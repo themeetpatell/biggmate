@@ -3,29 +3,40 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { 
   ArrowRight, 
-  Heart, 
   Users, 
-  Zap, 
-  Star, 
-  CheckCircle,
-  Play,
+  Rocket,
+  Star,
+  Quote,
   Sparkles,
-  Crown,
   Target,
-  Globe,
-  UserPlus,
-  TrendingUp
+  Brain,
+  CheckCircle,
+  TrendingUp,
+  Shield,
+  BarChart3,
+  PlayCircle,
+  Zap,
+  Globe2,
+  Gem,
+  Crown,
+  Lightbulb,
+  MessageCircle,
+  Lock,
+  Award
 } from 'lucide-react';
+import MarketingNavbar from './MarketingNavbar';
+import MarketingFooter from './MarketingFooter';
 
 const Landing = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [isVisible, setIsVisible] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
   useEffect(() => {
     setIsVisible(true);
     
     if (isAuthenticated) {
-      // Check if onboarding is complete
       const onboardingComplete = localStorage.getItem('onboardingComplete');
       if (onboardingComplete === 'true') {
         navigate('/home', { replace: true });
@@ -35,236 +46,415 @@ const Landing = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleGetStarted = () => {
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  const handleFindCofounder = () => {
     navigate('/auth');
   };
 
-  const features = [
-    {
-      icon: Target,
-      title: "Find Your Perfect Cofounder",
-      description: "Connect with like-minded entrepreneurs who share your vision, skills, and ambition. Build the next unicorn together."
-    },
-    {
-      icon: Users,
-      title: "Pitch & Pitch-Back System",
-      description: "Share your startup ideas and find cofounders who want to join your journey. Express interest with specific role proposals."
-    },
-    {
-      icon: TrendingUp,
-      title: "AI-Powered Matching Algorithm",
-      description: "Our advanced AI matches you with cofounders based on complementary skills, vision alignment, and startup compatibility."
-    },
-    {
-      icon: Globe,
-      title: "Complete Startup Journey",
-      description: "From idea to IPO - get roadmap generation, project tracking, team workspace, and launch preparation tools."
-    }
-  ];
-
-  const stats = [
-    { number: "1000+", label: "Active Entrepreneurs", icon: "🚀" },
-    { number: "500+", label: "Startups Founded", icon: "✨" },
-  ];
+  const handleLearnMore = () => {
+    navigate('/product');
+  };
 
   if (isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <span className="text-white text-2xl font-bold">CB</span>
+          <div className="w-20 h-20 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-4 animate-pulse shadow-2xl">
+            <span className="text-white text-3xl font-black">BM</span>
           </div>
-          <p className="text-gray-600 font-medium">Redirecting...</p>
+          <p className="text-gray-700 font-semibold text-lg">Redirecting to your dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900">
-
-      {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        {/* Enhanced Animated Background Elements */}
-        <div className="absolute inset-0">
-          <div className="floating-shape shape-1"></div>
-          <div className="floating-shape shape-2"></div>
-          <div className="floating-shape shape-3"></div>
-          <div className="floating-shape shape-4"></div>
-          <div className="floating-shape shape-5"></div>
-          <div className="floating-shape shape-6"></div>
+    <div className="min-h-screen bg-white overflow-hidden">
+      <MarketingNavbar />
+      
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50"></div>
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-300 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-300 rounded-full filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: '1s'}}></div>
         </div>
         
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 lg:pt-20 pb-16 sm:pb-20 lg:pb-24">
-          <div className={`text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-            <div className="inline-flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-orange-500/20 to-yellow-500/20 backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-full mb-6 sm:mb-8 border border-orange-400/30 hover:border-orange-400/50 transition-all duration-300 group">
-              <Crown className="w-4 h-4 sm:w-6 sm:h-6 text-orange-400 group-hover:scale-110 transition-transform duration-300" />
-              <span className="text-white font-semibold text-sm sm:text-base group-hover:text-orange-100 transition-colors duration-300">🚀 Build Your Startup Dream Team</span>
-            </div>
-            
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-              Find Your
-              <span className="shimmer-text block sm:inline"> Cofounder</span>
-            </h1>
-            
-            <div className="mb-6 sm:mb-8">
-              <p className="text-lg sm:text-xl md:text-2xl text-white font-semibold tracking-wide bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
-                The Premier Platform for Startup Cofounders & Entrepreneurs
-              </p>
-            </div>
-            
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-4">
-              Co-Builders is the first platform built specifically for finding cofounders, building startups, and launching successful ventures together. Every connection begins with a pitch, every match begins with vision. Find your perfect cofounder who shares your ambition to build something meaningful together.
-            </p>
-            
-            {/* Social Proof */}
-            <div className="mb-8 sm:mb-12">
-              <div className="flex items-center justify-center gap-6 sm:gap-8 text-gray-400 text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                  <span>Pitch-First Matching</span>
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className={`space-y-10 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-amber-200">
+                <div className="flex -space-x-2">
+                  <div className="w-6 h-6 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-full border-2 border-white"></div>
+                  <div className="w-6 h-6 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full border-2 border-white"></div>
+                  <div className="w-6 h-6 bg-gradient-to-br from-orange-500 to-amber-600 rounded-full border-2 border-white"></div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                  <span>Entrepreneur Community</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                  <span>Startup Journey</span>
-                </div>
+                <span className="text-sm font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">500+ Founders on Waitlist</span>
               </div>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-8 sm:mb-12 px-4">
-              <button
-                onClick={handleGetStarted}
-                className="glow-button w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 text-white rounded-2xl hover:from-purple-600 hover:via-pink-600 hover:to-purple-700 transition-all duration-500 font-bold text-base sm:text-lg shadow-2xl hover:shadow-purple-500/40 hover:scale-110 flex items-center justify-center gap-2 sm:gap-3 group"
-              >
-                <span className="relative z-10">Get Started</span>
-                <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform duration-300" />
-              </button>
               
-              <button 
-                onClick={handleGetStarted}
-                className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-white/10 backdrop-blur-sm text-white rounded-2xl hover:bg-white/20 hover:backdrop-blur-md transition-all duration-300 font-semibold text-base sm:text-lg flex items-center justify-center gap-2 sm:gap-3 group border border-white/20 hover:border-white/40"
-              >
-                <UserPlus className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                <span>Find Cofounders</span>
-              </button>
-            </div>
-            
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 max-w-2xl mx-auto px-4">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-500 hover:scale-105 hover:shadow-xl group">
-                  <div className="text-xl sm:text-2xl mb-1 group-hover:scale-110 transition-transform duration-300">{stat.icon}</div>
-                  <div className="text-base sm:text-lg font-bold text-white mb-1 group-hover:text-purple-200 transition-colors duration-300">{stat.number}</div>
-                  <div className="text-gray-300 text-xs font-medium group-hover:text-white transition-colors duration-300">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-            
-            {/* Cofounder Concept */}
-            <div className="mt-8 sm:mt-12 max-w-4xl mx-auto px-4">
-              <div className="text-center mb-6 sm:mb-8">
-                <span className="text-white/90 text-lg sm:text-xl font-bold tracking-wide uppercase bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">What is a Cofounder?</span>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-white/20 hover:bg-white/15 hover:border-white/30 transition-all duration-500 group relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <p className="text-gray-300 text-center leading-relaxed text-sm sm:text-base group-hover:text-white transition-colors duration-300 relative z-10">
-                  A <span className="text-purple-400 font-semibold group-hover:text-pink-400 transition-colors duration-300">Cofounder</span> is the partner who stands with you through every chapter of your startup journey, sharing your vision, complementary skills, and drive to build something meaningful. They give you strength in the hard moments, believe in your dreams, and grow with you in ambition, innovation, and success.
+              <div className="space-y-6">
+                <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black leading-none">
+                  <span className="bg-gradient-to-r from-gray-900 via-slate-800 to-gray-900 bg-clip-text text-transparent">Find Your</span>
+                  <span className="block bg-gradient-to-r from-amber-600 via-orange-600 to-yellow-600 bg-clip-text text-transparent">Perfect Match</span>
+                </h1>
+                <p className="text-2xl sm:text-3xl text-gray-800 leading-relaxed font-semibold">
+                  Connect with visionary cofounders.<br />
+                  <span className="text-amber-600 font-black">Build the next unicorn.</span>
                 </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  onClick={handleFindCofounder}
+                  className="group relative px-10 py-5 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-2xl hover:shadow-2xl hover:scale-105 transition-all font-bold text-lg flex items-center justify-center gap-3 overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-amber-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <span className="relative">Start Your Journey</span>
+                  <ArrowRight className="relative w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                </button>
+                <button 
+                  onClick={handleLearnMore}
+                  className="group px-10 py-5 bg-white text-gray-900 rounded-2xl hover:shadow-xl transition-all font-bold text-lg border-2 border-gray-200 hover:border-amber-300 flex items-center justify-center gap-3"
+                >
+                  <PlayCircle className="w-6 h-6 group-hover:scale-110 transition-transform text-amber-600" />
+                  <span>Watch Demo</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-3 gap-6 pt-8">
+                <div className="text-center">
+                  <div className="text-4xl font-black bg-gradient-to-br from-amber-600 to-orange-600 bg-clip-text text-transparent">500+</div>
+                  <div className="text-sm font-semibold text-gray-600 mt-1">On Waitlist</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-black bg-gradient-to-br from-orange-600 to-amber-700 bg-clip-text text-transparent">6</div>
+                  <div className="text-sm font-semibold text-gray-600 mt-1">Core Features</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-black bg-gradient-to-br from-yellow-600 to-amber-600 bg-clip-text text-transparent">2026</div>
+                  <div className="text-sm font-semibold text-gray-600 mt-1">Launching</div>
+                </div>
+              </div>
+            </div>
+
+            <div className={`relative transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-400 via-orange-400 to-yellow-400 rounded-[3rem] rotate-3 opacity-20 blur-2xl"></div>
+                <div className="relative bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900 rounded-[3rem] p-8 shadow-2xl border border-amber-500/10">
+                  <div className="space-y-6">
+                    <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-amber-500/20 hover:bg-white/15 transition-all">
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-orange-400 rounded-2xl flex items-center justify-center">
+                          <Users className="w-7 h-7 text-white" />
+                        </div>
+                      <div className="flex-1">
+                          <div className="h-4 bg-white/30 rounded-full w-3/4 mb-2"></div>
+                          <div className="h-3 bg-white/20 rounded-full w-1/2"></div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                        <div className="h-3 bg-white/20 rounded-full"></div>
+                        <div className="h-3 bg-white/20 rounded-full w-5/6"></div>
+                        <div className="h-3 bg-white/20 rounded-full w-4/6"></div>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                      {[Brain, Target, Rocket, BarChart3].map((Icon, i) => (
+                        <div key={i} className="bg-white/10 backdrop-blur-xl rounded-2xl p-5 border border-white/20 hover:bg-white/15 transition-all">
+                          <div className="w-10 h-10 bg-gradient-to-br from-white/20 to-white/10 rounded-xl flex items-center justify-center mb-3">
+                            <Icon className="w-5 h-5 text-white/90" />
+                          </div>
+                          <div className="h-2 bg-white/30 rounded-full w-2/3"></div>
+                    </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Features Section */}
-      <div id="features" className="py-16 sm:py-20 bg-white/5 backdrop-blur-sm">
+      <section className="relative py-20 bg-white border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">Why Co-Builders for Entrepreneurs?</h2>
-            <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
-              We're not just another networking platform. <br></br> We're building the future of cofounder matching and startup success for the entrepreneurial community.
-            </p>
+          <div className="text-center mb-8">
+            <p className="text-sm font-bold text-gray-400 uppercase tracking-widest">Join Our Growing Community</p>
           </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {features.map((feature, index) => {
+          <div className="flex flex-wrap items-center justify-center gap-16">
+            <div className="text-center">
+              <div className="text-4xl font-black bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-2">500+</div>
+              <div className="text-sm font-bold text-gray-600 uppercase tracking-wide">Founders Waiting</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-black bg-gradient-to-r from-orange-600 to-amber-700 bg-clip-text text-transparent mb-2">2026</div>
+              <div className="text-sm font-bold text-gray-600 uppercase tracking-wide">Launch Year</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-black bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent mb-2">100%</div>
+              <div className="text-sm font-bold text-gray-600 uppercase tracking-wide">Free to Join</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-32 bg-gradient-to-b from-white to-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 px-5 py-2 bg-amber-50 rounded-full mb-8">
+            <Sparkles className="w-5 h-5 text-amber-600" />
+            <span className="text-sm font-bold text-amber-600">The Problem</span>
+          </div>
+          <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-8 leading-tight">
+            Finding the Right Cofounder<br />
+            <span className="bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">Shouldn't Be This Hard</span>
+          </h2>
+          <p className="text-2xl text-gray-800 leading-relaxed max-w-4xl mx-auto font-semibold">
+            65% of startups fail because of cofounder conflicts. We're building an intelligent platform that ensures alignment from day one.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-32 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-5 py-2 bg-white rounded-full mb-8 shadow-sm border border-amber-200">
+            <Gem className="w-5 h-5 text-amber-600" />
+            <span className="text-sm font-bold text-amber-600">Platform Features</span>
+          </div>
+            <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6">Everything You Need</h2>
+            <p className="text-xl text-gray-800 max-w-3xl mx-auto font-semibold">Powerful tools designed to help you find the perfect cofounder and build a successful startup together</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Brain,
+                title: 'AI-Powered Matching',
+                description: 'Advanced algorithms analyze skills, experience, and vision to find your perfect cofounder match.',
+                gradient: 'from-amber-500 to-orange-500'
+              },
+              {
+                icon: Target,
+                title: 'Pitch-First System',
+                description: 'Share your vision through structured pitches. Get specific role proposals from interested cofounders.',
+                gradient: 'from-orange-500 to-amber-600'
+              },
+              {
+                icon: Rocket,
+                title: 'Complete Toolkit',
+                description: 'From idea validation to launch - comprehensive tools for every stage of your startup journey.',
+                gradient: 'from-yellow-500 to-amber-500'
+              },
+              {
+                icon: Shield,
+                title: 'Equity Framework',
+                description: 'Professional templates, calculators, and guidance for equity splits and cofounder agreements.',
+                gradient: 'from-amber-600 to-orange-600'
+              },
+              {
+                icon: BarChart3,
+                title: 'Sprint Dashboard',
+                description: 'Track milestones, manage tasks, and monitor progress with integrated project management.',
+                gradient: 'from-orange-600 to-red-500'
+              },
+              {
+                icon: TrendingUp,
+                title: 'Launch Prep',
+                description: 'Investor readiness resources and go-to-market planning to ensure a successful launch.',
+                gradient: 'from-amber-500 to-yellow-600'
+              }
+            ].map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <div key={index} className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-white/20 hover:bg-white/20 hover:border-white/40 transition-all duration-500 hover:scale-105 hover:shadow-2xl group">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg">
-                    <Icon className="w-6 h-6 sm:w-8 sm:h-8 text-white group-hover:scale-110 transition-transform duration-300" />
+                <div key={index} className="group relative bg-white rounded-3xl p-8 hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-transparent">
+                  <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 rounded-3xl transition-opacity from-amber-400 to-orange-400"></div>
+                  <div className={`relative w-16 h-16 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform`}>
+                    <Icon className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4 group-hover:text-purple-200 transition-colors duration-300">{feature.title}</h3>
-                  <p className="text-gray-300 text-sm sm:text-base group-hover:text-white transition-colors duration-300 leading-relaxed">{feature.description}</p>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">{feature.title}</h3>
+                  <p className="text-gray-800 leading-relaxed font-medium">{feature.description}</p>
                 </div>
               );
             })}
           </div>
         </div>
-      </div>
+      </section>
 
+      <section className="py-32 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-5 py-2 bg-amber-50 rounded-full mb-8">
+            <Zap className="w-5 h-5 text-amber-600" />
+            <span className="text-sm font-bold text-amber-600">Simple Process</span>
+          </div>
+            <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6">How It Works</h2>
+            <p className="text-xl text-gray-800 font-semibold">Four simple steps to find your perfect cofounder</p>
+          </div>
 
-
-      {/* CTA Section */}
-      <div id="about" className="py-16 sm:py-20">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-white/20 mb-8">
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold mb-4">
-                <Sparkles className="w-3 h-3 sm:w-4 sm:h-4" />
-                Start Building Today
+          <div className="grid md:grid-cols-4 gap-8 relative">
+            <div className="hidden md:block absolute top-16 left-0 right-0 h-1 bg-gradient-to-r from-amber-200 via-orange-200 to-yellow-200"></div>
+            {[
+              { step: '01', title: 'Create Profile', desc: 'Share your skills, experience, and startup vision', icon: Users, color: 'from-amber-500 to-orange-500' },
+              { step: '02', title: 'Post Your Pitch', desc: 'Describe your idea and what you need', icon: Target, color: 'from-orange-500 to-amber-600' },
+              { step: '03', title: 'Get Matched', desc: 'AI finds compatible cofounders for you', icon: Brain, color: 'from-yellow-500 to-amber-500' },
+              { step: '04', title: 'Build Together', desc: 'Connect and start building your startup', icon: Rocket, color: 'from-amber-600 to-orange-600' }
+            ].map((item, index) => {
+              const Icon = item.icon;
+              return (
+              <div key={index} className="relative">
+                <div className="text-center">
+                    <div className={`relative inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br ${item.color} rounded-3xl text-white shadow-2xl mb-8 hover:scale-110 transition-transform`}>
+                      <Icon className="w-10 h-10" />
+                      <div className="absolute -top-3 -right-3 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+                        <span className="text-sm font-black text-gray-900">{item.step}</span>
+                </div>
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                    <p className="text-gray-800 leading-relaxed font-medium">{item.desc}</p>
+                  </div>
               </div>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6">
-                Ready to Find Your
-                <span className="shimmer-text block sm:inline"> Perfect Cofounder</span>?
-              </h2>
-              <p className="text-lg sm:text-xl text-gray-300 mb-6 sm:mb-8">
-                Join Co-Builders and be the first to experience the future of cofounder matching and startup success. Find your perfect cofounder and build the next unicorn together.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
-                <button
-                  onClick={handleGetStarted}
-                  className="glow-button w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-600 text-white rounded-2xl hover:from-purple-600 hover:via-pink-600 hover:to-purple-700 transition-all duration-500 font-bold text-base sm:text-lg shadow-2xl hover:shadow-purple-500/40 hover:scale-110 flex items-center justify-center gap-2 sm:gap-3 group"
-                >
-                  <span className="relative z-10">Get Started</span>
-                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform duration-300" />
-                </button>
-                <div className="text-gray-400 text-xs sm:text-sm">
-                  <span className="inline-flex items-center gap-2 hover:text-white transition-colors duration-300">
-                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-orange-400" />
-                    Free to join • Startup Tools • Verified Entrepreneurs Only
-                  </span>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-32 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center gap-2 px-5 py-2 bg-amber-50 rounded-full mb-8">
+              <Crown className="w-5 h-5 text-amber-600" />
+              <span className="text-sm font-bold text-amber-600">Success Stories</span>
+            </div>
+            <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6">What Founders Are Saying</h2>
+            <p className="text-xl text-gray-800 font-semibold">Join 500+ founders excited about our launch</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                name: 'Sarah Chen',
+                role: 'Solo Founder',
+                quote: 'Can\'t wait to use Biggmate! The pitch-first approach is exactly what I need. Finally, a platform built for serious entrepreneurs looking for real alignment.',
+                result: 'On Waitlist',
+                achievement: 'Early Adopter',
+                rating: 5,
+                gradient: 'from-amber-500 to-orange-500'
+              },
+              {
+                name: 'Michael Rodriguez',
+                role: 'Aspiring Entrepreneur',
+                quote: 'The AI matching concept is brilliant. Instead of endless networking, I can find someone with complementary skills who shares my vision. Exactly what founders need.',
+                result: 'Excited to Launch',
+                achievement: 'Waitlist Member',
+                rating: 5,
+                gradient: 'from-orange-500 to-amber-600'
+              },
+              {
+                name: 'Emma Thompson',
+                role: 'Tech Founder',
+                quote: 'This is a game changer for solo founders. The comprehensive toolkit approach—matching, equity framework, and project management—is exactly what\'s been missing.',
+                result: 'Ready to Build',
+                achievement: 'Community Member',
+                rating: 5,
+                gradient: 'from-yellow-500 to-amber-500'
+              }
+            ].map((testimonial, index) => (
+              <div key={index} className="group relative bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all border border-gray-100">
+                <div className={`absolute inset-0 bg-gradient-to-br ${testimonial.gradient} opacity-0 group-hover:opacity-5 rounded-3xl transition-opacity`}></div>
+                <div className="relative">
+                <div className="flex items-center gap-1 mb-6">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <Quote className="w-10 h-10 text-gray-200 mb-4" />
+                <p className="text-gray-800 mb-8 leading-relaxed text-lg font-semibold">"{testimonial.quote}"</p>
+                <div className="flex items-center gap-4 mb-6">
+                    <div className={`w-14 h-14 bg-gradient-to-br ${testimonial.gradient} rounded-2xl flex items-center justify-center shadow-lg`}>
+                      <span className="text-white text-xl font-black">{testimonial.name.charAt(0)}</span>
+                  </div>
+                  <div>
+                      <div className="font-bold text-gray-900 text-lg">{testimonial.name}</div>
+                      <div className="text-sm text-gray-500 font-medium">{testimonial.role}</div>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 pt-6 border-t border-gray-100">
+                    <div className="flex-1 px-3 py-2 bg-green-50 rounded-xl">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4 text-amber-600" />
+                        <span className="text-xs font-bold text-amber-900">{testimonial.result}</span>
+                      </div>
+                    </div>
+                    <div className="flex-1 px-3 py-2 bg-orange-50 rounded-xl">
+                      <div className="flex items-center gap-2">
+                        <Award className="w-4 h-4 text-orange-600" />
+                        <span className="text-xs font-bold text-orange-900">{testimonial.achievement}</span>
+                  </div>
+                </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Footer */}
-      <div className="py-8 sm:py-12 border-t border-white/10 bg-gradient-to-r from-purple-900/20 to-pink-900/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="flex items-center justify-center gap-2 mb-3 sm:mb-4">
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300">
-                <span className="text-white text-sm sm:text-lg font-bold">CB</span>
-              </div>
-              <span className="text-white text-lg sm:text-xl font-bold hover:text-purple-200 transition-colors duration-300">Co-Builders</span>
+      <section className="relative py-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-500"></div>
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-20"></div>
+        
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 px-5 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-8 border border-white/30">
+            <Rocket className="w-5 h-5 text-white" />
+            <span className="text-sm font-bold text-white">Start Building Today</span>
+          </div>
+          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-8 leading-tight">
+            Ready to Find Your<br />Perfect Cofounder?
+          </h2>
+          <p className="text-2xl text-white mb-12 max-w-3xl mx-auto font-semibold">
+            Join 500+ founders on the waitlist building the next generation of successful startups
+          </p>
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <button
+              onClick={handleFindCofounder}
+              className="group px-12 py-6 bg-white text-gray-900 rounded-2xl hover:scale-105 hover:shadow-2xl transition-all font-black text-xl flex items-center justify-center gap-3"
+            >
+              <span>Start Your Journey</span>
+              <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+            </button>
+            <button
+              onClick={handleLearnMore}
+              className="px-12 py-6 bg-white/10 backdrop-blur-sm text-white rounded-2xl hover:bg-white/20 transition-all font-bold text-xl border-2 border-white/30 hover:border-white/50"
+            >
+              Explore Platform
+            </button>
+          </div>
+          <div className="mt-12 flex items-center justify-center gap-8 text-white/80">
+            <div className="flex items-center gap-2">
+              <Lock className="w-5 h-5" />
+              <span className="text-sm font-semibold">Secure Platform</span>
             </div>
-            <p className="text-gray-400 text-xs sm:text-sm hover:text-gray-300 transition-colors duration-300">
-              © 2025 Co-Builders. Find your Cofounder - Building successful startups through meaningful connections and partnerships.
-            </p>
-            <div className="mt-4 flex justify-center gap-4 text-gray-500 text-xs">
-              <span className="hover:text-purple-400 transition-colors duration-300 cursor-pointer">Privacy Policy</span>
-              <span className="hover:text-purple-400 transition-colors duration-300 cursor-pointer">Terms of Service</span>
-              <span className="hover:text-purple-400 transition-colors duration-300 cursor-pointer">Contact</span>
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5" />
+              <span className="text-sm font-semibold">Verified Users</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <MessageCircle className="w-5 h-5" />
+              <span className="text-sm font-semibold">24/7 Support</span>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <MarketingFooter />
     </div>
   );
 };

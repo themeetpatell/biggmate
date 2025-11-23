@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# BiggDate Production Deployment Script
+# BiggMate Production Deployment Script
 set -e
 
-echo "🚀 Starting BiggDate Production Deployment..."
+echo "🚀 Starting BiggMate Production Deployment..."
 
 # Colors for output
 RED='\033[0;31m'
@@ -103,7 +103,7 @@ else
 fi
 
 # Check database
-if docker-compose exec postgres pg_isready -U biggdate_user -d biggdate_prod > /dev/null 2>&1; then
+if docker-compose exec postgres pg_isready -U biggmate_user -d biggmate_prod > /dev/null 2>&1; then
     print_status "✅ Database is running"
 else
     print_warning "⚠️  Database health check failed"

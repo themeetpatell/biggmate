@@ -253,9 +253,9 @@ const Auth = () => {
 
   if (isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
+          <div className="w-16 h-16 bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulse">
             <span className="text-white text-2xl font-bold">B</span>
           </div>
           <p className="text-gray-600 font-medium">Redirecting...</p>
@@ -265,14 +265,14 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className={`text-center mb-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-6 py-3 rounded-full mb-6">
             <Crown className="w-6 h-6 text-yellow-400" />
             <span className="text-white font-semibold">
-              {authMode === 'reset' ? 'Reset Account' : 'Welcome to Co-Builders'}
+              {authMode === 'reset' ? 'Reset Account' : 'Welcome to Biggmate'}
             </span>
           </div>
           <h1 className="text-4xl font-bold text-white mb-2">
@@ -301,7 +301,7 @@ const Auth = () => {
                         onClick={() => setForgotType('username')}
                         className={`w-full p-4 text-left rounded-xl border transition-all duration-300 ${
                           forgotType === 'username' 
-                            ? 'bg-purple-500/20 border-purple-400 text-white' 
+                            ? 'bg-gray-800/20 border-gray-400 text-white' 
                             : 'bg-white/10 border-white/20 text-gray-300 hover:bg-white/20'
                         }`}
                       >
@@ -315,7 +315,7 @@ const Auth = () => {
                         onClick={() => setForgotType('password')}
                         className={`w-full p-4 text-left rounded-xl border transition-all duration-300 ${
                           forgotType === 'password' 
-                            ? 'bg-purple-500/20 border-purple-400 text-white' 
+                            ? 'bg-gray-800/20 border-gray-400 text-white' 
                             : 'bg-white/10 border-white/20 text-gray-300 hover:bg-white/20'
                         }`}
                       >
@@ -345,7 +345,7 @@ const Auth = () => {
                           name="countryCode"
                           value={resetData.countryCode}
                           onChange={handleResetInputChange}
-                          className="w-full py-3 px-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 appearance-none"
+                          className="w-full py-3 px-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 appearance-none"
                         >
                           {countryCodes.map((country) => (
                             <option key={country.code} value={country.code} className="bg-gray-800">
@@ -361,7 +361,7 @@ const Auth = () => {
                           name="whatsappNumber"
                           value={resetData.whatsappNumber}
                           onChange={handleResetInputChange}
-                          className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
+                          className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
                             errors.whatsappNumber ? 'border-red-500' : 'border-white/20'
                           }`}
                           placeholder="1234567890"
@@ -389,7 +389,7 @@ const Auth = () => {
                         name="otp"
                         value={resetData.otp}
                         onChange={handleResetInputChange}
-                        className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
+                        className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
                           errors.otp ? 'border-red-500' : 'border-white/20'
                         }`}
                         placeholder="123456"
@@ -417,7 +417,7 @@ const Auth = () => {
                         name="newPassword"
                         value={resetData.newPassword}
                         onChange={handleResetInputChange}
-                        className={`w-full pl-10 pr-12 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
+                        className={`w-full pl-10 pr-12 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
                           errors.newPassword ? 'border-red-500' : 'border-white/20'
                         }`}
                         placeholder="••••••••"
@@ -447,7 +447,7 @@ const Auth = () => {
                         name="confirmPassword"
                         value={resetData.confirmPassword}
                         onChange={handleResetInputChange}
-                        className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
+                        className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
                           errors.confirmPassword ? 'border-red-500' : 'border-white/20'
                         }`}
                         placeholder="••••••••"
@@ -474,7 +474,7 @@ const Auth = () => {
                         <span className="text-white font-mono text-lg">johndoe123</span>
                         <button
                           onClick={() => navigator.clipboard.writeText('johndoe123')}
-                          className="ml-2 px-3 py-1 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 hover:text-white rounded-lg text-sm transition-all duration-200"
+                          className="ml-2 px-3 py-1 bg-gray-800/20 hover:bg-gray-800/30 text-gray-300 hover:text-white rounded-lg text-sm transition-all duration-200"
                         >
                           Copy
                         </button>
@@ -482,7 +482,7 @@ const Auth = () => {
                       <p className="text-gray-400 text-sm mb-4">You can now sign in with this username</p>
                       <button
                         onClick={() => setMode('signin')}
-                        className="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-bold text-lg shadow-2xl hover:shadow-purple-500/25 hover:scale-105 flex items-center justify-center gap-3"
+                        className="w-full py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all duration-300 font-bold text-lg shadow-2xl hover:shadow-gray-900/25 hover:scale-105 flex items-center justify-center gap-3"
                       >
                         <ArrowLeft className="w-5 h-5" />
                         Back to Login
@@ -503,7 +503,7 @@ const Auth = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-bold text-lg shadow-2xl hover:shadow-purple-500/25 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
+                  className="w-full py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all duration-300 font-bold text-lg shadow-2xl hover:shadow-gray-900/25 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
                 >
                   {isLoading ? (
                     <>
@@ -538,7 +538,7 @@ const Auth = () => {
                           name="firstName"
                           value={formData.firstName}
                           onChange={handleInputChange}
-                          className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
+                          className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
                             errors.firstName ? 'border-red-500' : 'border-white/20'
                           }`}
                           placeholder="John"
@@ -561,7 +561,7 @@ const Auth = () => {
                           name="lastName"
                           value={formData.lastName}
                           onChange={handleInputChange}
-                          className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
+                          className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
                             errors.lastName ? 'border-red-500' : 'border-white/20'
                           }`}
                           placeholder="Doe"
@@ -584,7 +584,7 @@ const Auth = () => {
                           name="countryCode"
                           value={formData.countryCode}
                           onChange={handleInputChange}
-                          className="w-full py-3 px-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 appearance-none"
+                          className="w-full py-3 px-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 appearance-none"
                         >
                           {countryCodes.map((country) => (
                             <option key={country.code} value={country.code} className="bg-gray-800">
@@ -600,7 +600,7 @@ const Auth = () => {
                           name="whatsappNumber"
                           value={formData.whatsappNumber}
                           onChange={handleInputChange}
-                          className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
+                          className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
                             errors.whatsappNumber ? 'border-red-500' : 'border-white/20'
                           }`}
                           placeholder="1234567890"
@@ -624,7 +624,7 @@ const Auth = () => {
                         name="username"
                         value={formData.username}
                         onChange={handleInputChange}
-                        className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
+                        className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
                           errors.username ? 'border-red-500' : 'border-white/20'
                         }`}
                         placeholder="johndoe"
@@ -651,7 +651,7 @@ const Auth = () => {
                       name="username"
                       value={formData.username}
                       onChange={handleInputChange}
-                      className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
+                      className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
                         errors.username ? 'border-red-500' : 'border-white/20'
                       }`}
                       placeholder="johndoe"
@@ -675,9 +675,9 @@ const Auth = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-12 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
-                      errors.password ? 'border-red-500' : 'border-white/20'
-                    }`}
+                      className={`w-full pl-10 pr-12 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
+                        errors.password ? 'border-red-500' : 'border-white/20'
+                      }`}
                     placeholder="••••••••"
                   />
                   <button
@@ -706,7 +706,7 @@ const Auth = () => {
                       name="confirmPassword"
                       value={formData.confirmPassword}
                       onChange={handleInputChange}
-                      className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${
+                      className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
                         errors.confirmPassword ? 'border-red-500' : 'border-white/20'
                       }`}
                       placeholder="••••••••"
@@ -731,7 +731,7 @@ const Auth = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-bold text-lg shadow-2xl hover:shadow-purple-500/25 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
+                className="w-full py-3 bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all duration-300 font-bold text-lg shadow-2xl hover:shadow-gray-900/25 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
               >
                 {isLoading ? (
                   <>
@@ -757,7 +757,7 @@ const Auth = () => {
                   {authMode === 'signup' ? 'I already have an account?' : "I don't have an Account?"}
                   <button
                     onClick={() => setMode(authMode === 'signup' ? 'signin' : 'signup')}
-                    className="ml-2 text-purple-400 hover:text-purple-300 font-semibold transition-colors"
+                    className="ml-2 text-gray-300 hover:text-white font-semibold transition-colors"
                   >
                     {authMode === 'signup' ? 'Sign in' : 'Sign up'}
                   </button>
@@ -765,7 +765,7 @@ const Auth = () => {
                 {authMode === 'signin' && (
                   <button
                     onClick={() => setMode('reset')}
-                    className="mt-2 text-sm text-gray-400 hover:text-purple-400 transition-colors"
+                    className="mt-2 text-sm text-gray-400 hover:text-gray-300 transition-colors"
                   >
                     Forgot Username or Password? Reset Here
                   </button>
@@ -779,11 +779,11 @@ const Auth = () => {
         {authMode !== 'reset' && (
           <div className="mt-8 grid grid-cols-3 gap-4 text-center">
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-              <Heart className="w-6 h-6 text-pink-400 mx-auto mb-2" />
+              <Heart className="w-6 h-6 text-gray-400 mx-auto mb-2" />
               <p className="text-white text-sm font-semibold">AI Matching</p>
             </div>
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
-              <Sparkles className="w-6 h-6 text-purple-400 mx-auto mb-2" />
+              <Sparkles className="w-6 h-6 text-gray-400 mx-auto mb-2" />
               <p className="text-white text-sm font-semibold">Pitch Based</p>
             </div>
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">

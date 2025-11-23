@@ -231,7 +231,7 @@ const initializeDatabase = async () => {
       });
     }
 
-    // BiggDate specific tables
+    // BiggMate specific tables
     const hasFounders = await db.schema.hasTable('founders');
     if (!hasFounders) {
       logger.info('Creating founders table...');

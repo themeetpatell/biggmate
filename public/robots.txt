@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://biggdate.com/sitemap.xml
+Sitemap: https://biggmate.com/sitemap.xml
 
 # Disallow private areas
 Disallow: /api/

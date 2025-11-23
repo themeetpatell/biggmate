@@ -1,6 +1,6 @@
 {
-  "name": "BiggDate - AI-Powered Dating Platform",
-  "short_name": "BiggDate",
+  "name": "BiggMate - AI-Powered Dating Platform",
+  "short_name": "BiggMate",
   "description": "Find meaningful connections through AI-powered matching and psychological compatibility analysis",
   "start_url": "/",
   "display": "standalone",
@@ -136,7 +136,7 @@
   ],
   "protocol_handlers": [
     {
-      "protocol": "web+biggdate",
+      "protocol": "web+biggmate",
       "url": "/?action=%s"
     }
   ]

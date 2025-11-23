@@ -37,8 +37,8 @@ A comprehensive platform for finding cofounders, building startups, and launchin
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/biggdate.git
-cd biggdate
+git clone https://github.com/yourusername/biggmate.git
+cd biggmate
 
 # Install dependencies
 npm install
@@ -101,7 +101,7 @@ Upload the `dist/` folder to any static hosting provider:
 ## 📁 Project Structure
 
 ```
-biggdate/
+biggmate/
 ├── src/
 │   ├── components/          # React components
 │   │   ├── onboarding/      # Onboarding flow

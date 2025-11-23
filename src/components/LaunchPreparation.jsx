@@ -1174,7 +1174,7 @@ const LaunchPreparation = () => {
       {/* AI Product Coach */}
       <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 shadow-lg border border-purple-200">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">AI Product Coach</h2>
-        <p className="text-gray-600 mb-6">Suggests next build milestone, copy tips, or design refinements. (Powered by BiggDate AI.)</p>
+        <p className="text-gray-600 mb-6">Suggests next build milestone, copy tips, or design refinements. (Powered by BiggMate AI.)</p>
 
           <div className="space-y-4">
           <div className="bg-white rounded-xl p-4">
@@ -2412,7 +2412,7 @@ const LaunchPreparation = () => {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="font-semibold text-gray-900">Your Public Launch Page</h3>
-              <p className="text-sm text-gray-600">biggdate.com/showcase/techflow-ai</p>
+              <p className="text-sm text-gray-600">biggmate.com/showcase/techflow-ai</p>
             </div>
             <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">Live</span>
           </div>
@@ -2537,7 +2537,7 @@ const LaunchPreparation = () => {
       {/* Visa to StartupOS */}
       <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-8 shadow-lg border border-indigo-200">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Visa to StartupOS</h2>
-        <p className="text-gray-600 mb-6">Graduate from BiggDate to StartupOS platform with your Boarding Pass and Founder Visa.</p>
+        <p className="text-gray-600 mb-6">Graduate from BiggMate to StartupOS platform with your Boarding Pass and Founder Visa.</p>
 
         <div className="bg-white rounded-xl p-6 mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Graduation Requirements</h3>

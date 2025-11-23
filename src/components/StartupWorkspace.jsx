@@ -662,10 +662,6 @@ const StartupWorkspace = () => {
 
   const renderBuild = () => (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Build</h2>
-      </div>
 
       {/* Vision Board */}
       <div className="bg-white rounded-2xl p-8 shadow-lg">
@@ -979,10 +975,6 @@ const StartupWorkspace = () => {
 
   const renderExecute = () => (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Execute</h2>
-      </div>
 
       {/* Task Manager */}
       <div className="bg-white rounded-2xl p-8 shadow-lg">
@@ -1458,10 +1450,6 @@ const StartupWorkspace = () => {
 
   const renderFund = () => (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Fund</h2>
-      </div>
 
       {/* Funding Tracker */}
       <div className="bg-white rounded-2xl p-8 shadow-lg">
@@ -1715,10 +1703,6 @@ const StartupWorkspace = () => {
 
   const renderHub = () => (
     <div className="space-y-8">
-      {/* Header */}
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Hub</h2>
-      </div>
 
       {/* Community Feed */}
       <div className="bg-white rounded-2xl p-8 shadow-lg">
@@ -2131,11 +2115,7 @@ const StartupWorkspace = () => {
 
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Milestones</h2>
-            <p className="text-gray-600">Track your startup's key achievements and goals</p>
-          </div>
+        <div className="flex items-center justify-end mb-6">
           <button
             onClick={() => setShowMilestoneModal(true)}
             className="px-6 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300 flex items-center gap-2"
@@ -2631,11 +2611,7 @@ const StartupWorkspace = () => {
 
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Team Management</h2>
-            <p className="text-gray-600">Manage your team members, roles, and team health</p>
-          </div>
+        <div className="flex items-center justify-end mb-6">
           <button
             onClick={() => setShowTeamModal(true)}
             className="px-6 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300 flex items-center gap-2"
@@ -3828,12 +3804,6 @@ const StartupWorkspace = () => {
 
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">MVP Execution</h2>
-            <p className="text-gray-600">Complete MVP workspace with all tools and resources</p>
-          </div>
-        </div>
 
         {/* MVP Tabs */}
         <div className="bg-white rounded-2xl p-2 shadow-lg border border-gray-100 mb-6">
@@ -3940,11 +3910,7 @@ const StartupWorkspace = () => {
 
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Events & Networking</h2>
-            <p className="text-gray-600">Discover nearby events to pitch, network, and grow your startup</p>
-          </div>
+        <div className="flex items-center justify-end mb-6">
           <button
             onClick={() => setShowEventModal(true)}
             className="px-6 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300 flex items-center gap-2"
@@ -4444,10 +4410,6 @@ const StartupWorkspace = () => {
 
     return (
       <div className="space-y-6">
-        <div className="mb-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Startup Journey</h2>
-          <p className="text-gray-600">Track your progress from idea to launch and beyond</p>
-        </div>
 
         <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl p-8 text-white mb-6">
           <div className="flex items-center justify-between">
@@ -4553,10 +4515,6 @@ const StartupWorkspace = () => {
 
     return (
       <div className="space-y-6">
-        <div className="mb-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Idea Validation</h2>
-          <p className="text-gray-600">Comprehensive validation tools to validate your startup idea before building</p>
-        </div>
 
         {/* Validation Scorecard */}
         <div className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl p-8 text-white mb-6">
@@ -5406,7 +5364,7 @@ const StartupWorkspace = () => {
                 THE 45-DAY LAUNCH PROGRAM
               </h2>
               <p className="text-gray-300 text-lg mb-4">
-                The feature that makes BiggDate bigger than YC
+                The feature that makes BiggMate bigger than YC
               </p>
               <p className="text-gray-400">
                 An automated accelerator that transforms your idea into a launch-ready startup in 45 days
@@ -5520,10 +5478,6 @@ const StartupWorkspace = () => {
           </div>
         </div>
 
-        <div className="mb-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Launch Preparation</h2>
-          <p className="text-gray-600">Complete your launch checklist to ensure a successful launch</p>
-        </div>
 
         <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 text-white mb-6">
           <div className="flex items-center justify-between">
@@ -5724,10 +5678,6 @@ const StartupWorkspace = () => {
   const renderProfile = () => {
     return (
       <div className="space-y-6">
-        <div className="mb-6">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Startup Profile</h2>
-          <p className="text-gray-600">Manage your startup's public profile and branding</p>
-        </div>
 
         <div className="bg-white rounded-2xl p-8 shadow-lg">
           <div className="mb-8">
@@ -6453,32 +6403,6 @@ const StartupWorkspace = () => {
 
     return (
       <div className="space-y-8">
-        {/* Journey Progress Overview */}
-        <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 rounded-2xl p-8 text-white">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-3xl font-bold mb-2">Your Startup Journey</h2>
-              <p className="text-white/90 text-lg">From idea to launch and beyond</p>
-            </div>
-            <div className="text-right">
-              <div className="text-5xl font-bold">{overallProgress}%</div>
-              <div className="text-sm text-white/80">Overall Complete</div>
-            </div>
-          </div>
-          <div className="w-full bg-white/20 rounded-full h-6 mb-4">
-            <div
-              className="bg-white h-6 rounded-full transition-all duration-500"
-              style={{ width: `${overallProgress}%` }}
-            ></div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="flex-1">
-              <p className="text-sm text-white/80 mb-1">Current Stage</p>
-              <p className="text-xl font-bold">{currentStageData.name}</p>
-            </div>
-          </div>
-        </div>
-
         {/* Journey Stages */}
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Journey Stages</h2>

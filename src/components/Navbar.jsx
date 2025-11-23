@@ -287,7 +287,7 @@ const Navbar = () => {
               <div className="relative">
                 <div className="absolute -inset-1 bg-gradient-to-r from-gray-900/10 via-gray-800/5 to-gray-900/10 rounded-2xl opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"></div>
                 <span className="relative text-2xl font-extrabold tracking-tight bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent group-hover:from-gray-700 group-hover:via-gray-600 group-hover:to-gray-700 transition-all duration-500">
-                  Biggdate
+                  BiggMate
                 </span>
                 <div className="absolute -bottom-1.5 left-0 w-0 h-[2px] bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 group-hover:w-full transition-all duration-500 rounded-full"></div>
               </div>

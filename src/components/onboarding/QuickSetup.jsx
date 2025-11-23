@@ -307,7 +307,7 @@ const QuickSetup = () => {
             <span className="text-gray-700 font-medium">Your Vision Matters</span>
           </div>
           <h1 className="text-5xl font-normal text-gray-900 mb-4">
-            Biggdate
+            BiggMate
           </h1>
         </div>
 

@@ -7,20 +7,20 @@
   
   <!-- Homepage - Dating App for Founders -->
   <url>
-    <loc>https://biggdate.com/</loc>
+    <loc>https://biggmate.com/</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://biggdate.com/og-image.jpg</image:loc>
-      <image:title>BiggDate - Dating App for Founders & Startups</image:title>
+      <image:loc>https://biggmate.com/og-image.jpg</image:loc>
+      <image:title>BiggMate - Dating App for Founders & Startups</image:title>
       <image:caption>Premier dating app for founders, entrepreneurs, and startup professionals</image:caption>
     </image:image>
   </url>
   
   <!-- Authentication - Founder Dating App -->
   <url>
-    <loc>https://biggdate.com/auth</loc>
+    <loc>https://biggmate.com/auth</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -28,21 +28,21 @@
   
   <!-- Main App Pages - Professional Dating -->
   <url>
-    <loc>https://biggdate.com/home</loc>
+    <loc>https://biggmate.com/home</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://biggdate.com/profile</loc>
+    <loc>https://biggmate.com/profile</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://biggdate.com/connections</loc>
+    <loc>https://biggmate.com/connections</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -50,7 +50,7 @@
   
   <!-- Startup Community Events -->
   <url>
-    <loc>https://biggdate.com/events</loc>
+    <loc>https://biggmate.com/events</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -58,7 +58,7 @@
   
   <!-- Pitch-First Dating for Founders -->
   <url>
-    <loc>https://biggdate.com/pitches</loc>
+    <loc>https://biggmate.com/pitches</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
@@ -66,7 +66,7 @@
   
   <!-- AI-Powered Professional Matching -->
   <url>
-    <loc>https://biggdate.com/matching</loc>
+    <loc>https://biggmate.com/matching</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -74,7 +74,7 @@
   
   <!-- AI Matching for Entrepreneurs -->
   <url>
-    <loc>https://biggdate.com/ai-matching</loc>
+    <loc>https://biggmate.com/ai-matching</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -82,7 +82,7 @@
   
   <!-- Founder Community Gamification -->
   <url>
-    <loc>https://biggdate.com/gamification</loc>
+    <loc>https://biggmate.com/gamification</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
@@ -90,28 +90,28 @@
   
   <!-- Additional SEO Pages -->
   <url>
-    <loc>https://biggdate.com/about</loc>
+    <loc>https://biggmate.com/about</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://biggdate.com/features</loc>
+    <loc>https://biggmate.com/features</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://biggdate.com/community</loc>
+    <loc>https://biggmate.com/community</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://biggdate.com/success-stories</loc>
+    <loc>https://biggmate.com/success-stories</loc>
     <lastmod>2025-01-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
