@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { 
   ArrowRight, 
   Users, 
@@ -29,29 +28,10 @@ import MarketingFooter from './MarketingFooter';
 
 const Landing = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state) => state.auth);
   const [isVisible, setIsVisible] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     setIsVisible(true);
-    
-    if (isAuthenticated) {
-      const onboardingComplete = localStorage.getItem('onboardingComplete');
-      if (onboardingComplete === 'true') {
-        navigate('/home', { replace: true });
-      } else {
-        navigate('/onboarding/mission', { replace: true });
-      }
-    }
-  }, [isAuthenticated, navigate]);
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   const handleFindCofounder = () => {
@@ -61,19 +41,6 @@ const Landing = () => {
   const handleLearnMore = () => {
     navigate('/product');
   };
-
-  if (isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-        <div className="text-center">
-          <div className="w-20 h-20 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-4 animate-pulse shadow-2xl">
-            <span className="text-white text-3xl font-black">BM</span>
-          </div>
-          <p className="text-gray-700 font-semibold text-lg">Redirecting to your dashboard...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
