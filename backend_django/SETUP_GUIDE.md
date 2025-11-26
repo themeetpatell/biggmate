@@ -62,7 +62,7 @@ REST_FRAMEWORK = {
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "http://localhost:3000",
+    "http://localhost:8000",
     "http://127.0.0.1:5173",
     "http://127.0.0.1:3000",
 ]
@@ -179,7 +179,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/biggmate
 # DATABASE_URL=sqlite:///db.sqlite3
 
 # CORS
-CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
+CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:8000
 
 # OpenAI (for AI Co-Founder features)
 OPENAI_API_KEY=your-openai-api-key-here

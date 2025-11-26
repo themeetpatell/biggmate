@@ -89,8 +89,8 @@ sleep 30
 print_status "Checking service health..."
 
 # Check frontend
-if curl -f http://localhost:3000/health > /dev/null 2>&1; then
-    print_status "✅ Frontend is running on http://localhost:3000"
+if curl -f http://localhost:8000/health > /dev/null 2>&1; then
+    print_status "✅ Frontend is running on http://localhost:8000"
 else
     print_warning "⚠️  Frontend health check failed"
 fi
@@ -117,7 +117,7 @@ else
 fi
 
 print_status "🎉 Deployment completed!"
-print_status "Frontend: http://localhost:3000"
+print_status "Frontend: http://localhost:8000"
 print_status "Backend API: http://localhost:5000"
 print_status "Grafana: http://localhost:3001 (admin/admin123)"
 print_status "RabbitMQ Management: http://localhost:15672 (startupmatch/rabbit_password_123)"

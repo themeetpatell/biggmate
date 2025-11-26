@@ -11,6 +11,7 @@ import {
   Wallet,
   FileText
 } from 'lucide-react';
+import { authAPI } from '../../services/api';
 
 const IdeaSprint = () => {
   const [sprintDetails, setSprintDetails] = useState({
@@ -25,9 +26,30 @@ const IdeaSprint = () => {
 
   const navigate = useNavigate();
 
-  const handleContinue = () => {
-    localStorage.setItem('ideaSprintDetails', JSON.stringify(sprintDetails));
-    navigate('/home');
+  const handleContinue = async () => {
+    try {
+      // Save to localStorage
+      localStorage.setItem('ideaSprintDetails', JSON.stringify(sprintDetails));
+      
+      // Save to backend and mark onboarding as complete
+      await authAPI.completeOnboarding({
+        idea_sprint_data: sprintDetails,
+        onboarding_complete: true
+      });
+      
+      // Clear onboarding data from localStorage
+      const keysToRemove = ['userRole', 'userStage', 'userMask', 'birthPlace', 'whyHere', 
+                            'selectedValues', 'selectedIntent', 'yourIndustries', 'yourSkills', 
+                            'yourExperience', 'yourBackground', 'yourSelf', 'hasVoiceNote',
+                            'pitchDeckFileName', 'pitchDeckFileSize', 'ideaSprintDetails'];
+      keysToRemove.forEach(key => localStorage.removeItem(key));
+      
+      navigate('/home');
+    } catch (error) {
+      console.error('Failed to complete onboarding:', error);
+      // Still navigate even if save fails
+      navigate('/home');
+    }
   };
 
   const handleBack = () => {

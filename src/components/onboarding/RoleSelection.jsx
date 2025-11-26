@@ -21,6 +21,7 @@ import {
   Lightbulb,
   CheckCircle
 } from 'lucide-react';
+import { authAPI } from '../../services/api';
 
 const RoleSelection = () => {
   const [selectedStage, setSelectedStage] = useState('');
@@ -308,14 +309,31 @@ const RoleSelection = () => {
     }, 200);
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (selectedStage && selectedMask) {
-      // Save to localStorage
-      localStorage.setItem('userStage', selectedStage);
-      localStorage.setItem('userMask', selectedMask);
-      
-      // Navigate to next step
-      navigate('/onboarding/mission');
+      try {
+        // Save to localStorage
+        localStorage.setItem('userStage', selectedStage);
+        localStorage.setItem('userMask', selectedMask);
+        if (birthPlace) {
+          localStorage.setItem('birthPlace', birthPlace);
+        }
+        
+        // Save to backend
+        await authAPI.completeOnboarding({
+          user_role: userRole,
+          user_stage: selectedStage,
+          user_mask: selectedMask,
+          birth_place: birthPlace
+        });
+        
+        // Navigate to next step
+        navigate('/onboarding/mission');
+      } catch (error) {
+        console.error('Failed to save onboarding data:', error);
+        // Still navigate even if save fails
+        navigate('/onboarding/mission');
+      }
     }
   };
 

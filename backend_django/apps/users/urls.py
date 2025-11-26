@@ -3,7 +3,8 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from .views import (
     RegisterView, LoginView, LogoutView, CurrentUserView,
     PasswordResetRequestView, PasswordResetVerifyView,
-    UsernameRecoveryRequestView, UsernameRecoveryVerifyView
+    UsernameRecoveryRequestView, UsernameRecoveryVerifyView,
+    OnboardingView
 )
 
 urlpatterns = [
@@ -23,4 +24,7 @@ urlpatterns = [
     # Username recovery
     path('username-recovery/request/', UsernameRecoveryRequestView.as_view(), name='username-recovery-request'),
     path('username-recovery/verify/', UsernameRecoveryVerifyView.as_view(), name='username-recovery-verify'),
+    
+    # Onboarding
+    path('onboarding/', OnboardingView.as_view(), name='onboarding'),
 ]

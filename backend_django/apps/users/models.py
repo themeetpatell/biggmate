@@ -49,6 +49,9 @@ class User(AbstractUser):
         null=True,
         blank=True
     )
+    user_stage = models.CharField(max_length=100, null=True, blank=True)
+    user_mask = models.CharField(max_length=100, null=True, blank=True)
+    user_role = models.CharField(max_length=100, null=True, blank=True)
     
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
@@ -116,3 +119,45 @@ class OTPVerification(models.Model):
     
     def __str__(self):
         return f"OTP for {self.whatsapp_number}"
+
+
+class OnboardingData(models.Model):
+    """Store all onboarding data collected during user registration"""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='onboarding_data')
+    
+    # Mission & Values
+    mission_statement = models.TextField(blank=True)
+    selected_values = models.JSONField(default=list)  # Core values selected
+    
+    # Background
+    industries = models.JSONField(default=list)
+    skills = models.JSONField(default=list)
+    experience = models.CharField(max_length=200, blank=True)
+    background = models.TextField(blank=True)
+    about_self = models.TextField(blank=True)
+    birth_place = models.CharField(max_length=200, blank=True)
+    
+    # Pitch & Media
+    pitch_text = models.TextField(blank=True)
+    pitch_format = models.CharField(max_length=20, default='text')  # 'text' or 'voice'
+    has_voice_note = models.BooleanField(default=False)
+    pitch_deck_file_name = models.CharField(max_length=255, blank=True)
+    pitch_deck_file_size = models.CharField(max_length=50, blank=True)
+    
+    # Cofounder Preferences
+    cofounder_preferences = models.JSONField(default=dict)  # All cofounder search criteria
+    
+    # Offer Skills Data
+    offer_skills_data = models.JSONField(default=dict)  # Skills being offered
+    
+    # Idea Sprint Data
+    idea_sprint_data = models.JSONField(default=dict)  # Idea sprint details
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'onboarding_data'
+    
+    def __str__(self):
+        return f"{self.user.username}'s onboarding data"

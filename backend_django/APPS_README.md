@@ -392,7 +392,7 @@ EMAIL_HOST_USER=your-email
 EMAIL_HOST_PASSWORD=your-password
 
 # CORS
-CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
+CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:8000
 ```
 
 ---

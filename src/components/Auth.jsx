@@ -31,6 +31,7 @@ const Auth = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
+    email: '',
     countryCode: '+1',
     whatsappNumber: '',
     username: '',
@@ -104,6 +105,11 @@ const Auth = () => {
       }
       if (!formData.lastName) {
         newErrors.lastName = 'Last name is required';
+      }
+      if (!formData.email) {
+        newErrors.email = 'Email is required';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        newErrors.email = 'Please enter a valid email address';
       }
       if (!formData.whatsappNumber) {
         newErrors.whatsappNumber = 'WhatsApp number is required';
@@ -574,6 +580,29 @@ const Auth = () => {
                         </p>
                       )}
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-white font-semibold mb-2">Email</label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
+                          errors.email ? 'border-red-500' : 'border-white/20'
+                        }`}
+                        placeholder="john@example.com"
+                      />
+                    </div>
+                    {errors.email && (
+                      <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.email}
+                      </p>
+                    )}
                   </div>
 
                   <div>

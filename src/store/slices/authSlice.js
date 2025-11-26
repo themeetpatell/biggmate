@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { authAPI } from '../../services/api';
 
 const initialState = {
   user: null,
@@ -9,94 +10,32 @@ const initialState = {
   error: null,
 };
 
-// Mock API functions for now
-const mockAuthApi = {
-  login: async (credentials) => {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Mock successful login
-    return {
-      user: {
-        id: '1',
-        email: credentials.email,
-        firstName: 'John',
-        lastName: 'Doe',
-        profileImage: null,
-        isVerified: true,
-        safetyScore: 95,
-        premiumTier: 'gold',
-        globalLocation: {
-          country: 'United States',
-          city: 'San Francisco',
-          timezone: 'PST',
-          coordinates: { lat: 37.7749, lng: -122.4194 },
-          region: 'North America',
-          language: 'English'
-        },
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      accessToken: 'mock-access-token',
-      refreshToken: 'mock-refresh-token'
-    };
-  },
-  
-  register: async (userData) => {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Mock successful registration
-    return {
-      user: {
-        id: '1',
-        email: userData.email,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        profileImage: null,
-        isVerified: false,
-        safetyScore: 80,
-        premiumTier: 'free',
-        globalLocation: {
-          country: 'United States',
-          city: 'San Francisco',
-          timezone: 'PST',
-          coordinates: { lat: 37.7749, lng: -122.4194 },
-          region: 'North America',
-          language: 'English'
-        },
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      accessToken: 'mock-access-token',
-      refreshToken: 'mock-refresh-token'
-    };
-  },
-  
-  logout: async () => {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    return true;
-  }
-};
-
 // Async thunks
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials, { rejectWithValue }) => {
     try {
       console.log('loginUser thunk - credentials:', credentials);
-      const data = await mockAuthApi.login(credentials);
+      const response = await authAPI.login(credentials);
+      const data = response.data;
       console.log('loginUser thunk - data received:', data);
-      
-      // Store tokens in localStorage
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      
-      return data;
+      // Normalize token keys (backend sometimes returns accessToken/refreshToken)
+      const accessToken = data.access || data.accessToken || data.access_token || null;
+      const refreshToken = data.refresh || data.refreshToken || data.refresh_token || null;
+
+      // Store tokens in localStorage if present
+      if (accessToken) localStorage.setItem('accessToken', accessToken);
+      if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+
+      return {
+        user: data.user,
+        accessToken,
+        refreshToken
+      };
     } catch (error) {
       console.error('loginUser thunk - error:', error);
-      return rejectWithValue(error.message || 'Login failed');
+      const message = error.response?.data?.message || error.message || 'Login failed';
+      return rejectWithValue(message);
     }
   }
 );
@@ -105,25 +44,49 @@ export const registerUser = createAsyncThunk(
   'auth/registerUser',
   async (userData, { rejectWithValue }) => {
     try {
-      const data = await mockAuthApi.register(userData);
-      
-      // Store tokens in localStorage
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      
-      return data;
+      // Transform frontend data to match Django backend expected format
+      const registerData = {
+        first_name: userData.firstName,
+        last_name: userData.lastName,
+        email: userData.email,
+        username: userData.username,
+        password: userData.password,
+        confirm_password: userData.confirmPassword,
+        whatsapp_number: userData.whatsappNumber ? `${userData.countryCode}${userData.whatsappNumber}` : '',
+      };
+
+      const response = await authAPI.register(registerData);
+      const data = response.data;
+
+      // Normalize token keys
+      const accessToken = data.access || data.accessToken || data.access_token || null;
+      const refreshToken = data.refresh || data.refreshToken || data.refresh_token || null;
+
+      if (accessToken) localStorage.setItem('accessToken', accessToken);
+      if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+
+      return {
+        user: data.user,
+        accessToken,
+        refreshToken
+      };
     } catch (error) {
-      return rejectWithValue(error.message || 'Registration failed');
+      const message = error.response?.data?.message || error.message || 'Registration failed';
+      return rejectWithValue(message);
     }
   }
 );
 
 export const logoutUser = createAsyncThunk(
   'auth/logoutUser',
-  async (_, { rejectWithValue }) => {
+  async (_, { rejectWithValue, getState }) => {
     try {
       console.log('logoutUser thunk - starting logout');
-      await mockAuthApi.logout();
+      const refreshToken = getState().auth.refreshToken || localStorage.getItem('refreshToken');
+      
+      if (refreshToken) {
+        await authAPI.logout({ refresh: refreshToken });
+      }
       console.log('logoutUser thunk - API logout successful');
       
       // Clear tokens from localStorage
@@ -136,6 +99,19 @@ export const logoutUser = createAsyncThunk(
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       return rejectWithValue(error.message || 'Logout failed');
+    }
+  }
+);
+
+export const getCurrentUser = createAsyncThunk(
+  'auth/getCurrentUser',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await authAPI.getCurrentUser();
+      return response.data.user;
+    } catch (error) {
+      const message = error.response?.data?.message || error.message || 'Failed to get user';
+      return rejectWithValue(message);
     }
   }
 );

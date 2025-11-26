@@ -24,6 +24,7 @@ import {
   ChevronUp,
   ChevronDown,
 } from 'lucide-react';
+import { authAPI } from '../../services/api';
 
 const QuickSetup = () => {
   const [missionStatement, setMissionStatement] = useState('');
@@ -211,7 +212,7 @@ const QuickSetup = () => {
     setYourSkills(prev => prev.filter(s => s !== skill));
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (!missionStatement.trim()) {
       alert('Please share your vision');
       return;
@@ -241,6 +242,7 @@ const QuickSetup = () => {
       return;
     }
 
+    // Save to localStorage
     localStorage.setItem('whyHere', missionStatement);
     localStorage.setItem('selectedValues', JSON.stringify(selectedValues));
     localStorage.setItem('selectedIntent', selectedIntent);
@@ -257,6 +259,26 @@ const QuickSetup = () => {
       localStorage.setItem('pitchDeckFileSize', pitchDeckFile.size.toString());
     }
     
+    // Save to backend
+    try {
+      await authAPI.completeOnboarding({
+        user_intent: selectedIntent,
+        mission_statement: missionStatement,
+        selected_values: selectedValues,
+        industries: yourIndustries,
+        skills: yourSkills,
+        experience: yourExperience,
+        background: yourBackground,
+        about_self: yourSelf,
+        has_voice_note: hasVoiceNote,
+        pitch_deck_file_name: pitchDeckFile?.name || '',
+        pitch_deck_file_size: pitchDeckFile?.size?.toString() || ''
+      });
+    } catch (error) {
+      console.error('Failed to save onboarding data:', error);
+    }
+    
+    // Navigate based on intent
     if (selectedIntent === 'find-cofounder') {
       navigate('/onboarding/pitch');
     } else if (selectedIntent === 'offer-skills') {

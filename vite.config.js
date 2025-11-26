@@ -21,6 +21,7 @@ export default defineConfig({
       '@/hooks': path.resolve(__dirname, './src/hooks'),
       '@/store': path.resolve(__dirname, './src/store'),
     },
+    dedupe: ['react', 'react-dom'],
   },
   server: {
     port: 3000,

@@ -11,7 +11,8 @@ from .models import OTPVerification, GlobalLocation
 from .serializers import (
     UserSerializer, UserRegistrationSerializer, UserLoginSerializer,
     PasswordResetRequestSerializer, PasswordResetVerifySerializer,
-    UsernameRecoveryRequestSerializer, UsernameRecoveryVerifySerializer
+    UsernameRecoveryRequestSerializer, UsernameRecoveryVerifySerializer,
+    OnboardingDataSerializer
 )
 
 User = get_user_model()
@@ -268,4 +269,148 @@ class UsernameRecoveryVerifyView(views.APIView):
         return Response({
             'username': user.username,
             'email': user.email
+        })
+
+
+class OnboardingView(views.APIView):
+    """Save comprehensive onboarding data"""
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        from .models import OnboardingData
+        from profiles.models import Profile
+        
+        user = request.user
+        data = request.data
+        
+        # Update User model fields
+        if 'user_intent' in data:
+            user.user_intent = data['user_intent']
+        if 'onboarding_complete' in data:
+            user.onboarding_complete = data['onboarding_complete']
+        if 'user_stage' in data:
+            user.user_stage = data['user_stage']
+        if 'user_mask' in data:
+            user.user_mask = data['user_mask']
+        if 'user_role' in data:
+            user.user_role = data['user_role']
+        
+        user.save()
+        
+        # Create or update OnboardingData
+        onboarding_data, created = OnboardingData.objects.get_or_create(user=user)
+        
+        # Mission & Values
+        if 'mission_statement' in data or 'whyHere' in data:
+            onboarding_data.mission_statement = data.get('mission_statement') or data.get('whyHere', '')
+        if 'selected_values' in data or 'selectedValues' in data:
+            onboarding_data.selected_values = data.get('selected_values') or data.get('selectedValues', [])
+        
+        # Background
+        if 'industries' in data or 'yourIndustries' in data:
+            onboarding_data.industries = data.get('industries') or data.get('yourIndustries', [])
+        if 'skills' in data or 'yourSkills' in data:
+            onboarding_data.skills = data.get('skills') or data.get('yourSkills', [])
+        if 'experience' in data or 'yourExperience' in data:
+            onboarding_data.experience = data.get('experience') or data.get('yourExperience', '')
+        if 'background' in data or 'yourBackground' in data:
+            onboarding_data.background = data.get('background') or data.get('yourBackground', '')
+        if 'about_self' in data or 'yourSelf' in data:
+            onboarding_data.about_self = data.get('about_self') or data.get('yourSelf', '')
+        if 'birth_place' in data or 'birthPlace' in data:
+            onboarding_data.birth_place = data.get('birth_place') or data.get('birthPlace', '')
+        
+        # Pitch & Media
+        if 'pitch_text' in data or 'pitchText' in data:
+            onboarding_data.pitch_text = data.get('pitch_text') or data.get('pitchText', '')
+        if 'pitch_format' in data or 'pitchFormat' in data:
+            onboarding_data.pitch_format = data.get('pitch_format') or data.get('pitchFormat', 'text')
+        if 'has_voice_note' in data or 'hasVoiceNote' in data:
+            onboarding_data.has_voice_note = data.get('has_voice_note') or data.get('hasVoiceNote', False)
+        if 'pitch_deck_file_name' in data or 'pitchDeckFileName' in data:
+            onboarding_data.pitch_deck_file_name = data.get('pitch_deck_file_name') or data.get('pitchDeckFileName', '')
+        if 'pitch_deck_file_size' in data or 'pitchDeckFileSize' in data:
+            onboarding_data.pitch_deck_file_size = data.get('pitch_deck_file_size') or data.get('pitchDeckFileSize', '')
+        
+        # Cofounder Preferences
+        if 'cofounder_preferences' in data or 'cofounderPreferences' in data:
+            onboarding_data.cofounder_preferences = data.get('cofounder_preferences') or data.get('cofounderPreferences', {})
+        
+        # Offer Skills Data
+        if 'offer_skills_data' in data or 'offerSkillsPreferences' in data:
+            onboarding_data.offer_skills_data = data.get('offer_skills_data') or data.get('offerSkillsPreferences', {})
+        
+        # Idea Sprint Data
+        if 'idea_sprint_data' in data or 'ideaSprintDetails' in data:
+            onboarding_data.idea_sprint_data = data.get('idea_sprint_data') or data.get('ideaSprintDetails', {})
+        
+        onboarding_data.save()
+        
+        # Create or update Profile if needed
+        profile, profile_created = Profile.objects.get_or_create(
+            user=user,
+            defaults={
+                'role': user.user_role or 'founder',
+                'bio': onboarding_data.about_self or '',
+                'skills': onboarding_data.skills or [],
+                'experience': onboarding_data.experience or '',
+                'industries': onboarding_data.industries or [],
+                'location': onboarding_data.birth_place or '',
+            }
+        )
+        
+        # Update existing profile
+        if not profile_created:
+            if onboarding_data.skills:
+                profile.skills = onboarding_data.skills
+            if onboarding_data.industries:
+                profile.industries = onboarding_data.industries
+            if onboarding_data.experience:
+                profile.experience = onboarding_data.experience
+            if onboarding_data.about_self:
+                profile.bio = onboarding_data.about_self
+            if onboarding_data.birth_place:
+                profile.location = onboarding_data.birth_place
+            profile.save()
+        
+        return Response({
+            'success': True,
+            'message': 'Onboarding data saved successfully',
+            'user': UserSerializer(user).data,
+            'onboarding_complete': user.onboarding_complete
+        })
+    
+    def get(self, request):
+        """Get onboarding status and data"""
+        from .models import OnboardingData
+        
+        user = request.user
+        
+        try:
+            onboarding_data = user.onboarding_data
+            onboarding_dict = {
+                'mission_statement': onboarding_data.mission_statement,
+                'selected_values': onboarding_data.selected_values,
+                'industries': onboarding_data.industries,
+                'skills': onboarding_data.skills,
+                'experience': onboarding_data.experience,
+                'background': onboarding_data.background,
+                'about_self': onboarding_data.about_self,
+                'birth_place': onboarding_data.birth_place,
+                'pitch_text': onboarding_data.pitch_text,
+                'pitch_format': onboarding_data.pitch_format,
+                'cofounder_preferences': onboarding_data.cofounder_preferences,
+                'offer_skills_data': onboarding_data.offer_skills_data,
+                'idea_sprint_data': onboarding_data.idea_sprint_data,
+            }
+        except OnboardingData.DoesNotExist:
+            onboarding_dict = {}
+        
+        return Response({
+            'onboarding_complete': user.onboarding_complete,
+            'user_intent': user.user_intent,
+            'user_stage': user.user_stage,
+            'user_mask': user.user_mask,
+            'user_role': user.user_role,
+            'onboarding_data': onboarding_dict
         })
