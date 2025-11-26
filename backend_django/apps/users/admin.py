@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import User, GlobalLocation, OTPVerification
+from .models_onboarding import (
+    ValueCategory, Value, Intent, Industry, Skill, ExperienceLevel
+)
 
 
 @admin.register(User)
@@ -36,3 +39,46 @@ class OTPVerificationAdmin(admin.ModelAdmin):
     list_display = ['whatsapp_number', 'purpose', 'otp', 'is_used', 'expires_at', 'created_at']
     list_filter = ['purpose', 'is_used']
     search_fields = ['whatsapp_number', 'otp']
+
+
+# Onboarding Options Admin
+@admin.register(ValueCategory)
+class ValueCategoryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'order', 'created_at']
+    ordering = ['order']
+
+
+@admin.register(Value)
+class ValueAdmin(admin.ModelAdmin):
+    list_display = ['name', 'value_id', 'category', 'order', 'created_at']
+    list_filter = ['category']
+    search_fields = ['name', 'value_id']
+    ordering = ['category__order', 'order']
+
+
+@admin.register(Intent)
+class IntentAdmin(admin.ModelAdmin):
+    list_display = ['title', 'intent_id', 'icon', 'order', 'created_at']
+    search_fields = ['title', 'intent_id']
+    ordering = ['order']
+
+
+@admin.register(Industry)
+class IndustryAdmin(admin.ModelAdmin):
+    list_display = ['name', 'order', 'created_at']
+    search_fields = ['name']
+    ordering = ['order']
+
+
+@admin.register(Skill)
+class SkillAdmin(admin.ModelAdmin):
+    list_display = ['name', 'order', 'created_at']
+    search_fields = ['name']
+    ordering = ['order']
+
+
+@admin.register(ExperienceLevel)
+class ExperienceLevelAdmin(admin.ModelAdmin):
+    list_display = ['name', 'level_id', 'description', 'order', 'created_at']
+    search_fields = ['name', 'level_id']
+    ordering = ['order']

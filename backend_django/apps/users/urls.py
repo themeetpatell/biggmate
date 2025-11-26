@@ -4,7 +4,7 @@ from .views import (
     RegisterView, LoginView, LogoutView, CurrentUserView,
     PasswordResetRequestView, PasswordResetVerifyView,
     UsernameRecoveryRequestView, UsernameRecoveryVerifyView,
-    OnboardingView
+    OnboardingView, OnboardingOptionsView
 )
 
 urlpatterns = [
@@ -27,4 +27,5 @@ urlpatterns = [
     
     # Onboarding
     path('onboarding/', OnboardingView.as_view(), name='onboarding'),
+    path('onboarding/options/', OnboardingOptionsView.as_view(), name='onboarding-options'),
 ]

@@ -8,11 +8,18 @@ from datetime import timedelta
 import random
 
 from .models import OTPVerification, GlobalLocation
+from .models_onboarding import (
+    ValueCategory, Value, Intent, Industry, Skill, ExperienceLevel
+)
 from .serializers import (
     UserSerializer, UserRegistrationSerializer, UserLoginSerializer,
     PasswordResetRequestSerializer, PasswordResetVerifySerializer,
     UsernameRecoveryRequestSerializer, UsernameRecoveryVerifySerializer,
     OnboardingDataSerializer
+)
+from .serializers_onboarding import (
+    ValueCategorySerializer, IntentSerializer, IndustrySerializer,
+    SkillSerializer, ExperienceLevelSerializer, OnboardingOptionsSerializer
 )
 
 User = get_user_model()
@@ -414,3 +421,36 @@ class OnboardingView(views.APIView):
             'user_role': user.user_role,
             'onboarding_data': onboarding_dict
         })
+
+
+class OnboardingOptionsView(views.APIView):
+    """
+    Get all onboarding options including values, intents, industries, skills, and experience levels
+    """
+    permission_classes = [AllowAny]
+    
+    def get(self, request):
+        """Fetch all onboarding options from database"""
+        try:
+            # Fetch all data
+            value_categories = ValueCategory.objects.prefetch_related('values').all()
+            intents = Intent.objects.all()
+            industries = Industry.objects.all()
+            skills = Skill.objects.all()
+            experience_levels = ExperienceLevel.objects.all()
+            
+            # Serialize data
+            data = {
+                'value_groups': ValueCategorySerializer(value_categories, many=True).data,
+                'intents': IntentSerializer(intents, many=True).data,
+                'industries': IndustrySerializer(industries, many=True).data,
+                'skills': SkillSerializer(skills, many=True).data,
+                'experience_levels': ExperienceLevelSerializer(experience_levels, many=True).data,
+            }
+            
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {'error': f'Failed to fetch onboarding options: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

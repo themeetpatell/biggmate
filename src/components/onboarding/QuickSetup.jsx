@@ -40,6 +40,12 @@ const QuickSetup = () => {
   const [yourExperience, setYourExperience] = useState('');
   const [yourBackground, setYourBackground] = useState('');
   const [yourSelf, setYourSelf] = useState('');
+  const [valueGroups, setValueGroups] = useState([]);
+  const [intents, setIntents] = useState([]);
+  const [industriesList, setIndustriesList] = useState([]);
+  const [skillsList, setSkillsList] = useState([]);
+  const [experienceLevels, setExperienceLevels] = useState([]);
+  const [isLoadingOptions, setIsLoadingOptions] = useState(true);
   const navigate = useNavigate();
 
   // Set default role values if not already set
@@ -55,7 +61,67 @@ const QuickSetup = () => {
     }
   }, []);
 
-  const valueGroups = [
+  // Fetch onboarding options from backend
+  React.useEffect(() => {
+    const fetchOnboardingOptions = async () => {
+      try {
+        setIsLoadingOptions(true);
+        const response = await authAPI.getOnboardingOptions();
+        const data = response.data;
+        
+        // Transform value groups to match frontend structure
+        const transformedValueGroups = data.value_groups.map(group => ({
+          category: group.name,
+          values: group.values.map(val => ({
+            id: val.value_id,
+            name: val.name
+          }))
+        }));
+        
+        // Transform intents
+        const transformedIntents = data.intents.map(intent => ({
+          id: intent.intent_id,
+          title: intent.title,
+          description: intent.description,
+          icon: intent.icon === 'Target' ? Target : intent.icon === 'Sparkles' ? Sparkles : Zap,
+          color: intent.color
+        }));
+        
+        // Transform industries
+        const transformedIndustries = data.industries.map(ind => ind.name);
+        
+        // Transform skills
+        const transformedSkills = data.skills.map(skill => skill.name);
+        
+        // Transform experience levels
+        const transformedExperienceLevels = data.experience_levels.map(level => ({
+          value: level.level_id,
+          label: `${level.name} (${level.description})`
+        }));
+        
+        setValueGroups(transformedValueGroups);
+        setIntents(transformedIntents);
+        setIndustriesList(transformedIndustries);
+        setSkillsList(transformedSkills);
+        setExperienceLevels(transformedExperienceLevels);
+      } catch (error) {
+        console.error('Failed to fetch onboarding options:', error);
+        // Fall back to default data if API fails
+        setValueGroups(defaultValueGroups);
+        setIntents(defaultIntents);
+        setIndustriesList(defaultIndustries);
+        setSkillsList(defaultSkills);
+        setExperienceLevels(defaultExperienceLevels);
+      } finally {
+        setIsLoadingOptions(false);
+      }
+    };
+
+    fetchOnboardingOptions();
+  }, []);
+
+  // Default fallback data
+  const defaultValueGroups = [
     {
       category: 'Vision & Creation',
       values: [
@@ -98,7 +164,7 @@ const QuickSetup = () => {
     }
   ];
 
-  const intents = [
+  const defaultIntents = [
     {
       id: 'find-cofounder',
       title: 'Find a Cofounder',
@@ -120,6 +186,22 @@ const QuickSetup = () => {
       icon: Zap,
       color: 'from-purple-500 to-indigo-500'
     }
+  ];
+
+  const defaultIndustries = ['Technology', 'Healthcare', 'Fintech', 'E-commerce', 'Education', 'SaaS', 'AI/ML', 'Blockchain', 
+    'Real Estate', 'Food & Beverage', 'Transportation', 'Energy', 'Entertainment', 'Manufacturing', 
+    'Retail', 'Media', 'Travel', 'Sports', 'Gaming', 'Fashion'];
+
+  const defaultSkills = ['Technical Development', 'Product Management', 'Marketing', 'Sales', 'Operations', 'Finance', 
+    'Design', 'Business Strategy', 'Fundraising', 'Legal', 'HR', 'Data Analysis', 'AI/ML', 
+    'Blockchain', 'Mobile Development', 'Backend Development', 'Frontend Development', 'DevOps', 
+    'UX/UI Design', 'Growth Hacking', 'Content Marketing', 'SEO/SEM', 'Social Media', 'PR'];
+
+  const defaultExperienceLevels = [
+    { value: 'entry', label: 'Entry Level (0-2 years)' },
+    { value: 'mid', label: 'Mid Level (3-5 years)' },
+    { value: 'senior', label: 'Senior Level (6-10 years)' },
+    { value: 'executive', label: 'Executive (10+ years)' }
   ];
 
   const handleValueToggle = (valueId) => {
@@ -301,6 +383,17 @@ const QuickSetup = () => {
     selectedValues.length > 0 &&
     selectedIntent;
 
+  if (isLoadingOptions) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading options...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <style jsx>{`
@@ -450,9 +543,7 @@ const QuickSetup = () => {
               className="w-full p-4 bg-white border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent mb-4"
             >
               <option value="">+ Add Industry</option>
-              {['Technology', 'Healthcare', 'Fintech', 'E-commerce', 'Education', 'SaaS', 'AI/ML', 'Blockchain', 
-                'Real Estate', 'Food & Beverage', 'Transportation', 'Energy', 'Entertainment', 'Manufacturing', 
-                'Retail', 'Media', 'Travel', 'Sports', 'Gaming', 'Fashion']
+              {industriesList
                 .filter(ind => !yourIndustries.includes(ind))
                 .map((industry) => (
                   <option key={industry} value={industry}>{industry}</option>
@@ -501,10 +592,7 @@ const QuickSetup = () => {
                   className="w-full p-4 bg-white border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent mb-4"
                 >
                   <option value="">+ Add Skill</option>
-                  {['Technical Development', 'Product Management', 'Marketing', 'Sales', 'Operations', 'Finance', 
-                    'Design', 'Business Strategy', 'Fundraising', 'Legal', 'HR', 'Data Analysis', 'AI/ML', 
-                    'Blockchain', 'Mobile Development', 'Backend Development', 'Frontend Development', 'DevOps', 
-                    'UX/UI Design', 'Growth Hacking', 'Content Marketing', 'SEO/SEM', 'Social Media', 'PR']
+                  {skillsList
                     .filter(sk => !yourSkills.includes(sk))
                     .map((skill) => (
                       <option key={skill} value={skill}>{skill}</option>
@@ -541,10 +629,11 @@ const QuickSetup = () => {
                   className="w-full p-4 bg-white border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
                 >
                   <option value="">Select experience level</option>
-                  <option value="entry">Entry Level (0-2 years)</option>
-                  <option value="mid">Mid Level (3-5 years)</option>
-                  <option value="senior">Senior Level (6-10 years)</option>
-                  <option value="executive">Executive (10+ years)</option>
+                  {experienceLevels.map((level) => (
+                    <option key={level.value} value={level.value}>
+                      {level.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

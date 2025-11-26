@@ -77,6 +77,7 @@ export const authAPI = {
   verifyEmail: (token) => api.post('/auth/verify-email/', { token }),
   completeOnboarding: (data) => api.post('/auth/onboarding/', data),
   getOnboardingStatus: () => api.get('/auth/onboarding/'),
+  getOnboardingOptions: () => api.get('/auth/onboarding/options/'),
 };
 
 // Profile API

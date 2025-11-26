@@ -1,0 +1,104 @@
+"""
+Models for onboarding options data
+"""
+from django.db import models
+
+
+class ValueCategory(models.Model):
+    """Categories for user values"""
+    name = models.CharField(max_length=100, unique=True)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'value_categories'
+        ordering = ['order']
+        verbose_name_plural = 'Value Categories'
+    
+    def __str__(self):
+        return self.name
+
+
+class Value(models.Model):
+    """User values for onboarding"""
+    value_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+    category = models.ForeignKey(ValueCategory, on_delete=models.CASCADE, related_name='values')
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'values'
+        ordering = ['category__order', 'order']
+    
+    def __str__(self):
+        return self.name
+
+
+class Intent(models.Model):
+    """User intents for onboarding"""
+    intent_id = models.CharField(max_length=50, unique=True)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    icon = models.CharField(max_length=50)
+    color = models.CharField(max_length=50)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'intents'
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.title
+
+
+class Industry(models.Model):
+    """Industries for user background"""
+    name = models.CharField(max_length=100, unique=True)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'industries'
+        ordering = ['order']
+        verbose_name_plural = 'Industries'
+    
+    def __str__(self):
+        return self.name
+
+
+class Skill(models.Model):
+    """Skills for user expertise"""
+    name = models.CharField(max_length=100, unique=True)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'skills'
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.name
+
+
+class ExperienceLevel(models.Model):
+    """Experience levels for users"""
+    level_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=200)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'experience_levels'
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.name
