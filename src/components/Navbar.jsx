@@ -78,7 +78,7 @@ const Navbar = () => {
       label: 'Find Sprint Partner', 
       icon: Sparkles, 
       description: 'Find Cofounders for Your Sprint'
-    },
+    }, 
     { 
       path: '/my-pitches', 
       label: 'My Idea', 
@@ -87,7 +87,7 @@ const Navbar = () => {
     },
     { 
       path: '/launch', 
-      label: 'Launch', 
+      label: 'Launchpad', 
       icon: CheckCircle, 
       description: 'Launch Your MVP'
     },
@@ -114,7 +114,7 @@ const Navbar = () => {
       label: 'My Pitches', 
       icon: MessageCircle, 
       description: 'Manage Your Pitches'
-    },
+    }, 
     { 
       path: '/cofounders', 
       label: 'VisionMatching', 
@@ -123,13 +123,13 @@ const Navbar = () => {
     },
     { 
       path: '/startup-workspace', 
-      label: 'Startup Workspace', 
+      label: 'Sprinting', 
       icon: Rocket, 
       description: 'Build Your Startup'
     },
     { 
       path: '/launch', 
-      label: 'Launch', 
+      label: 'Launchpad', 
       icon: Target, 
       description: 'Prepare for Launch'
     },
