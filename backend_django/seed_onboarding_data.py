@@ -14,7 +14,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
 from apps.users.models_onboarding import (
-    ValueCategory, Value, Intent, Industry, Skill, ExperienceLevel
+    ValueCategory, Value, Intent, Industry, Skill, ExperienceLevel,
+    CofounderRole, WorkStyle, TimeCommitment, Availability, LocationPreference
 )
 
 
@@ -203,6 +204,125 @@ def seed_experience_levels():
             print(f"  Experience level already exists: {level.name}")
 
 
+def seed_cofounder_roles():
+    """Seed cofounder roles"""
+    roles = [
+        {'role_id': 'technical', 'name': 'Technical Co-founder', 'order': 1},
+        {'role_id': 'business', 'name': 'Business Co-founder', 'order': 2},
+        {'role_id': 'marketing', 'name': 'Marketing Co-founder', 'order': 3},
+        {'role_id': 'operations', 'name': 'Operations Co-founder', 'order': 4},
+        {'role_id': 'finance', 'name': 'Finance Co-founder', 'order': 5},
+        {'role_id': 'design', 'name': 'Design Co-founder', 'order': 6},
+    ]
+    
+    for role_data in roles:
+        role, created = CofounderRole.objects.get_or_create(
+            role_id=role_data['role_id'],
+            defaults={
+                'name': role_data['name'],
+                'order': role_data['order']
+            }
+        )
+        if created:
+            print(f"✓ Created cofounder role: {role.name}")
+        else:
+            print(f"  Cofounder role already exists: {role.name}")
+
+
+def seed_work_styles():
+    """Seed work styles"""
+    styles = [
+        {'style_id': 'remote-first', 'name': 'Remote-first', 'order': 1},
+        {'style_id': 'hybrid', 'name': 'Hybrid', 'order': 2},
+        {'style_id': 'office-based', 'name': 'Office-based', 'order': 3},
+        {'style_id': 'flexible', 'name': 'Flexible hours', 'order': 4},
+    ]
+    
+    for style_data in styles:
+        style, created = WorkStyle.objects.get_or_create(
+            style_id=style_data['style_id'],
+            defaults={
+                'name': style_data['name'],
+                'order': style_data['order']
+            }
+        )
+        if created:
+            print(f"✓ Created work style: {style.name}")
+        else:
+            print(f"  Work style already exists: {style.name}")
+
+
+def seed_time_commitments():
+    """Seed time commitments"""
+    commitments = [
+        {'commitment_id': 'full-time', 'name': 'Full-Time', 'description': '40+ hrs/week', 'order': 1},
+        {'commitment_id': 'part-time', 'name': 'Part-Time', 'description': '20-30 hrs/week', 'order': 2},
+        {'commitment_id': 'flexible', 'name': 'Flexible', 'description': '10-20 hrs/week', 'order': 3},
+        {'commitment_id': 'weekends', 'name': 'Weekends Only', 'description': '', 'order': 4},
+        {'commitment_id': 'evenings', 'name': 'Evenings Only', 'description': '', 'order': 5},
+    ]
+    
+    for commitment_data in commitments:
+        commitment, created = TimeCommitment.objects.get_or_create(
+            commitment_id=commitment_data['commitment_id'],
+            defaults={
+                'name': commitment_data['name'],
+                'description': commitment_data['description'],
+                'order': commitment_data['order']
+            }
+        )
+        if created:
+            print(f"✓ Created time commitment: {commitment.name}")
+        else:
+            print(f"  Time commitment already exists: {commitment.name}")
+
+
+def seed_availabilities():
+    """Seed availabilities"""
+    availabilities = [
+        {'availability_id': 'immediately', 'name': 'Immediately', 'order': 1},
+        {'availability_id': '1-month', 'name': 'Within 1 month', 'order': 2},
+        {'availability_id': '3-months', 'name': 'Within 3 months', 'order': 3},
+        {'availability_id': '6-months', 'name': 'Within 6 months', 'order': 4},
+    ]
+    
+    for avail_data in availabilities:
+        availability, created = Availability.objects.get_or_create(
+            availability_id=avail_data['availability_id'],
+            defaults={
+                'name': avail_data['name'],
+                'order': avail_data['order']
+            }
+        )
+        if created:
+            print(f"✓ Created availability: {availability.name}")
+        else:
+            print(f"  Availability already exists: {availability.name}")
+
+
+def seed_location_preferences():
+    """Seed location preferences"""
+    locations = [
+        {'location_id': 'same-city', 'name': 'Same City', 'order': 1},
+        {'location_id': 'same-country', 'name': 'Same Country', 'order': 2},
+        {'location_id': 'remote', 'name': 'Remote OK', 'order': 3},
+        {'location_id': 'anywhere', 'name': 'Anywhere', 'order': 4},
+    ]
+    
+    for loc_data in locations:
+        location, created = LocationPreference.objects.get_or_create(
+            location_id=loc_data['location_id'],
+            defaults={
+                'name': loc_data['name'],
+                'order': loc_data['order']
+            }
+        )
+        if created:
+            print(f"✓ Created location preference: {location.name}")
+        else:
+            print(f"  Location preference already exists: {location.name}")
+
+
 def main():
     """Main function to seed all data"""
     print("\n" + "="*60)
@@ -226,6 +346,21 @@ def main():
     
     print("\nSeeding Experience Levels...")
     seed_experience_levels()
+    
+    print("\nSeeding Cofounder Roles...")
+    seed_cofounder_roles()
+    
+    print("\nSeeding Work Styles...")
+    seed_work_styles()
+    
+    print("\nSeeding Time Commitments...")
+    seed_time_commitments()
+    
+    print("\nSeeding Availabilities...")
+    seed_availabilities()
+    
+    print("\nSeeding Location Preferences...")
+    seed_location_preferences()
     
     print("\n" + "="*60)
     print("✓ Onboarding options data seeded successfully!")

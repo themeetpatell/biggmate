@@ -9,7 +9,8 @@ import random
 
 from .models import OTPVerification, GlobalLocation
 from .models_onboarding import (
-    ValueCategory, Value, Intent, Industry, Skill, ExperienceLevel
+    ValueCategory, Value, Intent, Industry, Skill, ExperienceLevel,
+    CofounderRole, WorkStyle, TimeCommitment, Availability, LocationPreference
 )
 from .serializers import (
     UserSerializer, UserRegistrationSerializer, UserLoginSerializer,
@@ -19,7 +20,9 @@ from .serializers import (
 )
 from .serializers_onboarding import (
     ValueCategorySerializer, IntentSerializer, IndustrySerializer,
-    SkillSerializer, ExperienceLevelSerializer, OnboardingOptionsSerializer
+    SkillSerializer, ExperienceLevelSerializer, OnboardingOptionsSerializer,
+    CofounderRoleSerializer, WorkStyleSerializer, TimeCommitmentSerializer,
+    AvailabilitySerializer, LocationPreferenceSerializer
 )
 
 User = get_user_model()
@@ -285,7 +288,7 @@ class OnboardingView(views.APIView):
     
     def post(self, request):
         from .models import OnboardingData
-        from profiles.models import Profile
+        from apps.profiles.models import Profile
         
         user = request.user
         data = request.data
@@ -438,6 +441,11 @@ class OnboardingOptionsView(views.APIView):
             industries = Industry.objects.all()
             skills = Skill.objects.all()
             experience_levels = ExperienceLevel.objects.all()
+            cofounder_roles = CofounderRole.objects.all()
+            work_styles = WorkStyle.objects.all()
+            time_commitments = TimeCommitment.objects.all()
+            availabilities = Availability.objects.all()
+            location_preferences = LocationPreference.objects.all()
             
             # Serialize data
             data = {
@@ -446,6 +454,11 @@ class OnboardingOptionsView(views.APIView):
                 'industries': IndustrySerializer(industries, many=True).data,
                 'skills': SkillSerializer(skills, many=True).data,
                 'experience_levels': ExperienceLevelSerializer(experience_levels, many=True).data,
+                'cofounder_roles': CofounderRoleSerializer(cofounder_roles, many=True).data,
+                'work_styles': WorkStyleSerializer(work_styles, many=True).data,
+                'time_commitments': TimeCommitmentSerializer(time_commitments, many=True).data,
+                'availabilities': AvailabilitySerializer(availabilities, many=True).data,
+                'location_preferences': LocationPreferenceSerializer(location_preferences, many=True).data,
             }
             
             return Response(data, status=status.HTTP_200_OK)

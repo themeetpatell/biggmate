@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   ArrowRight, 
@@ -39,7 +39,130 @@ const AnonymousProfileFixed = () => {
     commitment: ''
   });
 
+  // State for options from backend
+  const [skillsOptions, setSkillsOptions] = useState([]);
+  const [industryOptions, setIndustryOptions] = useState([]);
+  const [experienceLevels, setExperienceLevels] = useState([]);
+  const [cofounderRoles, setCofounderRoles] = useState([]);
+  const [workStyles, setWorkStyles] = useState([]);
+  const [timeCommitments, setTimeCommitments] = useState([]);
+  const [availabilities, setAvailabilities] = useState([]);
+  const [locationPreferences, setLocationPreferences] = useState([]);
+  const [isLoadingOptions, setIsLoadingOptions] = useState(true);
+
   const navigate = useNavigate();
+
+  // Fetch onboarding options from backend
+  useEffect(() => {
+    const fetchOnboardingOptions = async () => {
+      try {
+        setIsLoadingOptions(true);
+        const response = await authAPI.getOnboardingOptions();
+        const data = response.data;
+        
+        // Transform and set all options
+        setSkillsOptions(data.skills?.map(skill => skill.name) || []);
+        setIndustryOptions(data.industries?.map(ind => ind.name) || []);
+        setExperienceLevels(data.experience_levels?.map(level => ({
+          value: level.level_id,
+          label: level.description ? `${level.name} (${level.description})` : level.name
+        })) || []);
+        setCofounderRoles(data.cofounder_roles?.map(role => ({
+          value: role.role_id,
+          label: role.name
+        })) || []);
+        setWorkStyles(data.work_styles?.map(style => ({
+          value: style.style_id,
+          label: style.name
+        })) || []);
+        setTimeCommitments(data.time_commitments?.map(commitment => ({
+          value: commitment.commitment_id,
+          label: commitment.description ? `${commitment.name} (${commitment.description})` : commitment.name
+        })) || []);
+        setAvailabilities(data.availabilities?.map(avail => ({
+          value: avail.availability_id,
+          label: avail.name
+        })) || []);
+        setLocationPreferences(data.location_preferences?.map(loc => ({
+          value: loc.location_id,
+          label: loc.name
+        })) || []);
+      } catch (error) {
+        console.error('Failed to fetch onboarding options:', error);
+        // Fall back to default data if API fails
+        setSkillsOptions(defaultSkillsOptions);
+        setIndustryOptions(defaultIndustryOptions);
+        setExperienceLevels(defaultExperienceLevels);
+        setCofounderRoles(defaultCofounderRoles);
+        setWorkStyles(defaultWorkStyles);
+        setTimeCommitments(defaultTimeCommitments);
+        setAvailabilities(defaultAvailabilities);
+        setLocationPreferences(defaultLocationPreferences);
+      } finally {
+        setIsLoadingOptions(false);
+      }
+    };
+
+    fetchOnboardingOptions();
+  }, []);
+
+  // Default fallback data
+  const defaultSkillsOptions = [
+    'Technical Development', 'Product Management', 'Marketing', 'Sales', 
+    'Operations', 'Finance', 'Design', 'Business Strategy', 'Fundraising',
+    'Legal', 'HR', 'Data Analysis', 'AI/ML', 'Blockchain', 'Mobile Development'
+  ];
+
+  const defaultIndustryOptions = [
+    'Technology', 'Healthcare', 'Fintech', 'E-commerce', 'Education',
+    'Real Estate', 'Food & Beverage', 'Transportation', 'Energy', 'Entertainment',
+    'Manufacturing', 'Retail', 'Travel', 'Sports', 'Gaming'
+  ];
+
+  const defaultExperienceLevels = [
+    { value: 'entry', label: 'Entry Level (0-2 years)' },
+    { value: 'mid', label: 'Mid Level (3-5 years)' },
+    { value: 'senior', label: 'Senior Level (6-10 years)' },
+    { value: 'executive', label: 'Executive (10+ years)' }
+  ];
+
+  const defaultCofounderRoles = [
+    { value: 'technical', label: 'Technical Co-founder' },
+    { value: 'business', label: 'Business Co-founder' },
+    { value: 'marketing', label: 'Marketing Co-founder' },
+    { value: 'operations', label: 'Operations Co-founder' },
+    { value: 'finance', label: 'Finance Co-founder' },
+    { value: 'design', label: 'Design Co-founder' }
+  ];
+
+  const defaultWorkStyles = [
+    { value: 'remote-first', label: 'Remote-first' },
+    { value: 'hybrid', label: 'Hybrid' },
+    { value: 'office-based', label: 'Office-based' },
+    { value: 'flexible', label: 'Flexible hours' }
+  ];
+
+  const defaultTimeCommitments = [
+    { value: 'full-time', label: 'Full-Time (40+ hrs/week)' },
+    { value: 'part-time', label: 'Part-Time (20-30 hrs/week)' },
+    { value: 'flexible', label: 'Flexible (10-20 hrs/week)' },
+    { value: 'weekends', label: 'Weekends Only' },
+    { value: 'evenings', label: 'Evenings Only' }
+  ];
+
+  const defaultAvailabilities = [
+    { value: 'immediately', label: 'Immediately' },
+    { value: '1-month', label: 'Within 1 month' },
+    { value: '3-months', label: 'Within 3 months' },
+    { value: '6-months', label: 'Within 6 months' }
+  ];
+
+  const defaultLocationPreferences = [
+    { value: 'same-city', label: 'Same City' },
+    { value: 'same-country', label: 'Same Country' },
+    { value: 'remote', label: 'Remote OK' },
+    { value: 'anywhere', label: 'Anywhere' }
+  ];
 
   const handleContinue = async () => {
     try {
@@ -94,17 +217,16 @@ const AnonymousProfileFixed = () => {
     }));
   };
 
-  const skillsOptions = [
-    'Technical Development', 'Product Management', 'Marketing', 'Sales', 
-    'Operations', 'Finance', 'Design', 'Business Strategy', 'Fundraising',
-    'Legal', 'HR', 'Data Analysis', 'AI/ML', 'Blockchain', 'Mobile Development'
-  ];
-
-  const industryOptions = [
-    'Technology', 'Healthcare', 'Fintech', 'E-commerce', 'Education',
-    'Real Estate', 'Food & Beverage', 'Transportation', 'Energy', 'Entertainment',
-    'Manufacturing', 'Retail', 'Travel', 'Sports', 'Gaming'
-  ];
+  if (isLoadingOptions) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading options...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
@@ -135,12 +257,9 @@ const AnonymousProfileFixed = () => {
                   className="w-full p-4 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
                 >
                   <option value="">Select role</option>
-                  <option value="technical">Technical Co-founder</option>
-                  <option value="business">Business Co-founder</option>
-                  <option value="marketing">Marketing Co-founder</option>
-                  <option value="operations">Operations Co-founder</option>
-                  <option value="finance">Finance Co-founder</option>
-                  <option value="design">Design Co-founder</option>
+                  {cofounderRoles.map(role => (
+                    <option key={role.value} value={role.value}>{role.label}</option>
+                  ))}
                 </select>
               </div>
 
@@ -157,10 +276,9 @@ const AnonymousProfileFixed = () => {
                   className="w-full p-4 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
                 >
                   <option value="">Select experience level</option>
-                  <option value="entry">Entry Level (0-2 years)</option>
-                  <option value="mid">Mid Level (3-5 years)</option>
-                  <option value="senior">Senior Level (6-10 years)</option>
-                  <option value="executive">Executive Level (10+ years)</option>
+                  {experienceLevels.map(level => (
+                    <option key={level.value} value={level.value}>{level.label}</option>
+                  ))}
                 </select>
               </div>
 
@@ -233,10 +351,9 @@ const AnonymousProfileFixed = () => {
                   className="w-full p-4 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
                 >
                   <option value="">Select work style</option>
-                  <option value="remote-first">Remote-first</option>
-                  <option value="hybrid">Hybrid</option>
-                  <option value="office-based">Office-based</option>
-                  <option value="flexible">Flexible hours</option>
+                  {workStyles.map(style => (
+                    <option key={style.value} value={style.value}>{style.label}</option>
+                  ))}
                 </select>
               </div>
 
@@ -253,11 +370,9 @@ const AnonymousProfileFixed = () => {
                   className="w-full p-4 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
                 >
                   <option value="">Select commitment</option>
-                  <option value="full-time">Full-Time (40+ hrs/week)</option>
-                  <option value="part-time">Part-Time (20-30 hrs/week)</option>
-                  <option value="flexible">Flexible (10-20 hrs/week)</option>
-                  <option value="weekends">Weekends Only</option>
-                  <option value="evenings">Evenings Only</option>
+                  {timeCommitments.map(commitment => (
+                    <option key={commitment.value} value={commitment.value}>{commitment.label}</option>
+                  ))}
                 </select>
               </div>
 
@@ -274,10 +389,9 @@ const AnonymousProfileFixed = () => {
                   className="w-full p-4 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
                 >
                   <option value="">Select availability</option>
-                  <option value="immediately">Immediately</option>
-                  <option value="1-month">Within 1 month</option>
-                  <option value="3-months">Within 3 months</option>
-                  <option value="6-months">Within 6 months</option>
+                  {availabilities.map(avail => (
+                    <option key={avail.value} value={avail.value}>{avail.label}</option>
+                  ))}
                 </select>
               </div>
 
@@ -294,10 +408,9 @@ const AnonymousProfileFixed = () => {
                   className="w-full p-4 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
                 >
                   <option value="">Select location</option>
-                  <option value="same-city">Same City</option>
-                  <option value="same-country">Same Country</option>
-                  <option value="remote">Remote OK</option>
-                  <option value="anywhere">Anywhere</option>
+                  {locationPreferences.map(loc => (
+                    <option key={loc.value} value={loc.value}>{loc.label}</option>
+                  ))}
                 </select>
               </div>
             </div>

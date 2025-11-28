@@ -90,11 +90,19 @@ ASGI_APPLICATION = 'config.asgi.application'
 # Using SQLite for development - easy to migrate to PostgreSQL/MySQL later
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'test',     # Name of your PostgreSQL database
+        'USER': 'postgres',     # Your PostgreSQL username
+        'PASSWORD': 'root',  # Your PostgreSQL password
+        'HOST': 'localhost',             # Database host, use 'localhost' for local DB or IP address for remote
+        'PORT': '5432',                 # Default PostgreSQL port
+        'POOL_OPTIONS': {
+            'MAX_CONNS': 50,  # Max connections in pool
+            'MIN_CONNS': 10,  # Minimum connections to keep open
+            'MAX_IDLE': 300,  # Seconds before closing idle connections
+        }
     }
 }
-
 # Uncomment below for PostgreSQL (after migration)
 # DATABASES = {
 #     'default': {

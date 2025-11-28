@@ -102,3 +102,85 @@ class ExperienceLevel(models.Model):
     
     def __str__(self):
         return self.name
+
+
+class CofounderRole(models.Model):
+    """Cofounder roles for matching"""
+    role_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'cofounder_roles'
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.name
+
+
+class WorkStyle(models.Model):
+    """Work style preferences"""
+    style_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'work_styles'
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.name
+
+
+class TimeCommitment(models.Model):
+    """Time commitment options"""
+    commitment_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=200, blank=True)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'time_commitments'
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.name
+
+
+class Availability(models.Model):
+    """Availability options"""
+    availability_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'availabilities'
+        ordering = ['order']
+        verbose_name_plural = 'Availabilities'
+    
+    def __str__(self):
+        return self.name
+
+
+class LocationPreference(models.Model):
+    """Location preference options"""
+    location_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'location_preferences'
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.name
