@@ -278,18 +278,18 @@ const EntrepreneurProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
-      <div className="max-w-6xl mx-auto pb-16">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      <div className="max-w-6xl mx-auto pb-16 px-4 sm:px-6">
         {/* Hero Section */}
-        <div className="relative mb-8">
+        <div className="relative mb-10">
           {/* Cover Photo */}
-          <div className="relative h-80 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl overflow-hidden shadow-2xl">
+          <div className="relative min-h-[340px] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-200/60">
             <img
               src={profile.basic.coverPicture || 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&h=400&fit=crop'}
               alt="Cover"
-              className="w-full h-full object-cover opacity-90"
+              className="w-full h-full object-cover opacity-85"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent"></div>
             
             {editingSection === 'cover' && (
               <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
@@ -302,7 +302,7 @@ const EntrepreneurProfile = () => {
             {!editingSection && (
               <button
                 onClick={() => setEditingSection('cover')}
-                className="absolute top-6 right-6 p-3 bg-white/90 hover:bg-white rounded-xl shadow-lg transition-all backdrop-blur-sm"
+                className="absolute top-6 right-6 p-3 bg-white/90 hover:bg-white rounded-full shadow-lg transition-all backdrop-blur-sm border border-white/60"
               >
                 <Camera className="w-5 h-5 text-gray-700" />
               </button>
@@ -337,24 +337,24 @@ const EntrepreneurProfile = () => {
             </div>
 
             {/* Profile Info Overlay */}
-            <div className="absolute bottom-8 left-56 right-8">
-              <div className="flex items-end justify-between">
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[92%] md:w-[80%] max-w-5xl transform">
+              <div className="flex flex-col md:flex-row md:items-end items-start justify-between gap-3 bg-white/18 backdrop-blur-xl border border-white/30 rounded-3xl p-5 shadow-2xl">
                 <div className="flex-1">
                   <h1 className="text-4xl font-bold text-white mb-2 drop-shadow-lg">
                     {editingSection === 'basic' ? (
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-2">
                         <input
                           type="text"
                           value={profile.basic.firstName}
                           onChange={(e) => setProfile(prev => ({ ...prev, basic: { ...prev.basic, firstName: e.target.value } }))}
-                          className="text-4xl font-bold bg-white/20 backdrop-blur-sm border-2 border-white/30 rounded-lg px-3 py-1 text-white placeholder-white/70 focus:outline-none focus:border-white/50"
+                          className="text-4xl font-bold bg-white/25 backdrop-blur-sm border border-white/40 rounded-lg px-3 py-1 text-white placeholder-white/70 focus:outline-none focus:border-white/60 w-auto min-w-[140px] max-w-[240px]"
                           placeholder="First Name"
                         />
                         <input
                           type="text"
                           value={profile.basic.lastName}
                           onChange={(e) => setProfile(prev => ({ ...prev, basic: { ...prev.basic, lastName: e.target.value } }))}
-                          className="text-4xl font-bold bg-white/20 backdrop-blur-sm border-2 border-white/30 rounded-lg px-3 py-1 text-white placeholder-white/70 focus:outline-none focus:border-white/50"
+                          className="text-4xl font-bold bg-white/25 backdrop-blur-sm border border-white/40 rounded-lg px-3 py-1 text-white placeholder-white/70 focus:outline-none focus:border-white/60 w-auto min-w-[140px] max-w-[240px]"
                           placeholder="Last Name"
                         />
                       </div>
@@ -367,13 +367,13 @@ const EntrepreneurProfile = () => {
                       type="text"
                       value={profile.basic.tagline}
                       onChange={(e) => setProfile(prev => ({ ...prev, basic: { ...prev.basic, tagline: e.target.value } }))}
-                      className="mt-2 text-xl text-white/90 bg-white/20 backdrop-blur-sm border-2 border-white/30 rounded-lg px-3 py-1.5 w-full focus:outline-none focus:border-white/50 placeholder-white/70"
+                      className="mt-2 text-xl text-white/90 bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-1.5 w-full max-w-2xl focus:outline-none focus:border-white/50 placeholder-white/70"
                       placeholder="Add a compelling tagline..."
                     />
                   ) : (
                     <p className="text-xl text-white/90 font-medium mb-3 drop-shadow-md">{profile.basic.tagline || 'Add a compelling tagline'}</p>
                   )}
-                  <div className="flex items-center gap-4 text-white/80">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-white/85 mt-2">
                     {profile.basic.location && (
                       <span className="flex items-center gap-1.5 text-sm font-medium">
                         <MapPin className="w-4 h-4" />
@@ -402,7 +402,7 @@ const EntrepreneurProfile = () => {
                       setEditingSection('basic');
                     }
                   }}
-                  className="px-6 py-2.5 bg-white/90 hover:bg-white backdrop-blur-sm text-gray-900 rounded-xl text-sm font-semibold transition-all shadow-lg flex items-center gap-2"
+                  className="px-5 py-2 bg-white text-gray-900 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-xl flex items-center gap-2 border border-white/70"
                 >
                   {editingSection === 'basic' ? (
                     <>
@@ -418,56 +418,8 @@ const EntrepreneurProfile = () => {
                 </button>
               </div>
             </div>
-          </div>
         </div>
-
-        {/* Stats Bar */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <Star className="w-6 h-6 text-blue-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">{profile.reputation.rating.toFixed(1)}</div>
-                <div className="text-sm text-gray-600">Rating</div>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                <MessageSquare className="w-6 h-6 text-purple-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">{profile.reputation.reviews.length}</div>
-                <div className="text-sm text-gray-600">Reviews</div>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <Users className="w-6 h-6 text-green-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">{profile.reputation.followers.toLocaleString()}</div>
-                <div className="text-sm text-gray-600">Followers</div>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                <Eye className="w-6 h-6 text-orange-600" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-gray-900">1.2K</div>
-                <div className="text-sm text-gray-600">Profile Views</div>
-              </div>
-            </div>
-          </div>
-        </div>
+      </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column */}
@@ -482,22 +434,31 @@ const EntrepreneurProfile = () => {
                     </div>
                     <h2 className="text-xl font-bold text-gray-900">About</h2>
                   </div>
-                  <button
-                    onClick={() => {
-                      if (editingSection === 'about') {
-                        handleSave();
-                      } else {
-                        setEditingSection('about');
-                      }
-                    }}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    {editingSection === 'about' ? (
-                      <span className="text-sm font-semibold text-blue-600">Save</span>
-                    ) : (
-                      <Pencil className="w-5 h-5 text-gray-600" />
-                    )}
-                  </button>
+                  {editingSection === 'about' ? (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setEditingSection(null)}
+                        className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleSave}
+                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                        Save
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setEditingSection('about')}
+                      className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2"
+                    >
+                      <Pencil className="w-4 h-4" />
+                      Edit
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="p-6">
@@ -529,22 +490,31 @@ const EntrepreneurProfile = () => {
                     </div>
                     <h2 className="text-xl font-bold text-gray-900">Skills & Expertise</h2>
                   </div>
-                  <button
-                    onClick={() => {
-                      if (editingSection === 'skills') {
-                        handleSave();
-                      } else {
-                        setEditingSection('skills');
-                      }
-                    }}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    {editingSection === 'skills' ? (
-                      <span className="text-sm font-semibold text-blue-600">Save</span>
-                    ) : (
-                      <Pencil className="w-5 h-5 text-gray-600" />
-                    )}
-                  </button>
+                  {editingSection === 'skills' ? (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setEditingSection(null)}
+                        className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleSave}
+                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                        Save
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setEditingSection('skills')}
+                      className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2"
+                    >
+                      <Pencil className="w-4 h-4" />
+                      Edit
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="p-6">
@@ -618,25 +588,38 @@ const EntrepreneurProfile = () => {
                     </div>
                     <h2 className="text-xl font-bold text-gray-900">Experience</h2>
                   </div>
-                  <button
-                    onClick={() => {
-                      if (editingSection === 'experience') {
-                        handleSave();
-                      } else {
+                  {editingSection === 'experience' ? (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          setEditingSection(null);
+                        }}
+                        className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleSave}
+                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                        Save
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
                         setEditingSection('experience');
                         if (profile.experience.length === 0) {
                           handleAddExperience();
                         }
-                      }
-                    }}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    {editingSection === 'experience' ? (
-                      <span className="text-sm font-semibold text-blue-600">Save</span>
-                    ) : (
-                      <Plus className="w-5 h-5 text-gray-600" />
-                    )}
-                  </button>
+                      }}
+                      className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Add
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="p-6">
@@ -659,7 +642,7 @@ const EntrepreneurProfile = () => {
                     {profile.experience.map((exp, index) => (
                       <div key={exp.id} className={`${index !== profile.experience.length - 1 ? 'pb-8 border-b border-gray-100' : ''}`}>
                         {editingSection === 'experience' ? (
-                          <div className="space-y-4">
+                          <div className="space-y-5 bg-slate-50/70 border border-slate-200 rounded-2xl p-5">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div>
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">Job Title</label>
@@ -672,7 +655,7 @@ const EntrepreneurProfile = () => {
                                     );
                                     setProfile(prev => ({ ...prev, experience: updated }));
                                   }}
-                                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all"
+                                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all"
                                   placeholder="e.g. Software Engineer"
                                 />
                               </div>
@@ -687,7 +670,7 @@ const EntrepreneurProfile = () => {
                                     );
                                     setProfile(prev => ({ ...prev, experience: updated }));
                                   }}
-                                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all"
+                                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all"
                                   placeholder="e.g. Google"
                                 />
                               </div>
@@ -702,7 +685,7 @@ const EntrepreneurProfile = () => {
                                   );
                                   setProfile(prev => ({ ...prev, experience: updated }));
                                 }}
-                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all"
                               >
                                 <option value="Full-time">Full-time</option>
                                 <option value="Part-time">Part-time</option>
@@ -723,7 +706,7 @@ const EntrepreneurProfile = () => {
                                     );
                                     setProfile(prev => ({ ...prev, experience: updated }));
                                   }}
-                                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all"
+                                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all"
                                 />
                               </div>
                               <div>
@@ -739,7 +722,7 @@ const EntrepreneurProfile = () => {
                                       setProfile(prev => ({ ...prev, experience: updated }));
                                     }}
                                     disabled={exp.endDate === 'Present'}
-                                    className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all disabled:bg-gray-50 disabled:text-gray-500"
+                                    className="flex-1 px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all disabled:bg-gray-50 disabled:text-gray-500"
                                   />
                                   <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
                                     <input
@@ -769,7 +752,7 @@ const EntrepreneurProfile = () => {
                                   );
                                   setProfile(prev => ({ ...prev, experience: updated }));
                                 }}
-                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 transition-all"
                                 placeholder="e.g. San Francisco, CA"
                               />
                             </div>
@@ -784,7 +767,7 @@ const EntrepreneurProfile = () => {
                                   setProfile(prev => ({ ...prev, experience: updated }));
                                 }}
                                 rows={4}
-                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none text-gray-900 transition-all"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none text-gray-900 transition-all"
                                 placeholder="Describe your role, achievements, and responsibilities..."
                               />
                             </div>
@@ -849,25 +832,36 @@ const EntrepreneurProfile = () => {
                     </div>
                     <h2 className="text-xl font-bold text-gray-900">Education</h2>
                   </div>
-                  <button
-                    onClick={() => {
-                      if (editingSection === 'education') {
-                        handleSave();
-                      } else {
+                  {editingSection === 'education' ? (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setEditingSection(null)}
+                        className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleSave}
+                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                        Save
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
                         setEditingSection('education');
                         if (profile.education.length === 0) {
                           handleAddEducation();
                         }
-                      }
-                    }}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    {editingSection === 'education' ? (
-                      <span className="text-sm font-semibold text-blue-600">Save</span>
-                    ) : (
-                      <Plus className="w-5 h-5 text-gray-600" />
-                    )}
-                  </button>
+                      }}
+                      className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Add
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="p-6">
@@ -1257,22 +1251,31 @@ const EntrepreneurProfile = () => {
                     </div>
                     <h2 className="text-xl font-bold text-gray-900">Contact</h2>
                   </div>
-                  <button
-                    onClick={() => {
-                      if (editingSection === 'contact') {
-                        handleSave();
-                      } else {
-                        setEditingSection('contact');
-                      }
-                    }}
-                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  >
-                    {editingSection === 'contact' ? (
-                      <span className="text-sm font-semibold text-blue-600">Save</span>
-                    ) : (
-                      <Pencil className="w-5 h-5 text-gray-600" />
-                    )}
-                  </button>
+                  {editingSection === 'contact' ? (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setEditingSection(null)}
+                        className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleSave}
+                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                        Save
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setEditingSection('contact')}
+                      className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors flex items-center gap-2"
+                    >
+                      <Pencil className="w-4 h-4" />
+                      Edit
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="p-6">
