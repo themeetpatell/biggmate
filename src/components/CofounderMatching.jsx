@@ -191,6 +191,11 @@ const CofounderMatching = ({ currentUser, matches, onConnect, onPass, onPitch, o
       });
   }, [matches, searchQuery, filters, sortBy, currentUser]);
 
+  const handlePitchClick = (match) => {
+    setSelectedCofounder(match);
+    setShowPitchModal(true);
+  };
+
   const handleSendPitch = () => {
     if (selectedCofounder && pitchForm.startupIdea.trim()) {
       const pitchData = {
@@ -465,7 +470,7 @@ I bring [business experience] and have [achievements]. Together, we could [visio
               className="flex-1 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2"
             >
               <Send className="w-4 h-4" />
-              Send Pitch
+              Send Pitchback
             </button>
           </div>
         </div>
@@ -621,7 +626,7 @@ I bring [business experience] and have [achievements]. Together, we could [visio
               className="flex-1 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300 flex items-center justify-center gap-2"
             >
               <Send className="w-4 h-4" />
-              Send Pitch
+              Pitchback
             </button>
             <button
               onClick={() => handleBookmark(match.id)}
@@ -929,7 +934,7 @@ I bring [business experience] and have [achievements]. Together, we could [visio
                           className="flex-1 py-2.5 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300 text-sm flex items-center justify-center gap-2"
                         >
                           <Send className="w-4 h-4" />
-                          Send Pitch
+                          Pitchback
                         </button>
                       ) : (
                         <button

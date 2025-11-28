@@ -3,126 +3,8 @@ import {
   Rocket, Target, CheckCircle, Clock, AlertCircle, 
   BarChart3, TrendingUp, Award, Star, Zap, Users,
   Calendar, FileText, MessageSquare, Video, Plus, MapPin,
-  Edit3, Trash2, Save, Download, Share2, Eye,
-  ChevronRight, ChevronDown, ChevronUp, ArrowRight,
-  ArrowLeft, ArrowUp, ArrowDown, Maximize2, Minimize2,
-  RotateCcw, RotateCw, ZoomIn, ZoomOut, Move, Copy,
-  Scissors, Trash2 as Trash2Icon, Save as SaveIcon,
-  Upload, Download as DownloadIcon, Link, Link2, Unlink,
-  Lock, Key, KeyRound, Shield, ShieldCheck, ShieldAlert,
-  AlertTriangle, AlertOctagon, AlertCircle as AlertCircleIcon,
-  Info, HelpCircle, CheckCircle2, XCircle, PlusCircle,
-  MinusCircle, X as XIcon, Check as CheckIcon,
-  AlertTriangle as AlertTriangleIcon, AlertOctagon as AlertOctagonIcon,
-  AlertCircle as AlertCircleIcon2, Info as InfoIcon,
-  HelpCircle as HelpCircleIcon, CheckCircle as CheckCircleIcon,
-  XCircle as XCircleIcon, PlusCircle as PlusCircleIcon,
-  MinusCircle as MinusCircleIcon, X as XIcon2, Check as CheckIcon2,
-  Globe, Phone, Mail, Instagram, Twitter, Linkedin, Github,
-  ExternalLink, Coffee, Plane, Gamepad2, BookOpen,
-  Users as UsersIcon, Clock as ClockIcon, BarChart3 as BarChart3Icon,
-  Activity, Compass, Shield as ShieldIcon, Badge, Gift,
-  Video as VideoIcon, FileText as FileTextIcon,
-  Download as DownloadIcon2, Play, Pause, Volume2, ThumbsUp,
-  MessageSquare as MessageSquareIcon, Send, Bookmark, Flag,
-  MoreHorizontal, Search, Filter, SortAsc, SortDesc, RefreshCw,
-  Bell, BellOff, Eye as EyeIcon, EyeOff as EyeOffIcon,
-  ChevronUp as ChevronUpIcon, ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon, ChevronDown as ChevronDownIcon,
-  ArrowRight as ArrowRightIcon, ArrowLeft as ArrowLeftIcon,
-  ArrowUp as ArrowUpIcon, ArrowDown as ArrowDownIcon,
-  Maximize2 as Maximize2Icon, Minimize2 as Minimize2Icon,
-  RotateCcw as RotateCcwIcon, RotateCw as RotateCwIcon,
-  ZoomIn as ZoomInIcon, ZoomOut as ZoomOutIcon, Move as MoveIcon,
-  Copy as CopyIcon, Scissors as ScissorsIcon, Trash2 as Trash2Icon2,
-  Save as SaveIcon2, Upload as UploadIcon, Download as DownloadIcon3,
-  Link as LinkIcon, Link2 as Link2Icon2, Unlink as UnlinkIcon,
-  Lock as LockIcon, Key as KeyIcon, KeyRound as KeyRoundIcon,
-  Shield as ShieldIcon2, ShieldCheck as ShieldCheckIcon,
-  ShieldAlert as ShieldAlertIcon, AlertCircle as AlertCircleIcon3,
-  Info as InfoIcon2, HelpCircle as HelpCircleIcon2,
-  CheckCircle as CheckCircleIcon2, XCircle as XCircleIcon2,
-  PlusCircle as PlusCircleIcon2, MinusCircle as MinusCircleIcon2,
-  X as XIcon3, Check as CheckIcon3, AlertTriangle as AlertTriangleIcon2,
-  AlertOctagon as AlertOctagonIcon2, AlertCircle as AlertCircleIcon4,
-  Info as InfoIcon3, HelpCircle as HelpCircleIcon3,
-  CheckCircle as CheckCircleIcon3, XCircle as XCircleIcon3,
-  PlusCircle as PlusCircleIcon3, MinusCircle as MinusCircleIcon3,
-  X as XIcon4, Check as CheckIcon4, Lightbulb, Code,
-  Palette, Music, Coffee as CoffeeIcon, Plane as PlaneIcon,
-  Gamepad2 as Gamepad2Icon, BookOpen as BookOpenIcon,
-  Users as UsersIcon2, Clock as ClockIcon2, BarChart3 as BarChart3Icon2,
-  Activity as ActivityIcon, Compass as CompassIcon,
-  Shield as ShieldIcon3, Badge as BadgeIcon, Gift as GiftIcon,
-  Video as VideoIcon2, FileText as FileTextIcon2,
-  Download as DownloadIcon4, Play as PlayIcon, Pause as PauseIcon,
-  Volume2 as Volume2Icon, ThumbsUp as ThumbsUpIcon,
-  MessageSquare as MessageSquareIcon2, Send as SendIcon,
-  Bookmark as BookmarkIcon, Flag as FlagIcon,
-  MoreHorizontal as MoreHorizontalIcon, Search as SearchIcon,
-  Filter as FilterIcon, SortAsc as SortAscIcon, SortDesc as SortDescIcon,
-  RefreshCw as RefreshCwIcon, Bell as BellIcon, BellOff as BellOffIcon,
-  Eye as EyeIcon2, EyeOff as EyeOffIcon2, ChevronUp as ChevronUpIcon2,
-  ChevronLeft as ChevronLeftIcon2, ChevronRight as ChevronRightIcon2,
-  ChevronDown as ChevronDownIcon2, ArrowRight as ArrowRightIcon2,
-  ArrowLeft as ArrowLeftIcon2, ArrowUp as ArrowUpIcon2,
-  ArrowDown as ArrowDownIcon2, Maximize2 as Maximize2Icon2,
-  Minimize2 as Minimize2Icon2, RotateCcw as RotateCcwIcon2,
-  RotateCw as RotateCwIcon2, ZoomIn as ZoomInIcon2,
-  ZoomOut as ZoomOutIcon2, Move as MoveIcon2, Copy as CopyIcon2,
-  Scissors as ScissorsIcon2, Trash2 as Trash2Icon3,
-  Save as SaveIcon3, Upload as UploadIcon2, Download as DownloadIcon5,
-  Link as LinkIcon2, Link2 as Link2Icon3, Unlink as UnlinkIcon2,
-  Lock as LockIcon2, Key as KeyIcon2, KeyRound as KeyRoundIcon2,
-  Shield as ShieldIcon4, ShieldCheck as ShieldCheckIcon2,
-  ShieldAlert as ShieldAlertIcon2, AlertCircle as AlertCircleIcon5,
-  Info as InfoIcon4, HelpCircle as HelpCircleIcon4,
-  CheckCircle as CheckCircleIcon4, XCircle as XCircleIcon4,
-  PlusCircle as PlusCircleIcon4, MinusCircle as MinusCircleIcon4,
-  X as XIcon5, Check as CheckIcon5, AlertTriangle as AlertTriangleIcon3,
-  AlertOctagon as AlertOctagonIcon3, AlertCircle as AlertCircleIcon6,
-  Info as InfoIcon5, HelpCircle as HelpCircleIcon5,
-  CheckCircle as CheckCircleIcon5, XCircle as XCircleIcon5,
-  PlusCircle as PlusCircleIcon5, MinusCircle as MinusCircleIcon5,
-  X as XIcon6, Check as CheckIcon6, Building2, DollarSign,
-  Phone as PhoneIcon, Mail as MailIcon, Instagram as InstagramIcon,
-  Twitter as TwitterIcon, Linkedin as LinkedinIcon, Github as GithubIcon,
-  ExternalLink as ExternalLinkIcon, Coffee as CoffeeIcon2,
-  Plane as PlaneIcon2, Gamepad2 as Gamepad2Icon2, BookOpen as BookOpenIcon2,
-  Users as UsersIcon3, Clock as ClockIcon3, BarChart3 as BarChart3Icon3,
-  Activity as ActivityIcon2, Compass as CompassIcon2,
-  Shield as ShieldIcon5, Badge as BadgeIcon2, Gift as GiftIcon2,
-  Video as VideoIcon3, FileText as FileTextIcon3,
-  Download as DownloadIcon6, Play as PlayIcon2, Pause as PauseIcon2,
-  Volume2 as Volume2Icon2, ThumbsUp as ThumbsUpIcon2,
-  MessageSquare as MessageSquareIcon3, Send as SendIcon2,
-  Bookmark as BookmarkIcon2, Flag as FlagIcon2,
-  MoreHorizontal as MoreHorizontalIcon2, Search as SearchIcon2,
-  Filter as FilterIcon2, SortAsc as SortAscIcon2, SortDesc as SortDescIcon2,
-  RefreshCw as RefreshCwIcon2, Bell as BellIcon2, BellOff as BellOffIcon2,
-  Eye as EyeIcon3, EyeOff as EyeOffIcon3, ChevronUp as ChevronUpIcon3,
-  ChevronLeft as ChevronLeftIcon3, ChevronRight as ChevronRightIcon3,
-  ChevronDown as ChevronDownIcon3, ArrowRight as ArrowRightIcon3,
-  ArrowLeft as ArrowLeftIcon3, ArrowUp as ArrowUpIcon3,
-  ArrowDown as ArrowDownIcon3, Maximize2 as Maximize2Icon3,
-  Minimize2 as Minimize2Icon3, RotateCcw as RotateCcwIcon3,
-  RotateCw as RotateCwIcon3, ZoomIn as ZoomInIcon3,
-  ZoomOut as ZoomOutIcon3, Move as MoveIcon3, Copy as CopyIcon3,
-  Scissors as ScissorsIcon3, Trash2 as Trash2Icon4,
-  Save as SaveIcon4, Upload as UploadIcon3, Download as DownloadIcon7,
-  Link as LinkIcon3, Link2 as Link2Icon4, Unlink as UnlinkIcon3,
-  Lock as LockIcon3, Key as KeyIcon3, KeyRound as KeyRoundIcon3,
-  Shield as ShieldIcon6, ShieldCheck as ShieldCheckIcon3,
-  ShieldAlert as ShieldAlertIcon3, AlertCircle as AlertCircleIcon7,
-  Info as InfoIcon6, HelpCircle as HelpCircleIcon6,
-  CheckCircle as CheckCircleIcon6, XCircle as XCircleIcon6,
-  PlusCircle as PlusCircleIcon6, MinusCircle as MinusCircleIcon6,
-  X as XIcon7, Check as CheckIcon7, AlertTriangle as AlertTriangleIcon4,
-  AlertOctagon as AlertOctagonIcon4, AlertCircle as AlertCircleIcon8,
-  Info as InfoIcon7, HelpCircle as HelpCircleIcon7,
-  CheckCircle as CheckCircleIcon7, XCircle as XCircleIcon7,
-  PlusCircle as PlusCircleIcon7, MinusCircle as MinusCircleIcon7,
-  X as XIcon8, Check as CheckIcon8
+  Edit3, Download, Share2, Shield, ShieldCheck,
+  AlertTriangle, X, Copy, DollarSign, ExternalLink, Gift, Link, ThumbsUp, Globe, Upload
 } from 'lucide-react';
 
 const LaunchPreparation = () => {
@@ -138,6 +20,82 @@ const LaunchPreparation = () => {
     targetAudience: '',
     channels: [],
     metrics: []
+  });
+  
+  // Countdown timer state
+  const [countdown, setCountdown] = useState({ days: 45, hours: 12, minutes: 34, seconds: 56 });
+  
+  // Launch Tracker state
+  const [tasks, setTasks] = useState([
+    {
+      id: 1,
+      task: 'Finalize landing page design',
+      category: 'Product',
+      assignee: 'Alex Chen',
+      dueDate: '2024-03-15',
+      status: 'in-progress',
+      dependencies: ['Design system complete'],
+      blockers: [],
+      progress: 75
+    },
+    {
+      id: 2,
+      task: 'Set up analytics tracking',
+      category: 'GTM',
+      assignee: 'Sarah Martinez',
+      dueDate: '2024-03-18',
+      status: 'pending',
+      dependencies: ['Landing page live'],
+      blockers: ['Waiting on dev team'],
+      progress: 30
+    },
+    {
+      id: 3,
+      task: 'Complete legal documentation',
+      category: 'Legal',
+      assignee: 'Legal Team',
+      dueDate: '2024-03-20',
+      status: 'in-progress',
+      dependencies: ['Incorporation complete'],
+      blockers: [],
+      progress: 60
+    },
+    {
+      id: 4,
+      task: 'Press kit preparation',
+      category: 'GTM',
+      assignee: 'Sarah Martinez',
+      dueDate: '2024-03-22',
+      status: 'pending',
+      dependencies: ['Founder bios', 'Product screenshots'],
+      blockers: [],
+      progress: 40
+    }
+  ]);
+  
+  // Success Metrics state
+  const [metrics, setMetrics] = useState({
+    waitlistSignups: { current: 1247, target: 2000 },
+    websiteVisitors: { current: 8542, target: 15000 },
+    conversionRate: { current: 12.5, target: 15.0 },
+    socialEngagement: { current: 3821, target: 5000 }
+  });
+  
+  // Launch Story state
+  const [launchStory, setLaunchStory] = useState('TechFlow AI is revolutionizing remote work with AI-powered workflow automation. Founded by Alex Chen (ex-Google) and Sarah Martinez (ex-McKinsey), we\'re on a mission to help distributed teams work smarter, not harder. After 6 months of development and beta testing with 1,250+ users, we\'re launching our MVP this May. Join us in building the future of work.');
+  const [isEditingStory, setIsEditingStory] = useState(false);
+  
+  // Modal states
+  const [showTaskModal, setShowTaskModal] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
+  const [newTask, setNewTask] = useState({
+    task: '',
+    category: 'Product',
+    assignee: '',
+    dueDate: '',
+    dependencies: '',
+    blockers: '',
+    progress: 0
   });
 
   const tabs = [
@@ -249,6 +207,135 @@ const LaunchPreparation = () => {
   useEffect(() => {
     loadLaunches();
   }, []);
+
+  // Countdown timer effect
+  useEffect(() => {
+    const launchDate = new Date('2024-05-01T00:00:00');
+    
+    const updateCountdown = () => {
+      const now = new Date();
+      const diff = launchDate - now;
+      
+      if (diff > 0) {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        setCountdown({ days, hours, minutes, seconds });
+      } else {
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      }
+    };
+    
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  // Task management handlers
+  const handleAddTask = () => {
+    setEditingTask(null);
+    setNewTask({
+      task: '',
+      category: 'Product',
+      assignee: '',
+      dueDate: '',
+      dependencies: '',
+      blockers: '',
+      progress: 0
+    });
+    setShowTaskModal(true);
+  };
+
+  const handleEditTask = (task) => {
+    setEditingTask(task);
+    setNewTask({
+      task: task.task,
+      category: task.category,
+      assignee: task.assignee,
+      dueDate: task.dueDate,
+      dependencies: task.dependencies.join(', '),
+      blockers: task.blockers.join(', '),
+      progress: task.progress
+    });
+    setShowTaskModal(true);
+  };
+
+  const handleSaveTask = () => {
+    if (editingTask) {
+      setTasks(tasks.map(t => 
+        t.id === editingTask.id 
+          ? {
+              ...t,
+              task: newTask.task,
+              category: newTask.category,
+              assignee: newTask.assignee,
+              dueDate: newTask.dueDate,
+              dependencies: newTask.dependencies ? newTask.dependencies.split(',').map(d => d.trim()) : [],
+              blockers: newTask.blockers ? newTask.blockers.split(',').map(b => b.trim()) : [],
+              progress: newTask.progress
+            }
+          : t
+      ));
+    } else {
+      const task = {
+        id: Date.now(),
+        task: newTask.task,
+        category: newTask.category,
+        assignee: newTask.assignee,
+        dueDate: newTask.dueDate,
+        status: 'pending',
+        dependencies: newTask.dependencies ? newTask.dependencies.split(',').map(d => d.trim()) : [],
+        blockers: newTask.blockers ? newTask.blockers.split(',').map(b => b.trim()) : [],
+        progress: newTask.progress
+      };
+      setTasks([...tasks, task]);
+    }
+    setShowTaskModal(false);
+    setEditingTask(null);
+  };
+
+  const handleCompleteTask = (taskId) => {
+    setTasks(tasks.map(t => 
+      t.id === taskId 
+        ? { ...t, status: 'completed', progress: 100 }
+        : t
+    ));
+  };
+
+  const handleDeleteTask = (taskId) => {
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      setTasks(tasks.filter(t => t.id !== taskId));
+    }
+  };
+
+  // Calculate overall readiness
+  const calculateReadiness = () => {
+    const taskProgress = tasks.length > 0 
+      ? tasks.reduce((sum, t) => sum + t.progress, 0) / tasks.length 
+      : 0;
+    
+    const productReadiness = 75;
+    const legalReadiness = 50;
+    const gtmReadiness = 80;
+    const eventsReadiness = 65;
+    
+    const overall = Math.round(
+      (taskProgress * 0.3 + productReadiness * 0.25 + legalReadiness * 0.2 + gtmReadiness * 0.15 + eventsReadiness * 0.1)
+    );
+    
+    return {
+      overall: Math.min(overall, 100),
+      product: productReadiness,
+      legal: legalReadiness,
+      gtm: gtmReadiness,
+      events: eventsReadiness
+    };
+  };
+
+  const readiness = calculateReadiness();
 
   const loadLaunches = async () => {
     setIsLoading(true);
@@ -392,29 +479,36 @@ const LaunchPreparation = () => {
         <div className="mb-6">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-xl font-semibold text-gray-900">Overall Readiness</h3>
-            <span className="text-3xl font-bold text-gray-900">67%</span>
+            <span className="text-3xl font-bold text-gray-900">{readiness.overall}%</span>
                 </div>
           <div className="w-full bg-gray-200 rounded-full h-4">
-            <div className="bg-gradient-to-r from-yellow-500 to-green-500 h-4 rounded-full" style={{ width: '67%' }}></div>
+            <div 
+              className={`h-4 rounded-full transition-all ${
+                readiness.overall >= 80 ? 'bg-gradient-to-r from-green-500 to-emerald-500' :
+                readiness.overall >= 60 ? 'bg-gradient-to-r from-yellow-500 to-green-500' :
+                'bg-gradient-to-r from-orange-500 to-yellow-500'
+              }`}
+              style={{ width: `${readiness.overall}%` }}
+            ></div>
                 </div>
                 </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-gray-50 rounded-xl p-4">
             <h4 className="text-sm font-semibold text-gray-600 mb-2">Product</h4>
-            <div className="text-2xl font-bold text-gray-900">75%</div>
+            <div className="text-2xl font-bold text-gray-900">{readiness.product}%</div>
                 </div>
           <div className="bg-gray-50 rounded-xl p-4">
             <h4 className="text-sm font-semibold text-gray-600 mb-2">Legal</h4>
-            <div className="text-2xl font-bold text-gray-900">50%</div>
+            <div className="text-2xl font-bold text-gray-900">{readiness.legal}%</div>
                 </div>
           <div className="bg-gray-50 rounded-xl p-4">
             <h4 className="text-sm font-semibold text-gray-600 mb-2">GTM</h4>
-            <div className="text-2xl font-bold text-gray-900">80%</div>
+            <div className="text-2xl font-bold text-gray-900">{readiness.gtm}%</div>
               </div>
           <div className="bg-gray-50 rounded-xl p-4">
             <h4 className="text-sm font-semibold text-gray-600 mb-2">Events</h4>
-            <div className="text-2xl font-bold text-gray-900">65%</div>
+            <div className="text-2xl font-bold text-gray-900">{readiness.events}%</div>
             </div>
               </div>
             </div>
@@ -426,19 +520,19 @@ const LaunchPreparation = () => {
         
         <div className="grid grid-cols-4 gap-4 text-center">
           <div className="bg-white rounded-xl p-4">
-            <div className="text-3xl font-bold text-gray-900">45</div>
+            <div className="text-3xl font-bold text-gray-900">{countdown.days}</div>
             <div className="text-sm text-gray-600">Days</div>
                 </div>
           <div className="bg-white rounded-xl p-4">
-            <div className="text-3xl font-bold text-gray-900">12</div>
+            <div className="text-3xl font-bold text-gray-900">{countdown.hours}</div>
             <div className="text-sm text-gray-600">Hours</div>
                 </div>
           <div className="bg-white rounded-xl p-4">
-            <div className="text-3xl font-bold text-gray-900">34</div>
+            <div className="text-3xl font-bold text-gray-900">{countdown.minutes}</div>
             <div className="text-sm text-gray-600">Minutes</div>
               </div>
           <div className="bg-white rounded-xl p-4">
-            <div className="text-3xl font-bold text-gray-900">56</div>
+            <div className="text-3xl font-bold text-gray-900">{countdown.seconds}</div>
             <div className="text-sm text-gray-600">Seconds</div>
             </div>
           </div>
@@ -509,12 +603,244 @@ const LaunchPreparation = () => {
         <p className="text-gray-600 mb-6">Press-ready 100-word story auto-generated from Passport & MVP data. Editable by founders.</p>
 
             <div className="bg-gray-50 rounded-xl p-6">
-          <p className="text-gray-700 leading-relaxed mb-4">
-            TechFlow AI is revolutionizing remote work with AI-powered workflow automation. Founded by Alex Chen (ex-Google) and Sarah Martinez (ex-McKinsey), we're on a mission to help distributed teams work smarter, not harder. After 6 months of development and beta testing with 1,250+ users, we're launching our MVP this May. Join us in building the future of work.
-          </p>
-          <button className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold">
-            Edit Story
+          {isEditingStory ? (
+            <textarea
+              value={launchStory}
+              onChange={(e) => setLaunchStory(e.target.value)}
+              className="w-full p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-black focus:border-transparent mb-4"
+              rows="5"
+            />
+          ) : (
+            <p className="text-gray-700 leading-relaxed mb-4">{launchStory}</p>
+          )}
+          <button 
+            onClick={() => setIsEditingStory(!isEditingStory)}
+            className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold"
+          >
+            {isEditingStory ? 'Save Story' : 'Edit Story'}
           </button>
+        </div>
+      </div>
+
+      {/* Launch Tracker */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Launch Tracker</h2>
+            <p className="text-gray-600">Detailed tracking of tasks, dependencies, and blockers across all launch activities.</p>
+          </div>
+          <button 
+            onClick={handleAddTask}
+            className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            Add Task
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {tasks.map((item) => (
+            <div key={item.id} className="p-6 bg-gray-50 rounded-xl border border-gray-200 hover:shadow-md transition-all">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="font-semibold text-gray-900">{item.task}</h3>
+                    <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                      item.status === 'completed' ? 'bg-green-100 text-green-700' :
+                      item.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
+                      'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {item.status}
+                    </span>
+                    <span className="px-2 py-1 bg-gray-200 text-gray-700 rounded-full text-xs font-semibold">
+                      {item.category}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                    <div className="flex items-center gap-1">
+                      <Users className="w-4 h-4" />
+                      {item.assignee}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-4 h-4" />
+                      Due: {item.dueDate}
+                    </div>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
+                    <div 
+                      className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all"
+                      style={{ width: `${item.progress}%` }}
+                    ></div>
+                  </div>
+                  {item.dependencies.length > 0 && (
+                    <div className="mb-2">
+                      <span className="text-xs font-semibold text-gray-600">Dependencies: </span>
+                      <span className="text-xs text-gray-700">{item.dependencies.join(', ')}</span>
+                    </div>
+                  )}
+                  {item.blockers.length > 0 && (
+                    <div className="flex items-center gap-2 text-red-600">
+                      <AlertTriangle className="w-4 h-4" />
+                      <span className="text-xs font-semibold">Blockers: {item.blockers.join(', ')}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 ml-4">
+                  <button 
+                    onClick={() => handleEditTask(item)}
+                    className="p-2 hover:bg-white rounded-lg transition-colors"
+                    title="Edit task"
+                  >
+                    <Edit3 className="w-4 h-4 text-gray-600" />
+                  </button>
+                  <button 
+                    onClick={() => handleCompleteTask(item.id)}
+                    className="p-2 hover:bg-white rounded-lg transition-colors"
+                    title="Mark as complete"
+                  >
+                    <CheckCircle className="w-4 h-4 text-gray-600" />
+                  </button>
+                  <button 
+                    onClick={() => handleDeleteTask(item.id)}
+                    className="p-2 hover:bg-white rounded-lg transition-colors"
+                    title="Delete task"
+                  >
+                    <X className="w-4 h-4 text-red-600" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Success Metrics Dashboard */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Success Metrics Dashboard</h2>
+        <p className="text-gray-600 mb-6">KPIs and goals for launch day and beyond. Track progress against targets.</p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {[
+            {
+              key: 'waitlistSignups',
+              metric: 'Waitlist Signups',
+              current: metrics.waitlistSignups.current,
+              target: metrics.waitlistSignups.target,
+              period: 'Pre-Launch',
+              trend: '+23%',
+              color: 'blue'
+            },
+            {
+              key: 'websiteVisitors',
+              metric: 'Website Visitors',
+              current: metrics.websiteVisitors.current,
+              target: metrics.websiteVisitors.target,
+              period: 'Launch Week',
+              trend: '+45%',
+              color: 'green'
+            },
+            {
+              key: 'conversionRate',
+              metric: 'Conversion Rate',
+              current: metrics.conversionRate.current,
+              target: metrics.conversionRate.target,
+              period: 'Launch Week',
+              trend: '+2.1%',
+              color: 'purple'
+            },
+            {
+              key: 'socialEngagement',
+              metric: 'Social Engagement',
+              current: metrics.socialEngagement.current,
+              target: metrics.socialEngagement.target,
+              period: 'Launch Week',
+              trend: '+67%',
+              color: 'orange'
+            }
+          ].map((metric, index) => {
+            const percentage = (metric.current / metric.target) * 100;
+            const colorClasses = {
+              blue: 'from-blue-500 to-blue-600',
+              green: 'from-green-500 to-green-600',
+              purple: 'from-purple-500 to-purple-600',
+              orange: 'from-orange-500 to-orange-600'
+            };
+            
+            return (
+              <div key={index} className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 border border-gray-200">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-semibold text-gray-600">{metric.metric}</h3>
+                  <span className="text-xs font-semibold text-green-600">{metric.trend}</span>
+                </div>
+                <div className="mb-2">
+                  <div className="text-2xl font-bold text-gray-900">{metric.current.toLocaleString()}</div>
+                  <div className="text-xs text-gray-500">Target: {metric.target.toLocaleString()}</div>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                  <div 
+                    className={`bg-gradient-to-r ${colorClasses[metric.color]} h-2 rounded-full transition-all`}
+                    style={{ width: `${Math.min(percentage, 100)}%` }}
+                  ></div>
+                </div>
+                <div className="text-xs text-gray-500">{metric.period}</div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="bg-gray-50 rounded-xl p-6">
+          <h3 className="font-semibold text-gray-900 mb-4">Launch Goals Timeline</h3>
+          <div className="space-y-4">
+            {[
+              {
+                phase: 'Pre-Launch (T-30 to T-0)',
+                goals: [
+                  { metric: 'Waitlist signups', target: '2,000', current: '1,247', status: 'on-track' },
+                  { metric: 'Beta users', target: '500', current: '1,250', status: 'exceeded' },
+                  { metric: 'Press mentions', target: '5', current: '3', status: 'on-track' }
+                ]
+              },
+              {
+                phase: 'Launch Day (T-0)',
+                goals: [
+                  { metric: 'Product Hunt rank', target: 'Top 5', current: 'TBD', status: 'pending' },
+                  { metric: 'New signups', target: '500', current: 'TBD', status: 'pending' },
+                  { metric: 'Social shares', target: '1,000', current: 'TBD', status: 'pending' }
+                ]
+              },
+              {
+                phase: 'Post-Launch (T+1 to T+30)',
+                goals: [
+                  { metric: 'Active users', target: '5,000', current: 'TBD', status: 'pending' },
+                  { metric: 'Paid conversions', target: '500', current: 'TBD', status: 'pending' },
+                  { metric: 'NPS score', target: '50+', current: 'TBD', status: 'pending' }
+                ]
+              }
+            ].map((phase, index) => (
+              <div key={index} className="bg-white rounded-lg p-4 border border-gray-200">
+                <h4 className="font-semibold text-gray-900 mb-3">{phase.phase}</h4>
+                <div className="space-y-2">
+                  {phase.goals.map((goal, gIndex) => (
+                    <div key={gIndex} className="flex items-center justify-between text-sm">
+                      <span className="text-gray-700">{goal.metric}</span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-gray-600">
+                          {goal.current} / {goal.target}
+                        </span>
+                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                          goal.status === 'exceeded' ? 'bg-green-100 text-green-700' :
+                          goal.status === 'on-track' ? 'bg-blue-100 text-blue-700' :
+                          'bg-gray-100 text-gray-600'
+                        }`}>
+                          {goal.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -1604,35 +1930,271 @@ const LaunchPreparation = () => {
           </div>
         </div>
 
-      {/* Regulatory Checklist */}
+      {/* Legal Documents */}
       <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Regulatory Checklist</h2>
-        <p className="text-gray-600 mb-6">Preloaded compliance path for India & UAE. More regions coming soon.</p>
-        
-        <div className="space-y-4">
-          {[
-            { region: 'India', items: ['GST Registration', 'PAN Card', 'MSME Registration'], progress: 67 },
-            { region: 'UAE', items: ['Trade License', 'VAT Registration', 'Labor Card'], progress: 33 }
-          ].map((region, index) => (
-            <div key={index} className="bg-gray-50 rounded-xl p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-gray-900">{region.region}</h3>
-                <span className="text-sm font-semibold text-gray-600">{region.progress}% Complete</span>
-        </div>
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
-                <div className="bg-black h-2 rounded-full" style={{ width: `${region.progress}%` }}></div>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Legal Documents</h2>
+            <p className="text-gray-600">Contracts, terms of service, privacy policy, and other legal agreements.</p>
           </div>
-              <div className="space-y-2">
-                {region.items.map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-600" />
-                    <span className="text-sm text-gray-700">{item}</span>
+          <button className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            Upload Document
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[
+            {
+              category: 'Terms of Service',
+              documents: [
+                { name: 'Terms of Service v1.0', date: '2024-02-20', status: 'active', size: '245 KB' },
+                { name: 'Terms of Service v0.9', date: '2024-02-15', status: 'archived', size: '238 KB' }
+              ]
+            },
+            {
+              category: 'Privacy Policy',
+              documents: [
+                { name: 'Privacy Policy v1.1', date: '2024-02-22', status: 'active', size: '189 KB' },
+                { name: 'Privacy Policy v1.0', date: '2024-02-10', status: 'archived', size: '185 KB' }
+              ]
+            },
+            {
+              category: 'User Agreements',
+              documents: [
+                { name: 'Beta User Agreement', date: '2024-01-15', status: 'active', size: '156 KB' },
+                { name: 'NDA Template', date: '2024-01-10', status: 'active', size: '98 KB' }
+              ]
+            },
+            {
+              category: 'Other Legal',
+              documents: [
+                { name: 'Data Processing Agreement', date: '2024-02-25', status: 'draft', size: '312 KB' },
+                { name: 'Cookie Policy', date: '2024-02-18', status: 'active', size: '124 KB' }
+              ]
+            }
+          ].map((category, index) => (
+            <div key={index} className="bg-gray-50 rounded-xl p-6">
+              <h3 className="font-semibold text-gray-900 mb-4">{category.category}</h3>
+              <div className="space-y-3">
+                {category.documents.map((doc, dIndex) => (
+                  <div key={dIndex} className="flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200">
+                    <div className="flex items-center gap-3 flex-1">
+                      <FileText className="w-5 h-5 text-gray-600" />
+                      <div>
+                        <p className="text-sm font-medium text-gray-900">{doc.name}</p>
+                        <p className="text-xs text-gray-500">{doc.date} • {doc.size}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                        doc.status === 'active' ? 'bg-green-100 text-green-700' :
+                        doc.status === 'draft' ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-gray-100 text-gray-600'
+                      }`}>
+                        {doc.status}
+                      </span>
+                      <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                        <Download className="w-4 h-4 text-gray-600" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Compliance Tracker */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Compliance Tracker</h2>
+        <p className="text-gray-600 mb-6">Regulatory requirements and deadlines across all jurisdictions.</p>
+        
+        <div className="space-y-6">
+          {[
+            {
+              region: 'United States',
+              requirements: [
+                { name: 'State Business License', deadline: '2024-04-01', status: 'pending', priority: 'high' },
+                { name: 'Sales Tax Registration', deadline: '2024-05-15', status: 'pending', priority: 'medium' },
+                { name: 'Data Privacy Compliance (CCPA)', deadline: '2024-06-01', status: 'in-progress', priority: 'high' }
+              ],
+              progress: 33
+            },
+            {
+              region: 'European Union',
+              requirements: [
+                { name: 'GDPR Compliance', deadline: '2024-04-15', status: 'in-progress', priority: 'high' },
+                { name: 'VAT Registration', deadline: '2024-05-30', status: 'pending', priority: 'medium' }
+              ],
+              progress: 50
+            },
+            {
+              region: 'India',
+              requirements: [
+                { name: 'GST Registration', deadline: '2024-03-20', status: 'completed', priority: 'high' },
+                { name: 'PAN Card', deadline: '2024-03-15', status: 'completed', priority: 'high' },
+                { name: 'MSME Registration', deadline: '2024-04-01', status: 'pending', priority: 'low' }
+              ],
+              progress: 67
+            }
+          ].map((region, index) => (
+            <div key={index} className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">{region.region}</h3>
+                <div className="flex items-center gap-3">
+                  <div className="w-32 bg-gray-200 rounded-full h-2">
+                    <div 
+                      className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all"
+                      style={{ width: `${region.progress}%` }}
+                    ></div>
+        </div>
+                  <span className="text-sm font-semibold text-gray-900">{region.progress}%</span>
+          </div>
+              </div>
+              <div className="space-y-3">
+                {region.requirements.map((req, rIndex) => (
+                  <div key={rIndex} className="flex items-center justify-between p-3 bg-white rounded-lg">
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className={`w-3 h-3 rounded-full ${
+                        req.status === 'completed' ? 'bg-green-500' :
+                        req.status === 'in-progress' ? 'bg-blue-500' :
+                        'bg-gray-300'
+                      }`}></div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-gray-900">{req.name}</span>
+                          <span className={`px-2 py-0.5 rounded text-xs font-semibold ${
+                            req.priority === 'high' ? 'bg-red-100 text-red-700' :
+                            req.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+                            'bg-gray-100 text-gray-600'
+                          }`}>
+                            {req.priority}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">Deadline: {req.deadline}</p>
+                      </div>
+                    </div>
+                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                      req.status === 'completed' ? 'bg-green-100 text-green-700' :
+                      req.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
+                      'bg-gray-100 text-gray-600'
+                    }`}>
+                      {req.status}
+                    </span>
         </div>
                 ))}
                 </div>
                 </div>
                   ))}
                 </div>
+      </div>
+
+      {/* Due Diligence Checklist */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Due Diligence Checklist</h2>
+        <p className="text-gray-600 mb-6">Investor-ready documentation status and completion tracking.</p>
+        
+        <div className="space-y-6">
+          {[
+            {
+              category: 'Corporate Documents',
+              items: [
+                { name: 'Certificate of Incorporation', status: 'complete', verified: true },
+                { name: 'Bylaws/Articles of Association', status: 'complete', verified: true },
+                { name: 'Board Resolutions', status: 'complete', verified: true },
+                { name: 'Stock Ledger', status: 'in-progress', verified: false }
+              ]
+            },
+            {
+              category: 'Financial Documents',
+              items: [
+                { name: 'Financial Statements', status: 'complete', verified: true },
+                { name: 'Tax Returns', status: 'pending', verified: false },
+                { name: 'Bank Statements', status: 'complete', verified: true },
+                { name: 'Cap Table', status: 'complete', verified: true }
+              ]
+            },
+            {
+              category: 'Legal & Compliance',
+              items: [
+                { name: 'Material Contracts', status: 'complete', verified: true },
+                { name: 'IP Documentation', status: 'in-progress', verified: false },
+                { name: 'Employment Agreements', status: 'complete', verified: true },
+                { name: 'Regulatory Filings', status: 'in-progress', verified: false }
+              ]
+            },
+            {
+              category: 'Business Documents',
+              items: [
+                { name: 'Business Plan', status: 'complete', verified: true },
+                { name: 'Market Research', status: 'complete', verified: true },
+                { name: 'Customer Contracts', status: 'in-progress', verified: false },
+                { name: 'Partnership Agreements', status: 'pending', verified: false }
+              ]
+            }
+          ].map((category, index) => {
+            const completed = category.items.filter(item => item.status === 'complete').length;
+            const total = category.items.length;
+            const percentage = (completed / total) * 100;
+            
+            return (
+              <div key={index} className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900">{category.category}</h3>
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-gray-600">{completed}/{total} complete</span>
+                    <div className="w-24 bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-gradient-to-r from-green-500 to-emerald-500 h-2 rounded-full transition-all"
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  {category.items.map((item, iIndex) => (
+                    <div key={iIndex} className="flex items-center justify-between p-3 bg-white rounded-lg">
+                      <div className="flex items-center gap-3">
+                        {item.status === 'complete' ? (
+                          <CheckCircle className="w-5 h-5 text-green-600" />
+                        ) : item.status === 'in-progress' ? (
+                          <Clock className="w-5 h-5 text-blue-600" />
+                        ) : (
+                          <div className="w-5 h-5 border-2 border-gray-300 rounded-full" />
+                        )}
+                        <span className="text-sm text-gray-900">{item.name}</span>
+                        {item.verified && (
+                          <ShieldCheck className="w-4 h-4 text-green-600" />
+                        )}
+                      </div>
+                      <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                        item.status === 'complete' ? 'bg-green-100 text-green-700' :
+                        item.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
+                        'bg-gray-100 text-gray-600'
+                      }`}>
+                        {item.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border border-green-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="font-semibold text-gray-900">Overall Readiness</h4>
+              <p className="text-sm text-gray-600">68% of due diligence documents are complete</p>
+            </div>
+            <button className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-semibold">
+              Generate Report
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -1968,10 +2530,489 @@ const LaunchPreparation = () => {
         </div>
       </div>
 
+      {/* Launch Timeline */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Launch Timeline</h2>
+        <p className="text-gray-600 mb-6">Detailed pre-launch, launch day, and post-launch schedule with milestones and deliverables.</p>
+        
+        <div className="space-y-6">
+          {[
+            {
+              phase: 'Pre-Launch (T-30 to T-1)',
+              duration: '30 days',
+              status: 'in-progress',
+              milestones: [
+                { task: 'Finalize product features', date: 'T-30', owner: 'Product Team', status: 'completed' },
+                { task: 'Complete legal documentation', date: 'T-25', owner: 'Legal Team', status: 'completed' },
+                { task: 'Build landing page', date: 'T-20', owner: 'Marketing', status: 'completed' },
+                { task: 'Start waitlist campaign', date: 'T-15', owner: 'Marketing', status: 'in-progress' },
+                { task: 'Press kit preparation', date: 'T-10', owner: 'Marketing', status: 'pending' },
+                { task: 'Influencer outreach', date: 'T-7', owner: 'Marketing', status: 'pending' },
+                { task: 'Final testing & QA', date: 'T-3', owner: 'Product Team', status: 'pending' }
+              ]
+            },
+            {
+              phase: 'Launch Day (T-0)',
+              duration: '1 day',
+              status: 'pending',
+              milestones: [
+                { task: 'Product Hunt launch (9 AM)', date: 'T-0', owner: 'Founders', status: 'pending' },
+                { task: 'Email blast to waitlist', date: 'T-0', owner: 'Marketing', status: 'pending' },
+                { task: 'Social media announcement', date: 'T-0', owner: 'Marketing', status: 'pending' },
+                { task: 'Press release distribution', date: 'T-0', owner: 'Marketing', status: 'pending' },
+                { task: 'Monitor metrics & respond', date: 'T-0', owner: 'All', status: 'pending' }
+              ]
+            },
+            {
+              phase: 'Post-Launch (T+1 to T+30)',
+              duration: '30 days',
+              status: 'pending',
+              milestones: [
+                { task: 'Follow-up with signups', date: 'T+1', owner: 'Sales', status: 'pending' },
+                { task: 'Content marketing push', date: 'T+3', owner: 'Marketing', status: 'pending' },
+                { task: 'User feedback collection', date: 'T+7', owner: 'Product Team', status: 'pending' },
+                { task: 'Iterate based on feedback', date: 'T+14', owner: 'Product Team', status: 'pending' },
+                { task: 'Scale marketing channels', date: 'T+21', owner: 'Marketing', status: 'pending' },
+                { task: 'First month review', date: 'T+30', owner: 'All', status: 'pending' }
+              ]
+            }
+          ].map((phase, index) => (
+            <div key={index} className="bg-gray-50 rounded-xl p-6 border border-gray-200">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">{phase.phase}</h3>
+                  <p className="text-sm text-gray-600 mt-1">Duration: {phase.duration}</p>
+                </div>
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                  phase.status === 'completed' ? 'bg-green-100 text-green-700' :
+                  phase.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
+                  'bg-gray-100 text-gray-600'
+                }`}>
+                  {phase.status}
+                </span>
+              </div>
+              <div className="space-y-3">
+                {phase.milestones.map((milestone, mIndex) => (
+                  <div key={mIndex} className="flex items-center gap-4 p-3 bg-white rounded-lg">
+                    <div className={`w-3 h-3 rounded-full ${
+                      milestone.status === 'completed' ? 'bg-green-500' :
+                      milestone.status === 'in-progress' ? 'bg-blue-500' :
+                      'bg-gray-300'
+                    }`}></div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-semibold text-gray-900">{milestone.task}</span>
+                        <span className="text-xs text-gray-500">({milestone.date})</span>
+                      </div>
+                      <p className="text-xs text-gray-600 mt-1">Owner: {milestone.owner}</p>
+                    </div>
+                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                      milestone.status === 'completed' ? 'bg-green-100 text-green-700' :
+                      milestone.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
+                      'bg-gray-100 text-gray-600'
+                    }`}>
+                      {milestone.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Landing Page */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Landing Page</h2>
+            <p className="text-gray-600">Conversion-optimized page with A/B testing plan and performance tracking.</p>
+          </div>
+          <button className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2">
+            <ExternalLink className="w-4 h-4" />
+            View Live Page
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Current Performance</h3>
+            <div className="space-y-4">
+              {[
+                { metric: 'Conversion Rate', value: '12.4%', target: '15%', trend: '+2.1%' },
+                { metric: 'Bounce Rate', value: '42%', target: '<40%', trend: '-3%' },
+                { metric: 'Avg. Time on Page', value: '2:34', target: '3:00', trend: '+15s' },
+                { metric: 'Mobile Conversion', value: '8.7%', target: '10%', trend: '+1.2%' }
+              ].map((item, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-white rounded-lg">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{item.metric}</p>
+                    <p className="text-xs text-gray-500">Target: {item.target}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-lg font-bold text-gray-900">{item.value}</p>
+                    <p className="text-xs text-green-600 font-semibold">{item.trend}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">A/B Tests</h3>
+            <div className="space-y-3">
+              {[
+                { name: 'Headline Variation', status: 'running', variantA: '12.1%', variantB: '12.4%', winner: 'B' },
+                { name: 'CTA Button Color', status: 'completed', variantA: '11.8%', variantB: '12.4%', winner: 'B' },
+                { name: 'Social Proof Placement', status: 'planned', variantA: 'TBD', variantB: 'TBD', winner: null }
+              ].map((test, index) => (
+                <div key={index} className="p-3 bg-white rounded-lg border border-gray-200">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-gray-900">{test.name}</span>
+                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                      test.status === 'running' ? 'bg-blue-100 text-blue-700' :
+                      test.status === 'completed' ? 'bg-green-100 text-green-700' :
+                      'bg-gray-100 text-gray-600'
+                    }`}>
+                      {test.status}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <span className="text-gray-500">Variant A:</span>
+                      <span className="ml-1 font-semibold text-gray-900">{test.variantA}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-500">Variant B:</span>
+                      <span className="ml-1 font-semibold text-gray-900">{test.variantB}</span>
+                      {test.winner && <span className="ml-1 text-green-600">✓ Winner</span>}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button className="w-full mt-4 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-semibold">
+              Create New Test
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Content Calendar */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Content Calendar</h2>
+            <p className="text-gray-600">Scheduled posts, emails, and announcements across all channels.</p>
+          </div>
+          <button className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            Schedule Post
+          </button>
+        </div>
+
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-4">
+            {['All', 'Twitter', 'LinkedIn', 'Email', 'Blog'].map((filter) => (
+              <button key={filter} className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
+                filter === 'All' 
+                  ? 'bg-black text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}>
+                {filter}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          {[
+            {
+              date: '2024-03-15',
+              time: '9:00 AM',
+              channel: 'Twitter',
+              type: 'Post',
+              content: '🚀 Excited to announce our launch! Join 1,500+ teams using TechFlow AI...',
+              status: 'scheduled',
+              engagement: null
+            },
+            {
+              date: '2024-03-15',
+              time: '10:00 AM',
+              channel: 'Email',
+              type: 'Newsletter',
+              content: 'Launch Day Special: Welcome to TechFlow AI',
+              status: 'scheduled',
+              engagement: null
+            },
+            {
+              date: '2024-03-14',
+              time: '2:00 PM',
+              channel: 'LinkedIn',
+              type: 'Post',
+              content: 'Behind the scenes: How we built TechFlow in 6 months...',
+              status: 'published',
+              engagement: '1.2K likes, 89 comments'
+            },
+            {
+              date: '2024-03-13',
+              time: '11:00 AM',
+              channel: 'Blog',
+              type: 'Article',
+              content: '10 Ways AI Can Transform Remote Team Productivity',
+              status: 'published',
+              engagement: '3.5K views'
+            }
+          ].map((item, index) => (
+            <div key={index} className="p-4 bg-gray-50 rounded-xl border border-gray-200 hover:shadow-md transition-all">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-sm font-semibold text-gray-900">{item.date}</span>
+                    <span className="text-sm text-gray-600">{item.time}</span>
+                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                      item.channel === 'Twitter' ? 'bg-blue-100 text-blue-700' :
+                      item.channel === 'LinkedIn' ? 'bg-indigo-100 text-indigo-700' :
+                      item.channel === 'Email' ? 'bg-purple-100 text-purple-700' :
+                      'bg-gray-100 text-gray-700'
+                    }`}>
+                      {item.channel}
+                    </span>
+                    <span className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs font-semibold">
+                      {item.type}
+                    </span>
+                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                      item.status === 'published' ? 'bg-green-100 text-green-700' :
+                      'bg-yellow-100 text-yellow-700'
+                    }`}>
+                      {item.status}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-700 mb-2">{item.content}</p>
+                  {item.engagement && (
+                    <p className="text-xs text-gray-600">📊 {item.engagement}</p>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 ml-4">
+                  <button className="p-2 hover:bg-white rounded-lg transition-colors">
+                    <Edit3 className="w-4 h-4 text-gray-600" />
+                  </button>
+                  {item.status === 'scheduled' && (
+                    <button className="p-2 hover:bg-white rounded-lg transition-colors">
+                      <X className="w-4 h-4 text-gray-600" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Influencer & Partner Outreach */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Influencer & Partner Outreach</h2>
+            <p className="text-gray-600">Contact list and collaboration tracker for influencers and strategic partners.</p>
+          </div>
+          <button className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            Add Contact
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="space-y-4">
+            <h3 className="font-semibold text-gray-900">Influencers</h3>
+            {[
+              {
+                name: 'Sarah Chen',
+                role: 'Tech YouTuber',
+                followers: '250K',
+                status: 'contacted',
+                response: 'Interested',
+                nextStep: 'Send product access'
+              },
+              {
+                name: 'Mike Johnson',
+                role: 'LinkedIn Creator',
+                followers: '180K',
+                status: 'pending',
+                response: null,
+                nextStep: 'Initial outreach'
+              },
+              {
+                name: 'Emma Davis',
+                role: 'Podcast Host',
+                followers: '95K',
+                status: 'contacted',
+                response: 'Scheduled',
+                nextStep: 'Interview on 3/20'
+              }
+            ].map((contact, index) => (
+              <div key={index} className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <div className="flex items-start justify-between mb-2">
+                  <div>
+                    <h4 className="font-semibold text-gray-900">{contact.name}</h4>
+                    <p className="text-sm text-gray-600">{contact.role} • {contact.followers} followers</p>
+                  </div>
+                  <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                    contact.status === 'contacted' ? 'bg-blue-100 text-blue-700' :
+                    'bg-yellow-100 text-yellow-700'
+                  }`}>
+                    {contact.status}
+                  </span>
+                </div>
+                {contact.response && (
+                  <p className="text-xs text-gray-600 mb-1">Response: <span className="font-semibold text-green-600">{contact.response}</span></p>
+                )}
+                <p className="text-xs text-gray-600">Next: {contact.nextStep}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="font-semibold text-gray-900">Partners</h3>
+            {[
+              {
+                name: 'TechCrunch',
+                type: 'Media Partner',
+                status: 'confirmed',
+                collaboration: 'Launch coverage',
+                nextStep: 'Send press kit'
+              },
+              {
+                name: 'Product Hunt',
+                type: 'Platform',
+                status: 'confirmed',
+                collaboration: 'Launch feature',
+                nextStep: 'Submit on 3/15'
+              },
+              {
+                name: 'Startup Grind',
+                type: 'Community',
+                status: 'pending',
+                collaboration: 'Event partnership',
+                nextStep: 'Follow up'
+              }
+            ].map((partner, index) => (
+              <div key={index} className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <div className="flex items-start justify-between mb-2">
+                  <div>
+                    <h4 className="font-semibold text-gray-900">{partner.name}</h4>
+                    <p className="text-sm text-gray-600">{partner.type}</p>
+                  </div>
+                  <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                    partner.status === 'confirmed' ? 'bg-green-100 text-green-700' :
+                    'bg-yellow-100 text-yellow-700'
+                  }`}>
+                    {partner.status}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-600 mb-1">Collaboration: {partner.collaboration}</p>
+                <p className="text-xs text-gray-600">Next: {partner.nextStep}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Press Kit */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Press Kit</h2>
+            <p className="text-gray-600">Media assets, company backgrounder, and founder bios for press outreach.</p>
+          </div>
+          <button className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2">
+            <Download className="w-4 h-4" />
+            Download Kit
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Media Assets</h3>
+            <div className="space-y-3">
+              {[
+                { name: 'Company Logo (High Res)', format: 'PNG, SVG', size: '2.4 MB' },
+                { name: 'Product Screenshots', format: 'PNG', size: '8.7 MB' },
+                { name: 'Founder Headshots', format: 'JPG', size: '5.2 MB' },
+                { name: 'Brand Guidelines PDF', format: 'PDF', size: '12.1 MB' }
+              ].map((asset, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-white rounded-lg">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">{asset.name}</p>
+                    <p className="text-xs text-gray-500">{asset.format} • {asset.size}</p>
+                  </div>
+                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                    <Download className="w-4 h-4 text-gray-600" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Company Backgrounder</h3>
+            <div className="space-y-4">
+              <div>
+                <h4 className="text-sm font-semibold text-gray-900 mb-2">About TechFlow AI</h4>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  TechFlow AI is an AI-powered workflow automation platform designed for remote teams. Founded in 2024 by ex-Google engineers, we help distributed teams save 10+ hours per week by automating repetitive tasks and unifying workflows.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-sm font-semibold text-gray-900 mb-2">Key Facts</h4>
+                <ul className="text-sm text-gray-700 space-y-1">
+                  <li>• Founded: January 2024</li>
+                  <li>• Location: San Francisco, CA</li>
+                  <li>• Beta Users: 1,250+ teams</li>
+                  <li>• Funding: Bootstrapped</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 rounded-xl p-6">
+          <h3 className="font-semibold text-gray-900 mb-4">Founder Bios</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              {
+                name: 'Alex Chen',
+                role: 'CEO & Co-Founder',
+                bio: 'Former Google engineer with 8 years of experience building scalable AI systems. Led development of Google Workspace automation tools.',
+                email: 'alex@techflow.ai',
+                linkedin: 'linkedin.com/in/alexchen'
+              },
+              {
+                name: 'Sarah Martinez',
+                role: 'COO & Co-Founder',
+                bio: 'Ex-McKinsey consultant with 6 years in strategy and operations. Led 3 successful product launches and raised $15M in previous ventures.',
+                email: 'sarah@techflow.ai',
+                linkedin: 'linkedin.com/in/sarahmartinez'
+              }
+            ].map((founder, index) => (
+              <div key={index} className="p-4 bg-white rounded-lg">
+                <h4 className="font-semibold text-gray-900 mb-1">{founder.name}</h4>
+                <p className="text-sm text-gray-600 mb-2">{founder.role}</p>
+                <p className="text-sm text-gray-700 mb-3 leading-relaxed">{founder.bio}</p>
+                <div className="text-xs text-gray-600">
+                  <p>{founder.email}</p>
+                  <p>{founder.linkedin}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Waitlist Metrics */}
       <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Waitlist Metrics</h2>
-        <p className="text-gray-600 mb-6">Track waitlist signups from your launch page form in real-time.</p>
+        <p className="text-gray-600 mb-6">Track waitlist signups, conversion rates, and engagement data.</p>
         
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
@@ -2403,6 +3444,333 @@ const LaunchPreparation = () => {
         </div>
       </div>
 
+      {/* Pitch Tracker */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Pitch Tracker</h2>
+            <p className="text-gray-600">Application status, feedback log, and follow-up tracking for all pitch events.</p>
+          </div>
+          <button className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            New Application
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {[
+            {
+              event: 'TechCrunch Disrupt Demo Day',
+              date: '2024-03-15',
+              status: 'submitted',
+              stage: 'review',
+              feedback: 'Strong product-market fit, interested in traction metrics',
+              nextStep: 'Follow up in 1 week',
+              materials: ['Pitch Deck v3', 'One-Pager', 'Demo Video']
+            },
+            {
+              event: 'Y Combinator W24',
+              date: '2024-02-20',
+              status: 'interview',
+              stage: 'interview',
+              feedback: 'Interview scheduled for March 20th. Prepare for technical deep dive.',
+              nextStep: 'Prepare Q&A responses',
+              materials: ['Pitch Deck v2', 'Financial Model']
+            },
+            {
+              event: 'Startup Grind Pitch Competition',
+              date: '2024-04-10',
+              status: 'applied',
+              stage: 'pending',
+              feedback: null,
+              nextStep: 'Wait for confirmation',
+              materials: ['Pitch Deck v3', 'One-Pager']
+            }
+          ].map((pitch, index) => (
+            <div key={index} className="p-6 bg-gray-50 rounded-xl border border-gray-200 hover:shadow-md transition-all">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-lg font-bold text-gray-900">{pitch.event}</h3>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      pitch.stage === 'accepted' ? 'bg-green-100 text-green-700' :
+                      pitch.stage === 'interview' ? 'bg-blue-100 text-blue-700' :
+                      pitch.stage === 'review' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-gray-100 text-gray-600'
+                    }`}>
+                      {pitch.status}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-3">Event Date: {pitch.date}</p>
+                  {pitch.feedback && (
+                    <div className="bg-white rounded-lg p-3 mb-3 border border-gray-200">
+                      <p className="text-xs font-semibold text-gray-600 mb-1">Feedback:</p>
+                      <p className="text-sm text-gray-700">{pitch.feedback}</p>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-600">Next Step: </span>
+                      <span className="font-semibold text-gray-900">{pitch.nextStep}</span>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {pitch.materials.map((material, mIndex) => (
+                      <span key={mIndex} className="px-2 py-1 bg-white text-gray-700 rounded text-xs font-semibold border border-gray-200">
+                        {material}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 ml-4">
+                  <button className="p-2 hover:bg-white rounded-lg transition-colors">
+                    <Edit3 className="w-4 h-4 text-gray-600" />
+                  </button>
+                  <button className="p-2 hover:bg-white rounded-lg transition-colors">
+                    <MessageSquare className="w-4 h-4 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Startup Profile */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Startup Profile</h2>
+            <p className="text-gray-600">Public-facing company profile for investors and partners.</p>
+          </div>
+          <button className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2">
+            <Edit3 className="w-4 h-4" />
+            Edit Profile
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Company Information</h3>
+            <div className="space-y-3">
+              {[
+                { label: 'Company Name', value: 'TechFlow AI' },
+                { label: 'Founded', value: 'January 2024' },
+                { label: 'Location', value: 'San Francisco, CA' },
+                { label: 'Industry', value: 'SaaS / Productivity' },
+                { label: 'Stage', value: 'Pre-Seed' },
+                { label: 'Website', value: 'techflow.ai' }
+              ].map((item, index) => (
+                <div key={index} className="flex justify-between p-2 bg-white rounded-lg">
+                  <span className="text-sm text-gray-600">{item.label}</span>
+                  <span className="text-sm font-semibold text-gray-900">{item.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Key Metrics</h3>
+            <div className="space-y-3">
+              {[
+                { label: 'Beta Users', value: '1,250+' },
+                { label: 'Waitlist', value: '1,523' },
+                { label: 'Revenue (MRR)', value: '$0 (Pre-revenue)' },
+                { label: 'Team Size', value: '8' },
+                { label: 'Funding Raised', value: 'Bootstrapped' },
+                { label: 'NPS Score', value: '52' }
+              ].map((item, index) => (
+                <div key={index} className="flex justify-between p-2 bg-white rounded-lg">
+                  <span className="text-sm text-gray-600">{item.label}</span>
+                  <span className="text-sm font-semibold text-gray-900">{item.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 rounded-xl p-6">
+          <h3 className="font-semibold text-gray-900 mb-4">Company Description</h3>
+          <p className="text-sm text-gray-700 leading-relaxed">
+            TechFlow AI is revolutionizing remote work with AI-powered workflow automation. We help distributed teams save 10+ hours per week by automating repetitive tasks and unifying workflows. Founded by ex-Google engineers, we're on a mission to make distributed work actually work.
+          </p>
+        </div>
+      </div>
+
+      {/* Investor CRM */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Investor CRM</h2>
+            <p className="text-gray-600">Investor contacts, meeting notes, and next steps tracking.</p>
+          </div>
+          <button className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            Add Investor
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {[
+            {
+              name: 'John Smith',
+              firm: 'Sequoia Capital',
+              role: 'Partner',
+              stage: 'Series A',
+              status: 'warm',
+              lastContact: '2024-03-10',
+              nextStep: 'Send updated deck',
+              notes: 'Interested in AI/ML space. Requested traction metrics.',
+              meetings: 2
+            },
+            {
+              name: 'Sarah Johnson',
+              firm: 'Andreessen Horowitz',
+              role: 'Principal',
+              stage: 'Seed',
+              status: 'cold',
+              lastContact: '2024-02-15',
+              nextStep: 'Initial outreach',
+              notes: 'Focuses on B2B SaaS. Good fit for our space.',
+              meetings: 0
+            },
+            {
+              name: 'Mike Chen',
+              firm: 'First Round Capital',
+              role: 'Partner',
+              stage: 'Pre-Seed',
+              status: 'hot',
+              lastContact: '2024-03-12',
+              nextStep: 'Schedule follow-up call',
+              notes: 'Very interested. Asked for customer references.',
+              meetings: 3
+            }
+          ].map((investor, index) => (
+            <div key={index} className="p-6 bg-gray-50 rounded-xl border border-gray-200 hover:shadow-md transition-all">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-lg font-bold text-gray-900">{investor.name}</h3>
+                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                      investor.status === 'hot' ? 'bg-red-100 text-red-700' :
+                      investor.status === 'warm' ? 'bg-yellow-100 text-yellow-700' :
+                      'bg-gray-100 text-gray-600'
+                    }`}>
+                      {investor.status}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-1">{investor.role} at {investor.firm}</p>
+                  <p className="text-xs text-gray-500 mb-3">Stage: {investor.stage} • {investor.meetings} meetings</p>
+                  <div className="bg-white rounded-lg p-3 mb-3 border border-gray-200">
+                    <p className="text-xs font-semibold text-gray-600 mb-1">Notes:</p>
+                    <p className="text-sm text-gray-700">{investor.notes}</p>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-600">Last Contact: </span>
+                      <span className="font-semibold text-gray-900">{investor.lastContact}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Next Step: </span>
+                      <span className="font-semibold text-gray-900">{investor.nextStep}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 ml-4">
+                  <button className="p-2 hover:bg-white rounded-lg transition-colors">
+                    <MessageSquare className="w-4 h-4 text-gray-600" />
+                  </button>
+                  <button className="p-2 hover:bg-white rounded-lg transition-colors">
+                    <Calendar className="w-4 h-4 text-gray-600" />
+                  </button>
+                  <button className="p-2 hover:bg-white rounded-lg transition-colors">
+                    <Edit3 className="w-4 h-4 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Q&A Repository */}
+      <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Q&A Repository</h2>
+            <p className="text-gray-600">Common questions and refined answers for investor meetings and pitch events.</p>
+          </div>
+          <button className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2">
+            <Plus className="w-4 h-4" />
+            Add Q&A
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          {[
+            {
+              question: 'What problem are you solving?',
+              answer: 'Remote teams waste 30% of their time on manual workflows and context switching between tools. TechFlow AI automates repetitive tasks and unifies workflows, saving teams 10+ hours per week.',
+              category: 'Problem/Solution',
+              usage: 12,
+              lastUpdated: '2024-03-10'
+            },
+            {
+              question: 'What is your traction?',
+              answer: 'We have 1,250+ beta users with an average 40% productivity increase. Our waitlist has grown to 1,523 signups in 3 months. NPS score of 52 indicates strong product-market fit.',
+              category: 'Traction',
+              usage: 8,
+              lastUpdated: '2024-03-12'
+            },
+            {
+              question: 'How do you differentiate from competitors?',
+              answer: 'Unlike generic automation tools, TechFlow AI is purpose-built for remote teams with deep integrations and AI that learns team patterns. Our focus on distributed work and founder experience (ex-Google) sets us apart.',
+              category: 'Competition',
+              usage: 6,
+              lastUpdated: '2024-03-08'
+            },
+            {
+              question: 'What is your business model?',
+              answer: 'SaaS subscription model with tiered pricing: Starter ($29/user/month), Pro ($49/user/month), and Enterprise (custom). Target 70% gross margins with strong unit economics.',
+              category: 'Business Model',
+              usage: 10,
+              lastUpdated: '2024-03-11'
+            },
+            {
+              question: 'What is your go-to-market strategy?',
+              answer: 'Product-led growth with freemium model, content marketing, and community building. Focus on remote-first companies and distributed teams. Partnerships with remote work tools.',
+              category: 'GTM',
+              usage: 7,
+              lastUpdated: '2024-03-09'
+            }
+          ].map((qa, index) => (
+            <div key={index} className="p-6 bg-gray-50 rounded-xl border border-gray-200 hover:shadow-md transition-all">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-semibold">
+                      {qa.category}
+                    </span>
+                    <span className="text-xs text-gray-500">Used {qa.usage} times</span>
+                  </div>
+                  <h3 className="font-semibold text-gray-900 mb-2">{qa.question}</h3>
+                  <p className="text-sm text-gray-700 leading-relaxed mb-2">{qa.answer}</p>
+                  <p className="text-xs text-gray-500">Last updated: {qa.lastUpdated}</p>
+                </div>
+                <div className="flex items-center gap-2 ml-4">
+                  <button className="p-2 hover:bg-white rounded-lg transition-colors">
+                    <Edit3 className="w-4 h-4 text-gray-600" />
+                  </button>
+                  <button className="p-2 hover:bg-white rounded-lg transition-colors">
+                    <Copy className="w-4 h-4 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Showcase Page */}
       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 shadow-lg border border-blue-200">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Showcase Page</h2>
@@ -2575,7 +3943,7 @@ const LaunchPreparation = () => {
         {/* Tabs */}
         <div className="mb-6">
           <div className="bg-white rounded-2xl p-2 shadow-lg border border-gray-100">
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 overflow-x-auto">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -2583,8 +3951,9 @@ const LaunchPreparation = () => {
                 return (
                   <button
                     key={tab.id}
+                    type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-300 cursor-pointer ${
                       isActive
                         ? 'bg-gray-900 text-white shadow-lg'
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
@@ -2608,6 +3977,146 @@ const LaunchPreparation = () => {
         {activeTab === 'perks' && renderPerksTab()}
         {activeTab === 'visa' && renderVisaTab()}
       </div>
+
+      {/* Task Modal */}
+      {showTaskModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">
+                {editingTask ? 'Edit Task' : 'Add New Task'}
+              </h2>
+              <button
+                onClick={() => {
+                  setShowTaskModal(false);
+                  setEditingTask(null);
+                }}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-600" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Task Name *
+                </label>
+                <input
+                  type="text"
+                  value={newTask.task}
+                  onChange={(e) => setNewTask({ ...newTask, task: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                  placeholder="Enter task name"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    Category *
+                  </label>
+                  <select
+                    value={newTask.category}
+                    onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                  >
+                    <option value="Product">Product</option>
+                    <option value="GTM">GTM</option>
+                    <option value="Legal">Legal</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Operations">Operations</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    Assignee
+                  </label>
+                  <input
+                    type="text"
+                    value={newTask.assignee}
+                    onChange={(e) => setNewTask({ ...newTask, assignee: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                    placeholder="Enter assignee name"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Due Date
+                </label>
+                <input
+                  type="date"
+                  value={newTask.dueDate}
+                  onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Dependencies (comma-separated)
+                </label>
+                <input
+                  type="text"
+                  value={newTask.dependencies}
+                  onChange={(e) => setNewTask({ ...newTask, dependencies: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                  placeholder="e.g., Design system complete, Landing page live"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Blockers (comma-separated)
+                </label>
+                <input
+                  type="text"
+                  value={newTask.blockers}
+                  onChange={(e) => setNewTask({ ...newTask, blockers: e.target.value })}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                  placeholder="e.g., Waiting on dev team"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Progress ({newTask.progress}%)
+                </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={newTask.progress}
+                  onChange={(e) => setNewTask({ ...newTask, progress: parseInt(e.target.value) })}
+                  className="w-full"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowTaskModal(false);
+                  setEditingTask(null);
+                }}
+                className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors font-semibold"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveTask}
+                disabled={!newTask.task.trim()}
+                className="flex-1 px-6 py-3 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors font-semibold disabled:bg-gray-300 disabled:cursor-not-allowed"
+              >
+                {editingTask ? 'Update Task' : 'Add Task'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

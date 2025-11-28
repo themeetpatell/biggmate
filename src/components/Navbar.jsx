@@ -68,7 +68,7 @@ const Navbar = () => {
       isHighlighted: true
     },
     { 
-      path: '/startup-workspace', 
+      path: '/sprinto', 
       label: 'Build MVP', 
       icon: Rocket, 
       description: 'Build Your Product'
@@ -122,7 +122,7 @@ const Navbar = () => {
       description: 'Match with Co-Founders'
     },
     { 
-      path: '/startup-workspace', 
+      path: '/sprinto', 
       label: 'Sprinting', 
       icon: Rocket, 
       description: 'Build Your Startup'
