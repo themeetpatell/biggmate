@@ -2,10 +2,14 @@ from django.urls import path
 from .views import (
     ProfileDetailView, PublicProfileView, ProfileListView,
     PortfolioItemListCreateView, PortfolioItemDetailView,
-    TestimonialListCreateView, TestimonialDetailView
+    TestimonialListCreateView, TestimonialDetailView,
+    ComprehensiveProfileView
 )
 
 urlpatterns = [
+    # Comprehensive profile (for EntrepreneurProfile component)
+    path('comprehensive/', ComprehensiveProfileView.as_view(), name='comprehensive-profile'),
+    
     # Profile management
     path('me/', ProfileDetailView.as_view(), name='profile-detail'),
     path('list/', ProfileListView.as_view(), name='profile-list'),

@@ -16,6 +16,7 @@ import {
   Globe, Phone, Mail, Instagram, Twitter, Linkedin, Github, Coffee, 
   Plane, Gamepad2, BookOpen, GraduationCap
 } from 'lucide-react';
+import { profileAPI } from '../services/api';
 
 const EntrepreneurProfile = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -27,9 +28,12 @@ const EntrepreneurProfile = () => {
     personal: {},
     portfolio: {},
     stats: {},
-    achievements: []
+    achievements: [],
+    projects: [],
+    certifications: []
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     loadProfileData();
@@ -37,238 +41,52 @@ const EntrepreneurProfile = () => {
 
   const loadProfileData = async () => {
     setIsLoading(true);
+    setError(null);
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Fetch comprehensive profile data from the API
+      const response = await profileAPI.getComprehensiveProfile();
+      const profileData = response.data;
       
-      const profileData = {
-        basic: {
-          name: "Alex Chen",
-          role: "Technical Co-founder",
-          bio: "Full-stack developer with 8 years experience building scalable web applications. Passionate about AI and fintech. Looking for a business co-founder to build the next unicorn startup.",
-          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-          coverPhoto: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&h=400&fit=crop",
-          location: "San Francisco, CA",
-          experience: "8 years",
-          isVerified: true,
-          isPremium: true,
-          joinDate: "2024-01-15",
-          lastActive: "2 hours ago"
-        },
-        professional: {
-          skills: {
-            technical: [
-              { name: "React", level: 95, category: "Frontend" },
-              { name: "Node.js", level: 90, category: "Backend" },
-              { name: "Python", level: 88, category: "Programming" },
-              { name: "AWS", level: 85, category: "Cloud" },
-              { name: "Machine Learning", level: 80, category: "AI/ML" },
-              { name: "Docker", level: 75, category: "DevOps" }
-            ],
-            business: [
-              { name: "Product Strategy", level: 85 },
-              { name: "Team Leadership", level: 90 },
-              { name: "Fundraising", level: 70 },
-              { name: "Market Analysis", level: 75 },
-              { name: "Operations", level: 80 }
-            ]
-          },
-          workExperience: [
-            {
-              id: 1,
-              company: "TechFlow Solutions",
-              position: "Founder & CTO",
-              duration: "2022 - Present",
-              description: "Leading technical development of AI-powered business solutions. Raised $2.5M Series A.",
-              achievements: ["Raised $2.5M Series A", "Built team of 15", "1000+ customers"]
-            },
-            {
-              id: 2,
-              company: "Google",
-              position: "Senior Software Engineer",
-              duration: "2019 - 2022",
-              description: "Developed scalable backend systems for Google Cloud Platform.",
-              achievements: ["Promoted to Senior", "Led team of 5", "2 patents filed"]
-            }
-          ],
-          education: [
-            {
-              school: "Stanford University",
-              degree: "Master of Science in Computer Science",
-              year: "2017"
-            }
-          ]
-        },
-        startup: {
-          currentStage: "Series A",
-          lookingFor: ["Business Co-founder", "Marketing Expert", "Designer"],
-          industries: ["Fintech", "AI/ML", "SaaS"],
-          previousStartups: ["TechCorp (Acquired)", "DataFlow (Series A)"],
-          investmentRaised: "$2.5M",
-          teamSize: "15",
-          revenue: "$50K MRR"
-        },
-        personal: {
-          interests: [
-            { name: "Hiking", icon: "🏔️", level: "Expert" },
-            { name: "Cooking", icon: "👨‍🍳", level: "Advanced" },
-            { name: "Photography", icon: "📸", level: "Intermediate" },
-            { name: "Tennis", icon: "🎾", level: "Advanced" }
-          ],
-          personality: {
-            type: "ENTJ",
-            traits: ["Analytical", "Ambitious", "Confident", "Strategic"],
-            values: ["Innovation", "Excellence", "Growth", "Impact"]
-          }
-        },
-        portfolio: {},
-        stats: {
-          level: 8,
-          xp: 2450,
-          nextLevelXp: 3000,
-          cofounderMatches: 24,
-          pitches: 15,
-          events: 8,
-          totalConnections: 150,
-          profileViews: 1250
-        },
-        achievements: [
-          {
-            id: 1,
-            title: "Top 1% Cofounder",
-            description: "Recognized as one of the top cofounders on the platform",
-            date: "2024-01-15",
-            type: "platform",
-            icon: "🏆"
-          },
-          {
-            id: 2,
-            title: "Series A Success",
-            description: "Successfully raised $2.5M Series A funding for TechFlow Solutions",
-            date: "2023-11-20",
-            type: "funding",
-            icon: "💰"
-          },
-          {
-            id: 3,
-            title: "Product Launch",
-            description: "Launched EcoTrack AI with 10K+ active users",
-            date: "2023-08-10",
-            type: "product",
-            icon: "🚀"
-          },
-          {
-            id: 4,
-            title: "Team Building",
-            description: "Built and led a team of 15+ engineers",
-            date: "2023-06-15",
-            type: "leadership",
-            icon: "👥"
-          },
-          {
-            id: 5,
-            title: "Patent Filed",
-            description: "Filed 2 patents for innovative AI algorithms",
-            date: "2023-03-22",
-            type: "innovation",
-            icon: "💡"
-          }
-        ],
-        projects: [
-          {
-            id: 1,
-            title: "EcoTrack AI",
-            description: "AI-powered carbon footprint tracking platform for businesses. Empowering companies to monitor, analyze, and reduce their environmental impact through intelligent data analytics.",
-            image: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&h=400&fit=crop",
-            technologies: ["React", "Node.js", "Python", "AWS", "Machine Learning", "PostgreSQL"],
-            status: "Live",
-            url: "https://ecotrack-ai.com",
-            github: "https://github.com/alexchen/ecotrack-ai",
-            metrics: { 
-              users: "10K+", 
-              revenue: "$50K MRR", 
-              rating: 4.8,
-              downloads: "25K+"
-            },
-            features: [
-              "Real-time carbon footprint tracking",
-              "AI-powered sustainability insights",
-              "Automated ESG reporting",
-              "Team collaboration tools",
-              "Custom analytics dashboard"
-            ]
-          },
-          {
-            id: 2,
-            title: "HealthConnect",
-            description: "Telemedicine platform connecting patients with specialists worldwide. Revolutionizing healthcare access through secure video consultations and integrated medical records.",
-            image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=600&h=400&fit=crop",
-            technologies: ["React Native", "Node.js", "MongoDB", "WebRTC", "Socket.io"],
-            status: "Beta",
-            url: "https://healthconnect.app",
-            github: "https://github.com/alexchen/healthconnect",
-            metrics: { 
-              users: "5K+", 
-              revenue: "$25K MRR", 
-              rating: 4.6,
-              downloads: "12K+"
-            },
-            features: [
-              "HD video consultations",
-              "Smart appointment scheduling",
-              "Secure medical records",
-              "E-prescription management",
-              "Multi-language support"
-            ]
-          },
-          {
-            id: 3,
-            title: "EduFlow",
-            description: "Personalized learning platform for K-12 education. Using adaptive algorithms to create customized learning paths that match each student's pace and style.",
-            image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop",
-            technologies: ["Vue.js", "Laravel", "MySQL", "Redis", "TensorFlow"],
-            status: "Development",
-            url: null,
-            github: "https://github.com/alexchen/eduflow",
-            metrics: { 
-              users: "2K+", 
-              revenue: "$10K MRR", 
-              rating: 4.4,
-              downloads: "8K+"
-            },
-            features: [
-              "Adaptive learning paths",
-              "Real-time progress tracking",
-              "Parent dashboard & reports",
-              "Teacher collaboration tools",
-              "Gamification elements"
-            ]
-          }
-        ],
-        certifications: [
-          {
-            name: "AWS Solutions Architect Professional",
-            issuer: "Amazon Web Services",
-            date: "2023-09-15",
-            credentialId: "AWS-SAA-123456"
-          },
-          {
-            name: "Google Cloud Professional Architect",
-            issuer: "Google Cloud",
-            date: "2023-05-20",
-            credentialId: "GCP-PRO-789012"
-          },
-          {
-            name: "Certified Scrum Master (CSM)",
-            issuer: "Scrum Alliance",
-            date: "2023-02-10",
-            credentialId: "CSM-345678"
-          }
-        ]
-      }
-      
-      setProfile(profileData);
+      // Set the profile data from API response
+      setProfile({
+        basic: profileData.basic || {},
+        professional: profileData.professional || {},
+        startup: profileData.startup || {},
+        personal: profileData.personal || {},
+        portfolio: profileData.portfolio || {},
+        stats: profileData.stats || {},
+        achievements: profileData.achievements || [],
+        projects: profileData.projects || [],
+        certifications: profileData.certifications || []
+      });
     } catch (error) {
       console.error('Error loading profile data:', error);
+      setError('Failed to load profile data. Please try again.');
+      
+      // Set default empty profile structure on error
+      setProfile({
+        basic: {
+          name: 'User',
+          role: 'Entrepreneur',
+          bio: '',
+          avatar: '',
+          coverPhoto: '',
+          location: '',
+          experience: '',
+          isVerified: false,
+          isPremium: false,
+          joinDate: '',
+          lastActive: ''
+        },
+        professional: { skills: { technical: [], business: [] }, workExperience: [], education: [] },
+        startup: { currentStage: '', lookingFor: [], industries: [], previousStartups: [] },
+        personal: { interests: [], values: [], personality: {} },
+        portfolio: {},
+        stats: { level: 1, xp: 0, cofounderMatches: 0, pitches: 0, events: 0, totalConnections: 0, profileViews: 0 },
+        achievements: [],
+        projects: [],
+        certifications: []
+      });
     } finally {
       setIsLoading(false);
     }
@@ -1076,6 +894,24 @@ const EntrepreneurProfile = () => {
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-black mx-auto mb-4"></div>
           <p className="text-gray-600 font-medium text-lg">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center">
+        <div className="text-center bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
+          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+          <p className="text-gray-600 font-medium text-lg mb-4">{error}</p>
+          <button 
+            onClick={loadProfileData}
+            className="px-6 py-3 bg-black text-white rounded-xl hover:bg-gray-800 transition-all duration-300 font-semibold flex items-center gap-2 mx-auto"
+          >
+            <RefreshCw className="w-5 h-5" />
+            Retry
+          </button>
         </div>
       </div>
     );

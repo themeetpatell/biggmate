@@ -85,7 +85,10 @@ export const profileAPI = {
   getProfile: (userId) => api.get(`/profiles/${userId}/`),
   updateProfile: (userId, data) => api.patch(`/profiles/${userId}/`, data),
   getMyProfile: () => api.get('/profiles/me/'),
-  searchProfiles: (params) => api.get('/profiles/', { params }),
+  getComprehensiveProfile: () => api.get('/profiles/comprehensive/'),
+  updateComprehensiveProfile: (data) => api.patch('/profiles/comprehensive/', data),
+  searchProfiles: (params) => api.get('/profiles/list/', { params }),
+  getPublicProfile: (username) => api.get(`/profiles/${username}/`),
   uploadAvatar: (file) => {
     const formData = new FormData();
     formData.append('avatar', file);
@@ -93,6 +96,16 @@ export const profileAPI = {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
+  // Portfolio items
+  getPortfolioItems: () => api.get('/profiles/me/portfolio/'),
+  createPortfolioItem: (data) => api.post('/profiles/me/portfolio/', data),
+  updatePortfolioItem: (id, data) => api.patch(`/profiles/me/portfolio/${id}/`, data),
+  deletePortfolioItem: (id) => api.delete(`/profiles/me/portfolio/${id}/`),
+  // Testimonials
+  getTestimonials: () => api.get('/profiles/me/testimonials/'),
+  createTestimonial: (data) => api.post('/profiles/me/testimonials/', data),
+  updateTestimonial: (id, data) => api.patch(`/profiles/me/testimonials/${id}/`, data),
+  deleteTestimonial: (id) => api.delete(`/profiles/me/testimonials/${id}/`),
 };
 
 // Pitches API

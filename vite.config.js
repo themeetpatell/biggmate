@@ -25,15 +25,19 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    host: true,
+    strictPort: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'http://localhost:8000',
         changeOrigin: true,
       },
     },
-    // Enable HMR
-    hmr: {
-      overlay: true,
+    // Disable WebSocket HMR if it keeps failing - use polling instead
+    hmr: false,
+    watch: {
+      usePolling: true,
+      interval: 1000,
     },
   },
   build: {
