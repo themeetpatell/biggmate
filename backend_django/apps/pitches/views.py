@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
-from .models import Pitch, SavedPitch
+from .models import Pitch, SavedPitch, LikedPitch
 from .serializers import PitchSerializer, PitchListSerializer, SavedPitchSerializer
 
 
@@ -103,4 +103,57 @@ class PitchViewSet(viewsets.ModelViewSet):
             serializer = SavedPitchSerializer(page, many=True, context={'request': request})
             return self.get_paginated_response(serializer.data)
         serializer = SavedPitchSerializer(saved_pitches, many=True, context={'request': request})
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def like(self, request, pk=None):
+        """Like a pitch"""
+        pitch = self.get_object()
+        liked_pitch, created = LikedPitch.objects.get_or_create(
+            user=request.user,
+            pitch=pitch
+        )
+        if created:
+            pitch.increment_likes()
+            return Response(
+                {'message': 'Pitch liked successfully', 'likes_count': pitch.likes_count},
+                status=status.HTTP_201_CREATED
+            )
+        return Response(
+            {'message': 'Pitch already liked', 'likes_count': pitch.likes_count},
+            status=status.HTTP_200_OK
+        )
+    
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def unlike(self, request, pk=None):
+        """Unlike a pitch"""
+        pitch = self.get_object()
+        deleted_count, _ = LikedPitch.objects.filter(
+            user=request.user,
+            pitch=pitch
+        ).delete()
+        if deleted_count > 0:
+            pitch.decrement_likes()
+            return Response(
+                {'message': 'Pitch unliked successfully', 'likes_count': pitch.likes_count},
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {'message': 'Pitch was not liked', 'likes_count': pitch.likes_count},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    def liked(self, request):
+        """Get all pitches liked by the current user"""
+        liked_pitches = LikedPitch.objects.filter(
+            user=request.user
+        ).select_related('pitch', 'pitch__author')
+        pitch_ids = [lp.pitch.id for lp in liked_pitches]
+        pitches = Pitch.objects.filter(id__in=pitch_ids)
+        page = self.paginate_queryset(pitches)
+        if page is not None:
+            serializer = PitchListSerializer(page, many=True, context={'request': request})
+            return self.get_paginated_response(serializer.data)
+        serializer = PitchListSerializer(pitches, many=True, context={'request': request})
         return Response(serializer.data)

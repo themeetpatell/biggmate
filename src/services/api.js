@@ -128,6 +128,12 @@ export const pitchesAPI = {
   unsavePitch: (id) => api.post(`/pitches/pitches/${id}/unsave/`),
   // Get saved pitches
   getSavedPitches: (params) => api.get('/pitches/pitches/saved/', { params }),
+  // Like a pitch
+  likePitch: (id) => api.post(`/pitches/pitches/${id}/like/`),
+  // Unlike a pitch
+  unlikePitch: (id) => api.post(`/pitches/pitches/${id}/unlike/`),
+  // Get liked pitches
+  getLikedPitches: (params) => api.get('/pitches/pitches/liked/', { params }),
 };
 
 // Pitchbacks API

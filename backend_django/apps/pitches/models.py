@@ -60,6 +60,7 @@ class Pitch(models.Model):
     # Metrics
     views_count = models.PositiveIntegerField(default=0)
     saves_count = models.PositiveIntegerField(default=0)
+    likes_count = models.PositiveIntegerField(default=0)
     
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
@@ -86,6 +87,14 @@ class Pitch(models.Model):
     def increment_saves(self):
         self.saves_count += 1
         self.save(update_fields=['saves_count'])
+    
+    def increment_likes(self):
+        self.likes_count += 1
+        self.save(update_fields=['likes_count'])
+    
+    def decrement_likes(self):
+        self.likes_count = max(0, self.likes_count - 1)
+        self.save(update_fields=['likes_count'])
 
 
 class SavedPitch(models.Model):
@@ -109,3 +118,27 @@ class SavedPitch(models.Model):
     
     def __str__(self):
         return f"{self.user.username} saved {self.pitch.title}"
+
+
+class LikedPitch(models.Model):
+    """Track which users have liked which pitches"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='liked_pitches'
+    )
+    pitch = models.ForeignKey(
+        Pitch,
+        on_delete=models.CASCADE,
+        related_name='liked_by'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ['user', 'pitch']
+        ordering = ['-created_at']
+        verbose_name = 'Liked Pitch'
+        verbose_name_plural = 'Liked Pitches'
+    
+    def __str__(self):
+        return f"{self.user.username} liked {self.pitch.title}"

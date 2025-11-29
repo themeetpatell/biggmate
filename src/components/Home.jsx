@@ -1253,12 +1253,23 @@ const Home = () => {
                     onClick={() => handleLike(selectedPitchDetails.id)}
                     className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
                       likedPitches.has(selectedPitchDetails.id)
-                        ? 'bg-gray-600 text-white hover:bg-gray-800'
+                        ? 'bg-red-50 text-red-500 hover:bg-red-100'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
                     <Heart className={`w-5 h-5 ${likedPitches.has(selectedPitchDetails.id) ? 'fill-current' : ''}`} />
                     {likedPitches.has(selectedPitchDetails.id) ? 'Liked' : 'Like'}
+                  </button>
+                  <button
+                    onClick={() => handleSave(selectedPitchDetails.id)}
+                    className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
+                      savedPitches.has(selectedPitchDetails.id)
+                        ? 'bg-blue-50 text-blue-500 hover:bg-blue-100'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Bookmark className={`w-5 h-5 ${savedPitches.has(selectedPitchDetails.id) ? 'fill-current' : ''}`} />
+                    {savedPitches.has(selectedPitchDetails.id) ? 'Saved' : 'Save'}
                   </button>
                   <button className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-300 flex items-center justify-center gap-2">
                     <Share2 className="w-5 h-5" />
@@ -1367,14 +1378,23 @@ const Home = () => {
                       onClick={() => handleLike(pitch.id)}
                       className={`p-2 rounded-xl transition-colors ${
                         likedPitches.has(pitch.id) 
-                          ? 'bg-gray-100 text-gray-500' 
+                          ? 'bg-red-50 text-red-500' 
                           : 'hover:bg-gray-100 text-gray-500'
                       }`}
+                      title={likedPitches.has(pitch.id) ? 'Unlike' : 'Like'}
                     >
                       <Heart className={`w-5 h-5 ${likedPitches.has(pitch.id) ? 'fill-current' : ''}`} />
                     </button>
-                    <button className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-500">
-                      <Bookmark className="w-5 h-5" />
+                    <button 
+                      onClick={() => handleSave(pitch.id)}
+                      className={`p-2 rounded-xl transition-colors ${
+                        savedPitches.has(pitch.id) 
+                          ? 'bg-blue-50 text-blue-500' 
+                          : 'hover:bg-gray-100 text-gray-500'
+                      }`}
+                      title={savedPitches.has(pitch.id) ? 'Unsave' : 'Save'}
+                    >
+                      <Bookmark className={`w-5 h-5 ${savedPitches.has(pitch.id) ? 'fill-current' : ''}`} />
                     </button>
                     <button className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-500">
                       <Share2 className="w-5 h-5" />
@@ -1466,12 +1486,12 @@ const Home = () => {
                     <span>{pitch.metrics.views}</span>
                 </div>
                   <div className="flex items-center gap-1">
-                    <Heart className="w-4 h-4" />
+                    <Heart className={`w-4 h-4 ${likedPitches.has(pitch.id) ? 'text-red-500 fill-current' : ''}`} />
                     <span>{pitch.metrics.likes}</span>
             </div>
                   <div className="flex items-center gap-1">
-                    <MessageCircle className="w-4 h-4" />
-                    <span>{pitch.metrics.pitches}</span>
+                    <Bookmark className={`w-4 h-4 ${savedPitches.has(pitch.id) ? 'text-blue-500 fill-current' : ''}`} />
+                    <span>{pitch.metrics.saves || 0}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
