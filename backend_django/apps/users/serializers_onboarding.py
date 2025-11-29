@@ -4,7 +4,8 @@ Serializers for onboarding options
 from rest_framework import serializers
 from .models_onboarding import (
     ValueCategory, Value, Intent, Industry, Skill, ExperienceLevel,
-    CofounderRole, WorkStyle, TimeCommitment, Availability, LocationPreference
+    CofounderRole, WorkStyle, TimeCommitment, Availability, LocationPreference,
+    WorkType, HourlyRate, StartupStage
 )
 
 
@@ -97,6 +98,30 @@ class LocationPreferenceSerializer(serializers.ModelSerializer):
         fields = ['id', 'location_id', 'name']
 
 
+class WorkTypeSerializer(serializers.ModelSerializer):
+    """Serializer for WorkType model"""
+    
+    class Meta:
+        model = WorkType
+        fields = ['id', 'work_type_id', 'name']
+
+
+class HourlyRateSerializer(serializers.ModelSerializer):
+    """Serializer for HourlyRate model"""
+    
+    class Meta:
+        model = HourlyRate
+        fields = ['id', 'rate_id', 'name', 'min_rate', 'max_rate']
+
+
+class StartupStageSerializer(serializers.ModelSerializer):
+    """Serializer for StartupStage model"""
+    
+    class Meta:
+        model = StartupStage
+        fields = ['id', 'stage_id', 'name', 'description']
+
+
 class OnboardingOptionsSerializer(serializers.Serializer):
     """Combined serializer for all onboarding options"""
     value_groups = ValueCategorySerializer(many=True)
@@ -109,3 +134,6 @@ class OnboardingOptionsSerializer(serializers.Serializer):
     time_commitments = TimeCommitmentSerializer(many=True)
     availabilities = AvailabilitySerializer(many=True)
     location_preferences = LocationPreferenceSerializer(many=True)
+    work_types = WorkTypeSerializer(many=True)
+    hourly_rates = HourlyRateSerializer(many=True)
+    startup_stages = StartupStageSerializer(many=True)

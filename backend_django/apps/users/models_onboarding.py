@@ -184,3 +184,54 @@ class LocationPreference(models.Model):
     
     def __str__(self):
         return self.name
+
+
+class WorkType(models.Model):
+    """Work type options for preferences"""
+    work_type_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'work_types'
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.name
+
+
+class HourlyRate(models.Model):
+    """Hourly rate options for preferences"""
+    rate_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+    min_rate = models.IntegerField(null=True, blank=True)
+    max_rate = models.IntegerField(null=True, blank=True)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'hourly_rates'
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.name
+
+
+class StartupStage(models.Model):
+    """Startup stage options"""
+    stage_id = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=200, blank=True)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'startup_stages'
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.name

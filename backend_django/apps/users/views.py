@@ -10,7 +10,8 @@ import random
 from .models import OTPVerification, GlobalLocation
 from .models_onboarding import (
     ValueCategory, Value, Intent, Industry, Skill, ExperienceLevel,
-    CofounderRole, WorkStyle, TimeCommitment, Availability, LocationPreference
+    CofounderRole, WorkStyle, TimeCommitment, Availability, LocationPreference,
+    WorkType, HourlyRate, StartupStage
 )
 from .serializers import (
     UserSerializer, UserRegistrationSerializer, UserLoginSerializer,
@@ -22,7 +23,8 @@ from .serializers_onboarding import (
     ValueCategorySerializer, IntentSerializer, IndustrySerializer,
     SkillSerializer, ExperienceLevelSerializer, OnboardingOptionsSerializer,
     CofounderRoleSerializer, WorkStyleSerializer, TimeCommitmentSerializer,
-    AvailabilitySerializer, LocationPreferenceSerializer
+    AvailabilitySerializer, LocationPreferenceSerializer,
+    WorkTypeSerializer, HourlyRateSerializer, StartupStageSerializer
 )
 
 User = get_user_model()
@@ -446,6 +448,9 @@ class OnboardingOptionsView(views.APIView):
             time_commitments = TimeCommitment.objects.all()
             availabilities = Availability.objects.all()
             location_preferences = LocationPreference.objects.all()
+            work_types = WorkType.objects.all()
+            hourly_rates = HourlyRate.objects.all()
+            startup_stages = StartupStage.objects.all()
             
             # Serialize data
             data = {
@@ -459,6 +464,9 @@ class OnboardingOptionsView(views.APIView):
                 'time_commitments': TimeCommitmentSerializer(time_commitments, many=True).data,
                 'availabilities': AvailabilitySerializer(availabilities, many=True).data,
                 'location_preferences': LocationPreferenceSerializer(location_preferences, many=True).data,
+                'work_types': WorkTypeSerializer(work_types, many=True).data,
+                'hourly_rates': HourlyRateSerializer(hourly_rates, many=True).data,
+                'startup_stages': StartupStageSerializer(startup_stages, many=True).data,
             }
             
             return Response(data, status=status.HTTP_200_OK)
