@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
-from .models import Pitch, SavedPitch, LikedPitch
-from .serializers import PitchSerializer, PitchListSerializer, SavedPitchSerializer
+from .models import Pitch, SavedPitch, LikedPitch, PitchComment
+from .serializers import PitchSerializer, PitchListSerializer, SavedPitchSerializer, PitchCommentSerializer
 
 
 class PitchViewSet(viewsets.ModelViewSet):
@@ -156,4 +156,82 @@ class PitchViewSet(viewsets.ModelViewSet):
             serializer = PitchListSerializer(page, many=True, context={'request': request})
             return self.get_paginated_response(serializer.data)
         serializer = PitchListSerializer(pitches, many=True, context={'request': request})
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['get', 'post'], permission_classes=[IsAuthenticatedOrReadOnly])
+    def comments(self, request, pk=None):
+        """Get or add comments for a pitch"""
+        pitch = self.get_object()
+        
+        if request.method == 'GET':
+            # Get all comments for this pitch (top-level only, no replies)
+            comments = PitchComment.objects.filter(pitch=pitch, parent=None).select_related('author')
+            page = self.paginate_queryset(comments)
+            if page is not None:
+                serializer = PitchCommentSerializer(page, many=True, context={'request': request})
+                return self.get_paginated_response(serializer.data)
+            serializer = PitchCommentSerializer(comments, many=True, context={'request': request})
+            return Response(serializer.data)
+        
+        elif request.method == 'POST':
+            if not request.user.is_authenticated:
+                return Response(
+                    {'error': 'Authentication required'},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
+            
+            serializer = PitchCommentSerializer(data={
+                'pitch': pitch.id,
+                'content': request.data.get('content', ''),
+                'parent': request.data.get('parent')
+            }, context={'request': request})
+            
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PitchCommentViewSet(viewsets.ModelViewSet):
+    """ViewSet for managing pitch comments"""
+    queryset = PitchComment.objects.select_related('author', 'pitch').all()
+    serializer_class = PitchCommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        pitch_id = self.request.query_params.get('pitch')
+        if pitch_id:
+            queryset = queryset.filter(pitch_id=pitch_id)
+        return queryset
+    
+    def destroy(self, request, *args, **kwargs):
+        """Delete a comment - only author can delete their own comments"""
+        instance = self.get_object()
+        if instance.author != request.user:
+            return Response(
+                {'error': 'You can only delete your own comments'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        # Decrement comments count on pitch
+        instance.pitch.comments_count = max(0, instance.pitch.comments_count - 1)
+        instance.pitch.save(update_fields=['comments_count'])
+        return super().destroy(request, *args, **kwargs)
+    
+    def update(self, request, *args, **kwargs):
+        """Update a comment - only author can update their own comments"""
+        instance = self.get_object()
+        if instance.author != request.user:
+            return Response(
+                {'error': 'You can only edit your own comments'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        return super().update(request, *args, **kwargs)
+    
+    @action(detail=True, methods=['get'])
+    def replies(self, request, pk=None):
+        """Get all replies to a comment"""
+        comment = self.get_object()
+        replies = comment.replies.select_related('author')
+        serializer = PitchCommentSerializer(replies, many=True, context={'request': request})
         return Response(serializer.data)

@@ -515,7 +515,7 @@ const Home = () => {
         likes: apiPitch.likes_count || 0,
         saves: apiPitch.saves_count || 0,
         pitches: 0,
-        comments: 0
+        comments: apiPitch.comments_count || 0
       },
       isLiked: apiPitch.is_liked || false,
       isSaved: apiPitch.is_saved || false,
@@ -871,6 +871,54 @@ const Home = () => {
       }, 3000);
     } finally {
       setIsSubmittingPitch(false);
+    }
+  };
+
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+
+  const handleSubmitComment = async () => {
+    if (!commentText.trim() || !commentPitch) return;
+    
+    setIsSubmittingComment(true);
+    
+    try {
+      await pitchesAPI.addComment(commentPitch.id, commentText.trim());
+      
+      // Update the comment count locally
+      setPitches(prevPitches => 
+        prevPitches.map(pitch => 
+          pitch.id === commentPitch.id 
+            ? { 
+                ...pitch, 
+                metrics: { 
+                  ...pitch.metrics, 
+                  comments: (pitch.metrics?.comments || 0) + 1 
+                } 
+              }
+            : pitch
+        )
+      );
+      
+      setSuccessMessage('Comment added successfully!');
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        setSuccessMessage('');
+      }, 3000);
+      
+      setShowCommentModal(false);
+      setCommentPitch(null);
+      setCommentText('');
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      setSuccessMessage('Failed to add comment. Please try again.');
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        setSuccessMessage('');
+      }, 3000);
+    } finally {
+      setIsSubmittingComment(false);
     }
   };
 
@@ -1916,18 +1964,11 @@ const Home = () => {
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  if (commentText.trim()) {
-                    console.log('Comment submitted:', commentText);
-                    setShowCommentModal(false);
-                    setCommentPitch(null);
-                    setCommentText('');
-                  }
-                }}
-                disabled={!commentText.trim()}
+                onClick={handleSubmitComment}
+                disabled={!commentText.trim() || isSubmittingComment}
                 className="flex-1 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
               >
-                Submit Comment
+                {isSubmittingComment ? 'Submitting...' : 'Submit Comment'}
               </button>
             </div>
           </div>

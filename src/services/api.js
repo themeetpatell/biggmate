@@ -134,6 +134,12 @@ export const pitchesAPI = {
   unlikePitch: (id) => api.post(`/pitches/pitches/${id}/unlike/`),
   // Get liked pitches
   getLikedPitches: (params) => api.get('/pitches/pitches/liked/', { params }),
+  // Comments
+  getComments: (pitchId, params) => api.get(`/pitches/pitches/${pitchId}/comments/`, { params }),
+  addComment: (pitchId, content, parentId = null) => api.post(`/pitches/pitches/${pitchId}/comments/`, { content, parent: parentId }),
+  deleteComment: (commentId) => api.delete(`/pitches/comments/${commentId}/`),
+  updateComment: (commentId, content) => api.patch(`/pitches/comments/${commentId}/`, { content }),
+  getCommentReplies: (commentId) => api.get(`/pitches/comments/${commentId}/replies/`),
 };
 
 // Pitchbacks API

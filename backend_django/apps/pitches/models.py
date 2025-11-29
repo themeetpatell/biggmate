@@ -61,6 +61,7 @@ class Pitch(models.Model):
     views_count = models.PositiveIntegerField(default=0)
     saves_count = models.PositiveIntegerField(default=0)
     likes_count = models.PositiveIntegerField(default=0)
+    comments_count = models.PositiveIntegerField(default=0)
     
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
@@ -142,3 +143,39 @@ class LikedPitch(models.Model):
     
     def __str__(self):
         return f"{self.user.username} liked {self.pitch.title}"
+
+
+class PitchComment(models.Model):
+    """Comments on pitches"""
+    pitch = models.ForeignKey(
+        Pitch,
+        on_delete=models.CASCADE,
+        related_name='comments'
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='pitch_comments'
+    )
+    content = models.TextField(max_length=500)
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='replies'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Pitch Comment'
+        verbose_name_plural = 'Pitch Comments'
+        indexes = [
+            models.Index(fields=['pitch', '-created_at']),
+            models.Index(fields=['author', '-created_at']),
+        ]
+    
+    def __str__(self):
+        return f"{self.author.username} commented on {self.pitch.title}"
