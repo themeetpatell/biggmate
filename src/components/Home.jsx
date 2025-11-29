@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { pitchesAPI } from '../services/api';
 import { 
   Send,
   Heart,
@@ -460,27 +461,164 @@ const Home = () => {
     }));
   };
 
-  // Load more pitches
-  const loadMorePitches = useCallback(() => {
+  // Transform API pitch data to match frontend format
+  const transformPitchData = (apiPitch) => {
+    const stageMap = {
+      'idea': { label: 'Idea Stage', color: 'blue' },
+      'validation': { label: 'Validation', color: 'yellow' },
+      'prototype': { label: 'Prototype', color: 'yellow' },
+      'mvp': { label: 'MVP Stage', color: 'green' },
+      'growth': { label: 'Growth Stage', color: 'green' },
+      'scaling': { label: 'Scale Stage', color: 'green' },
+    };
+    
+    const stageInfo = stageMap[apiPitch.stage] || { label: apiPitch.stage, color: 'gray' };
+    
+    return {
+      id: apiPitch.id,
+      title: apiPitch.title,
+      shortDescription: apiPitch.tagline,
+      description: apiPitch.description,
+      problem: apiPitch.problem || '',
+      solution: apiPitch.solution || '',
+      targetMarket: apiPitch.target_market || '',
+      businessModel: apiPitch.business_model || '',
+      industry: apiPitch.industries?.[0] || 'Technology',
+      stage: stageInfo.label,
+      stageColor: stageInfo.color,
+      lookingFor: apiPitch.skills_needed || [],
+      author: {
+        name: apiPitch.author_details?.first_name 
+          ? `${apiPitch.author_details.first_name} ${apiPitch.author_details.last_name || ''}`.trim()
+          : 'Anonymous',
+        role: 'Founder',
+        location: 'Remote',
+        avatar: null,
+        experience: '',
+        previousStartups: [],
+        skills: apiPitch.skills_needed || [],
+        summary: 'Founder',
+        anonymousProfile: {
+          experience: '',
+          skills: apiPitch.skills_needed || [],
+          previousStartups: [],
+          education: '',
+          achievements: [],
+          workStyle: '',
+          availability: apiPitch.timeline || 'Flexible'
+        }
+      },
+      compatibility: Math.floor(Math.random() * 20) + 80,
+      tags: apiPitch.industries || [],
+      metrics: {
+        views: apiPitch.views_count || 0,
+        likes: apiPitch.likes_count || 0,
+        saves: apiPitch.saves_count || 0,
+        pitches: 0,
+        comments: 0
+      },
+      isLiked: apiPitch.is_liked || false,
+      isSaved: apiPitch.is_saved || false,
+      timeline: apiPitch.timeline || '',
+      market: apiPitch.market_size || '',
+      funding: apiPitch.funding_needs ? `Seeking $${Number(apiPitch.funding_needs).toLocaleString()}` : '',
+      createdAt: apiPitch.created_at ? new Date(apiPitch.created_at).toLocaleDateString() : 'Recently',
+      imageUrl: null
+    };
+  };
+
+  // Load pitches from API
+  const loadMorePitches = useCallback(async () => {
     if (loading || !hasMore) return;
     
     setLoading(true);
-    setTimeout(() => {
-      const newPitches = generateMockPitches(page);
-      setPitches(prev => [...prev, ...newPitches]);
-      setPage(prev => prev + 1);
-      setLoading(false);
+    try {
+      const response = await pitchesAPI.getAllPitches({ page, page_size: 10 });
+      const apiPitches = response.data.results || response.data || [];
       
-      // Simulate end of data after 5 pages
-      if (page >= 5) {
+      if (apiPitches.length === 0) {
+        setHasMore(false);
+        // If no pitches from API on first load, use mock data
+        if (page === 1) {
+          const mockPitches = generateMockPitches(1);
+          setPitches(mockPitches);
+        }
+      } else {
+        // Transform API data to frontend format
+        const transformedPitches = apiPitches.map(transformPitchData);
+        
+        // Update liked/saved sets based on API response
+        const newLikedIds = new Set();
+        const newSavedIds = new Set();
+        transformedPitches.forEach(p => {
+          if (p.isLiked) newLikedIds.add(p.id);
+          if (p.isSaved) newSavedIds.add(p.id);
+        });
+        
+        setLikedPitches(prev => new Set([...prev, ...newLikedIds]));
+        setBookmarkedPitches(prev => new Set([...prev, ...newSavedIds]));
+        
+        setPitches(prev => {
+          const existingIds = new Set(prev.map(p => p.id));
+          const uniqueNewPitches = transformedPitches.filter(p => !existingIds.has(p.id));
+          return [...prev, ...uniqueNewPitches];
+        });
+        
+        // Check if there are more pages
+        const totalCount = response.data.count;
+        if (totalCount && pitches.length + apiPitches.length >= totalCount) {
+          setHasMore(false);
+        }
+        
+        setPage(prev => prev + 1);
+      }
+    } catch (error) {
+      console.error('Error loading pitches from API:', error);
+      
+      // Fallback to mock data if API fails
+      if (page === 1) {
+        console.log('Using mock data - API unavailable');
+        const mockPitches = generateMockPitches(page);
+        setPitches(mockPitches);
+        setPage(prev => prev + 1);
+      }
+      
+      // If it's an auth error or network error after first page, stop loading more
+      if (error.response?.status === 401 || !error.response) {
         setHasMore(false);
       }
-    }, 1000);
-  }, [loading, hasMore, page]);
+    } finally {
+      setLoading(false);
+    }
+  }, [loading, hasMore, page, pitches.length]);
+
+  // Load user's liked and saved pitches
+  const loadUserInteractions = async () => {
+    try {
+      // Load liked pitches
+      const likedResponse = await pitchesAPI.getLikedPitches();
+      const likedPitchesData = likedResponse.data.results || likedResponse.data || [];
+      const likedIds = new Set(likedPitchesData.map(p => p.id));
+      setLikedPitches(likedIds);
+      
+      // Load saved pitches
+      const savedResponse = await pitchesAPI.getSavedPitches();
+      const savedPitchesData = savedResponse.data.results || savedResponse.data || [];
+      const savedIds = new Set(savedPitchesData.map(p => p.pitch || p.id));
+      setBookmarkedPitches(savedIds);
+    } catch (error) {
+      console.log('Could not load user interactions:', error);
+    }
+  };
 
   // Initial load
+  const initialLoadDone = React.useRef(false);
   useEffect(() => {
-    loadMorePitches();
+    if (!initialLoadDone.current) {
+      initialLoadDone.current = true;
+      loadMorePitches();
+      loadUserInteractions();
+    }
   }, []);
 
   // Infinite scroll
@@ -495,32 +633,102 @@ const Home = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [loadMorePitches]);
 
-  const handleLike = (pitchId) => {
+  const handleLike = async (pitchId) => {
+    const isCurrentlyLiked = likedPitches.has(pitchId);
+    
+    // Optimistic update
     setLikedPitches(prev => {
       const newLiked = new Set(prev);
-      if (newLiked.has(pitchId)) {
+      if (isCurrentlyLiked) {
         newLiked.delete(pitchId);
-        // Decrease like count
-        setPitches(prevPitches => 
-          prevPitches.map(pitch => 
-            pitch.id === pitchId 
-              ? { ...pitch, metrics: { ...pitch.metrics, likes: pitch.metrics.likes - 1 } }
-              : pitch
-          )
-        );
       } else {
         newLiked.add(pitchId);
-        // Increase like count
-        setPitches(prevPitches => 
-          prevPitches.map(pitch => 
-            pitch.id === pitchId 
-              ? { ...pitch, metrics: { ...pitch.metrics, likes: pitch.metrics.likes + 1 } }
-              : pitch
-          )
-        );
       }
       return newLiked;
     });
+    
+    // Update like count optimistically
+    setPitches(prevPitches => 
+      prevPitches.map(pitch => 
+        pitch.id === pitchId 
+          ? { 
+              ...pitch, 
+              metrics: { 
+                ...pitch.metrics, 
+                likes: pitch.metrics.likes + (isCurrentlyLiked ? -1 : 1) 
+              } 
+            }
+          : pitch
+      )
+    );
+    
+    try {
+      if (isCurrentlyLiked) {
+        await pitchesAPI.unlikePitch(pitchId);
+      } else {
+        await pitchesAPI.likePitch(pitchId);
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+      // Revert on error
+      setLikedPitches(prev => {
+        const newLiked = new Set(prev);
+        if (isCurrentlyLiked) {
+          newLiked.add(pitchId);
+        } else {
+          newLiked.delete(pitchId);
+        }
+        return newLiked;
+      });
+      setPitches(prevPitches => 
+        prevPitches.map(pitch => 
+          pitch.id === pitchId 
+            ? { 
+                ...pitch, 
+                metrics: { 
+                  ...pitch.metrics, 
+                  likes: pitch.metrics.likes + (isCurrentlyLiked ? 1 : -1) 
+                } 
+              }
+            : pitch
+        )
+      );
+    }
+  };
+
+  const handleBookmark = async (pitchId) => {
+    const isCurrentlyBookmarked = bookmarkedPitches.has(pitchId);
+    
+    // Optimistic update
+    setBookmarkedPitches(prev => {
+      const newBookmarked = new Set(prev);
+      if (isCurrentlyBookmarked) {
+        newBookmarked.delete(pitchId);
+      } else {
+        newBookmarked.add(pitchId);
+      }
+      return newBookmarked;
+    });
+    
+    try {
+      if (isCurrentlyBookmarked) {
+        await pitchesAPI.unsavePitch(pitchId);
+      } else {
+        await pitchesAPI.savePitch(pitchId);
+      }
+    } catch (error) {
+      console.error('Error toggling bookmark:', error);
+      // Revert on error
+      setBookmarkedPitches(prev => {
+        const newBookmarked = new Set(prev);
+        if (isCurrentlyBookmarked) {
+          newBookmarked.add(pitchId);
+        } else {
+          newBookmarked.delete(pitchId);
+        }
+        return newBookmarked;
+      });
+    }
   };
 
   const handlePitch = (pitch) => {
@@ -579,6 +787,91 @@ const Home = () => {
 
   const handleCreatePitch = () => {
     setShowCreatePitch(true);
+  };
+
+  const [isSubmittingPitch, setIsSubmittingPitch] = useState(false);
+
+  const handleSubmitPitch = async () => {
+    if (!pitchForm.startupName || !pitchForm.industry || !pitchForm.oneLineDescription || 
+        !pitchForm.problem || !pitchForm.solution || !pitchForm.targetMarket || 
+        !pitchForm.businessModel || !pitchForm.currentStage || !pitchForm.lookingForRole ||
+        !pitchForm.requiredSkills || !pitchForm.whatYouBring || !pitchForm.location || 
+        !pitchForm.timeline) {
+      return;
+    }
+    
+    setIsSubmittingPitch(true);
+    
+    try {
+      // Transform form data to match API expectations
+      const pitchData = {
+        title: pitchForm.startupName,
+        tagline: pitchForm.oneLineDescription,
+        description: `${pitchForm.problem}\n\n${pitchForm.solution}`,
+        problem: pitchForm.problem,
+        solution: pitchForm.solution,
+        target_audience: pitchForm.targetMarket,
+        business_model: pitchForm.businessModel,
+        market_size: pitchForm.marketSize || '',
+        stage: pitchForm.currentStage,
+        industry: pitchForm.industry,
+        location: pitchForm.location,
+        timeline: pitchForm.timeline,
+        funding_stage: pitchForm.fundingStage || '',
+        equity_offer: pitchForm.equityOffer || '',
+        looking_for_role: pitchForm.lookingForRole,
+        required_skills: pitchForm.requiredSkills,
+        what_you_bring: pitchForm.whatYouBring,
+        additional_info: pitchForm.additionalInfo || '',
+        reply_to_pitch: selectedPitch?.id || null
+      };
+      
+      const response = await pitchesAPI.createPitch(pitchData);
+      
+      // Transform the response and add to local state
+      const transformedPitch = transformPitchData(response.data);
+      setPitches(prev => [transformedPitch, ...prev]);
+      
+      setSuccessMessage('Pitch created successfully!');
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        setSuccessMessage('');
+      }, 3000);
+      
+      // Reset form and close modal
+      setShowCreatePitch(false);
+      setSelectedPitch(null);
+      setPitchForm({
+        startupName: '',
+        industry: '',
+        oneLineDescription: '',
+        problem: '',
+        solution: '',
+        targetMarket: '',
+        businessModel: '',
+        marketSize: '',
+        currentStage: '',
+        lookingForRole: '',
+        requiredSkills: '',
+        whatYouBring: '',
+        location: '',
+        timeline: '',
+        fundingStage: '',
+        equityOffer: '',
+        additionalInfo: ''
+      });
+    } catch (error) {
+      console.error('Error creating pitch:', error);
+      setSuccessMessage('Failed to create pitch. Please try again.');
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        setSuccessMessage('');
+      }, 3000);
+    } finally {
+      setIsSubmittingPitch(false);
+    }
   };
 
   const handleViewDetails = (pitch) => {
@@ -991,87 +1284,15 @@ const Home = () => {
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  if (pitchForm.startupName && pitchForm.industry && pitchForm.oneLineDescription && 
-                      pitchForm.problem && pitchForm.solution && pitchForm.targetMarket && 
-                      pitchForm.businessModel && pitchForm.currentStage && pitchForm.lookingForRole &&
-                      pitchForm.requiredSkills && pitchForm.whatYouBring && pitchForm.location && 
-                      pitchForm.timeline) {
-                    const newPitch = {
-                      id: Date.now(),
-                      title: pitchForm.startupName,
-                      shortDescription: pitchForm.oneLineDescription,
-                      description: `${pitchForm.problem}\n\n${pitchForm.solution}`,
-                      targetMarket: pitchForm.targetMarket,
-                      businessModel: pitchForm.businessModel,
-                      problem: pitchForm.problem,
-                      solution: pitchForm.solution,
-                      industry: pitchForm.industry,
-                      stage: pitchForm.currentStage,
-                      stageColor: 'green',
-                      lookingFor: [pitchForm.lookingForRole],
-                      requiredSkills: pitchForm.requiredSkills,
-                      author: {
-                        name: user?.name || 'You',
-                        role: pitchForm.whatYouBring.split(' ').slice(0, 3).join(' ') || 'Founder',
-                        summary: pitchForm.whatYouBring,
-                        location: pitchForm.location,
-                        anonymousProfile: {
-                          experience: pitchForm.requiredSkills,
-                          skills: pitchForm.requiredSkills.split(',').map(s => s.trim()),
-                          education: 'Not specified',
-                          workStyle: 'Collaborative',
-                          availability: pitchForm.timeline
-                        }
-                      },
-                      compatibility: 100,
-                      metrics: { views: 0, likes: 0, pitches: 0, comments: 0 },
-                      timeline: pitchForm.timeline,
-                      market: pitchForm.marketSize || 'Not specified',
-                      funding: pitchForm.fundingStage || 'Not specified',
-                      equityOffer: pitchForm.equityOffer || 'Open to discussion',
-                      additionalInfo: pitchForm.additionalInfo || '',
-                      createdAt: 'just now'
-                    };
-                    
-                    setPitches(prev => [newPitch, ...prev]);
-                    setSuccessMessage('Pitch created successfully!');
-                    setShowSuccessMessage(true);
-                    setTimeout(() => {
-                      setShowSuccessMessage(false);
-                      setSuccessMessage('');
-                    }, 3000);
-                    setShowCreatePitch(false);
-                    setSelectedPitch(null);
-                    setPitchForm({
-                      startupName: '',
-                      industry: '',
-                      oneLineDescription: '',
-                      problem: '',
-                      solution: '',
-                      targetMarket: '',
-                      businessModel: '',
-                      marketSize: '',
-                      currentStage: '',
-                      lookingForRole: '',
-                      requiredSkills: '',
-                      whatYouBring: '',
-                      location: '',
-                      timeline: '',
-                      fundingStage: '',
-                      equityOffer: '',
-                      additionalInfo: ''
-                    });
-                  }
-                }}
-                disabled={!pitchForm.startupName || !pitchForm.industry || !pitchForm.oneLineDescription || 
+                onClick={handleSubmitPitch}
+                disabled={isSubmittingPitch || !pitchForm.startupName || !pitchForm.industry || !pitchForm.oneLineDescription || 
                          !pitchForm.problem || !pitchForm.solution || !pitchForm.targetMarket || 
                          !pitchForm.businessModel || !pitchForm.currentStage || !pitchForm.lookingForRole ||
                          !pitchForm.requiredSkills || !pitchForm.whatYouBring || !pitchForm.location || 
                          !pitchForm.timeline}
                 className="flex-1 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
               >
-                {selectedPitch ? 'Send Pitch' : 'Post Pitch'}
+                {isSubmittingPitch ? 'Posting...' : (selectedPitch ? 'Send Pitch' : 'Post Pitch')}
               </button>
             </div>
           </div>
@@ -1807,17 +2028,7 @@ const Home = () => {
                   </div>
                   <div className="flex items-center gap-2 ml-3">
                     <button
-                      onClick={() => {
-                        setBookmarkedPitches(prev => {
-                          const newBookmarked = new Set(prev);
-                          if (newBookmarked.has(pitch.id)) {
-                            newBookmarked.delete(pitch.id);
-                          } else {
-                            newBookmarked.add(pitch.id);
-                          }
-                          return newBookmarked;
-                        });
-                      }}
+                      onClick={() => handleBookmark(pitch.id)}
                       className={`p-2 rounded-xl transition-all duration-200 hover:scale-110 ${
                         bookmarkedPitches.has(pitch.id)
                           ? 'bg-yellow-50 text-yellow-600'
