@@ -33,7 +33,7 @@ const EquityFramework = lazy(() => import('./components/EquityFramework.jsx'));
 const CollaborationTools = lazy(() => import('./components/CollaborationTools.jsx'));
 const LaunchPreparation = lazy(() => import('./components/LaunchPreparation.jsx'));
 const EntrepreneurProfile = lazy(() => import('./components/EntrepreneurProfile.jsx'));
-const StartupWorkspace = lazy(() => import('./components/StartupWorkspace.jsx'));
+const Sprinto = lazy(() => import('./components/Sprinto.jsx'));
 const MyPitches = lazy(() => import('./components/MyPitches.jsx'));
 
 // Sprint Tools
@@ -341,10 +341,10 @@ const AppContent = () => {
                 </ProtectedRoute>
               } />
               
-              <Route path="/startup-workspace" element={
+              <Route path="/sprinto" element={
                 <ProtectedRoute>
                   <MainLayout>
-                    <StartupWorkspace />
+                    <Sprinto />
                   </MainLayout>
                 </ProtectedRoute>
               } />
