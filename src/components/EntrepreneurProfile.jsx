@@ -266,6 +266,8 @@ const EntrepreneurProfile = () => {
         case 'basic':
         case 'cover':
         case 'profile-pic':
+          apiData.first_name = currentProfile.basic.firstName;
+          apiData.last_name = currentProfile.basic.lastName;
           apiData.tagline = currentProfile.basic.tagline;
           apiData.avatar = currentProfile.basic.profilePicture;
           apiData.cover_image = currentProfile.basic.coverPicture;

@@ -475,6 +475,34 @@ const Home = () => {
     
     const stageInfo = stageMap[apiPitch.stage] || { label: apiPitch.stage, color: 'gray' };
     
+    // Extract author profile and onboarding data
+    const authorProfile = apiPitch.author_details?.profile || {};
+    const authorOnboarding = apiPitch.author_details?.onboarding || {};
+    
+    // Get skills from profile or onboarding
+    const authorSkills = authorProfile.skills || authorOnboarding.skills || [];
+    
+    // Get experience text - from profile or construct from onboarding work_experience
+    const experienceText = authorProfile.experience || 
+      (authorOnboarding.work_experience?.length > 0 
+        ? `${authorOnboarding.work_experience[0]?.years || ''} years in ${authorOnboarding.work_experience[0]?.industry || 'tech'}`
+        : apiPitch.what_you_bring || '');
+    
+    // Get education - from onboarding education array
+    const educationText = authorOnboarding.education?.length > 0
+      ? `${authorOnboarding.education[0]?.degree || ''} from ${authorOnboarding.education[0]?.institution || ''}`
+      : '';
+    
+    // Get work style and availability (from profile only, not in onboarding)
+    const workStyle = authorProfile.bio ? 'Collaborative' : '';
+    const availability = authorProfile.availability || apiPitch.timeline || 'Flexible';
+    
+    // Get previous startups
+    const previousStartups = authorProfile.previous_startups || [];
+    
+    // Get role from profile
+    const authorRole = authorProfile.role || 'Founder';
+    
     return {
       id: apiPitch.id,
       title: apiPitch.title,
@@ -494,21 +522,21 @@ const Home = () => {
         name: apiPitch.author_details?.first_name 
           ? `${apiPitch.author_details.first_name} ${apiPitch.author_details.last_name || ''}`.trim()
           : 'Anonymous',
-        role: 'Founder',
-        location: apiPitch.location || 'Remote',
-        avatar: null,
-        experience: apiPitch.what_you_bring || '',
-        previousStartups: [],
-        skills: apiPitch.skills_needed || [],
-        summary: apiPitch.what_you_bring || 'Founder',
+        role: authorRole,
+        location: authorProfile.location || apiPitch.location || 'Remote',
+        avatar: authorProfile.avatar || null,
+        experience: experienceText,
+        previousStartups: previousStartups,
+        skills: authorSkills,
+        summary: authorProfile.bio || apiPitch.what_you_bring || authorRole,
         anonymousProfile: {
-          experience: apiPitch.what_you_bring || '',
-          skills: apiPitch.skills_needed || [],
-          previousStartups: [],
-          education: '',
+          experience: experienceText,
+          skills: authorSkills,
+          previousStartups: previousStartups,
+          education: educationText,
           achievements: [],
-          workStyle: '',
-          availability: apiPitch.timeline || 'Flexible'
+          workStyle: workStyle,
+          availability: availability
         }
       },
       compatibility: Math.floor(Math.random() * 20) + 80,

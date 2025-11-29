@@ -40,6 +40,17 @@ class ComprehensiveProfileView(views.APIView):
         # Get or create profile
         profile, created = Profile.objects.get_or_create(user=user)
         
+        # Update user fields (first_name, last_name, etc.)
+        user_fields = ['first_name', 'last_name']
+        user_updated = False
+        for field in user_fields:
+            if field in data:
+                setattr(user, field, data[field])
+                user_updated = True
+        
+        if user_updated:
+            user.save()
+        
         # Update profile fields
         profile_fields = [
             'role', 'bio', 'tagline', 'avatar', 'cover_image',

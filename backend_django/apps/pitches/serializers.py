@@ -1,14 +1,51 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Pitch, SavedPitch, LikedPitch, PitchComment
+from apps.profiles.models import Profile
+from apps.users.models import OnboardingData
 
 User = get_user_model()
 
 
+class PitchAuthorProfileSerializer(serializers.ModelSerializer):
+    """Serializer for author's profile data to show on pitch cards/details"""
+    class Meta:
+        model = Profile
+        fields = [
+            'role', 'bio', 'tagline', 'avatar', 'skills', 'experience',
+            'previous_startups', 'location', 'availability', 'industries'
+        ]
+
+
 class PitchAuthorSerializer(serializers.ModelSerializer):
+    profile = serializers.SerializerMethodField()
+    onboarding = serializers.SerializerMethodField()
+    
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'profile', 'onboarding']
+    
+    def get_profile(self, obj):
+        try:
+            profile = Profile.objects.get(user=obj)
+            return PitchAuthorProfileSerializer(profile).data
+        except Profile.DoesNotExist:
+            return None
+    
+    def get_onboarding(self, obj):
+        try:
+            onboarding = OnboardingData.objects.get(user=obj)
+            return {
+                'skills': onboarding.skills or [],
+                'work_experience': onboarding.work_experience or [],
+                'education': onboarding.education or [],
+                'experience': onboarding.experience or '',
+                'industries': onboarding.industries or [],
+                'about_self': onboarding.about_self or '',
+                'background': onboarding.background or '',
+            }
+        except OnboardingData.DoesNotExist:
+            return None
 
 
 class PitchCommentSerializer(serializers.ModelSerializer):
