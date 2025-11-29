@@ -46,6 +46,8 @@ class PitchSerializer(serializers.ModelSerializer):
             'business_model', 'funding_needs', 'timeline', 'team',
             'skills_needed', 'industries', 'stage', 'video_url',
             'audio_url', 'deck_url', 'author', 'author_details',
+            'looking_for_role', 'what_you_bring', 'equity_offer',
+            'location', 'funding_stage', 'additional_info',
             'is_public', 'views_count', 'saves_count', 'likes_count', 'comments_count',
             'is_saved', 'is_liked', 'created_at', 'updated_at'
         ]
@@ -79,6 +81,8 @@ class PitchListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'tagline', 'stage', 'industries', 'skills_needed',
             'funding_needs', 'author', 'author_details',
+            'looking_for_role', 'what_you_bring', 'equity_offer',
+            'location', 'funding_stage', 'additional_info',
             'views_count', 'saves_count', 'likes_count', 'comments_count',
             'is_saved', 'is_liked', 'created_at'
         ]

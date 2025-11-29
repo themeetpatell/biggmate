@@ -43,6 +43,16 @@ class Pitch(models.Model):
     skills_needed = models.JSONField(default=list, blank=True)  # List of required skills
     industries = models.JSONField(default=list, blank=True)  # List of industry tags
     
+    # Cofounder Requirements
+    looking_for_role = models.CharField(max_length=100, blank=True)  # Role being sought
+    what_you_bring = models.TextField(blank=True)  # What the founder brings
+    equity_offer = models.CharField(max_length=100, blank=True)  # Equity offer
+    
+    # Additional Details
+    location = models.CharField(max_length=200, blank=True)  # Location
+    funding_stage = models.CharField(max_length=100, blank=True)  # Funding stage
+    additional_info = models.TextField(blank=True)  # Any additional information
+    
     # Stage & Media
     stage = models.CharField(max_length=20, choices=STAGE_CHOICES, default='idea')
     video_url = models.URLField(blank=True, validators=[URLValidator()])

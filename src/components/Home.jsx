@@ -148,6 +148,7 @@ const Home = () => {
     problem: '',
     solution: '',
     targetMarket: '',
+    competitiveAdvantage: '',
     businessModel: '',
     marketSize: '',
     currentStage: '',
@@ -482,24 +483,26 @@ const Home = () => {
       problem: apiPitch.problem || '',
       solution: apiPitch.solution || '',
       targetMarket: apiPitch.target_market || '',
+      competitiveAdvantage: apiPitch.competitive_advantage || '',
       businessModel: apiPitch.business_model || '',
       industry: apiPitch.industries?.[0] || 'Technology',
       stage: stageInfo.label,
       stageColor: stageInfo.color,
-      lookingFor: apiPitch.skills_needed || [],
+      lookingFor: apiPitch.looking_for_role ? [apiPitch.looking_for_role] : (apiPitch.skills_needed || []),
+      requiredSkills: Array.isArray(apiPitch.skills_needed) ? apiPitch.skills_needed.join(', ') : (apiPitch.skills_needed || ''),
       author: {
         name: apiPitch.author_details?.first_name 
           ? `${apiPitch.author_details.first_name} ${apiPitch.author_details.last_name || ''}`.trim()
           : 'Anonymous',
         role: 'Founder',
-        location: 'Remote',
+        location: apiPitch.location || 'Remote',
         avatar: null,
-        experience: '',
+        experience: apiPitch.what_you_bring || '',
         previousStartups: [],
         skills: apiPitch.skills_needed || [],
-        summary: 'Founder',
+        summary: apiPitch.what_you_bring || 'Founder',
         anonymousProfile: {
-          experience: '',
+          experience: apiPitch.what_you_bring || '',
           skills: apiPitch.skills_needed || [],
           previousStartups: [],
           education: '',
@@ -521,7 +524,10 @@ const Home = () => {
       isSaved: apiPitch.is_saved || false,
       timeline: apiPitch.timeline || '',
       market: apiPitch.market_size || '',
-      funding: apiPitch.funding_needs ? `Seeking $${Number(apiPitch.funding_needs).toLocaleString()}` : '',
+      funding: apiPitch.funding_stage || (apiPitch.funding_needs ? `Seeking $${Number(apiPitch.funding_needs).toLocaleString()}` : ''),
+      equityOffer: apiPitch.equity_offer || '',
+      additionalInfo: apiPitch.additional_info || '',
+      location: apiPitch.location || '',
       createdAt: apiPitch.created_at ? new Date(apiPitch.created_at).toLocaleDateString() : 'Recently',
       imageUrl: null
     };
@@ -794,9 +800,9 @@ const Home = () => {
   const handleSubmitPitch = async () => {
     if (!pitchForm.startupName || !pitchForm.industry || !pitchForm.oneLineDescription || 
         !pitchForm.problem || !pitchForm.solution || !pitchForm.targetMarket || 
-        !pitchForm.businessModel || !pitchForm.currentStage || !pitchForm.lookingForRole ||
-        !pitchForm.requiredSkills || !pitchForm.whatYouBring || !pitchForm.location || 
-        !pitchForm.timeline) {
+        !pitchForm.competitiveAdvantage || !pitchForm.businessModel || !pitchForm.currentStage || 
+        !pitchForm.lookingForRole || !pitchForm.requiredSkills || !pitchForm.whatYouBring || 
+        !pitchForm.location || !pitchForm.timeline) {
       return;
     }
     
@@ -810,20 +816,24 @@ const Home = () => {
         description: `${pitchForm.problem}\n\n${pitchForm.solution}`,
         problem: pitchForm.problem,
         solution: pitchForm.solution,
-        target_audience: pitchForm.targetMarket,
+        target_market: pitchForm.targetMarket,
+        competitive_advantage: pitchForm.competitiveAdvantage,
         business_model: pitchForm.businessModel,
         market_size: pitchForm.marketSize || '',
         stage: pitchForm.currentStage,
-        industry: pitchForm.industry,
-        location: pitchForm.location,
+        industries: [pitchForm.industry],
+        skills_needed: pitchForm.requiredSkills.split(',').map(s => s.trim()).filter(s => s),
         timeline: pitchForm.timeline,
-        funding_stage: pitchForm.fundingStage || '',
-        equity_offer: pitchForm.equityOffer || '',
+        funding_needs: null,
+        team: [],
+        // Cofounder Requirements
         looking_for_role: pitchForm.lookingForRole,
-        required_skills: pitchForm.requiredSkills,
         what_you_bring: pitchForm.whatYouBring,
+        equity_offer: pitchForm.equityOffer || '',
+        // Additional Details
+        location: pitchForm.location,
+        funding_stage: pitchForm.fundingStage || '',
         additional_info: pitchForm.additionalInfo || '',
-        reply_to_pitch: selectedPitch?.id || null
       };
       
       const response = await pitchesAPI.createPitch(pitchData);
@@ -849,6 +859,7 @@ const Home = () => {
         problem: '',
         solution: '',
         targetMarket: '',
+        competitiveAdvantage: '',
         businessModel: '',
         marketSize: '',
         currentStage: '',
@@ -1092,10 +1103,22 @@ const Home = () => {
                   <textarea
                     value={pitchForm.solution}
                     onChange={(e) => setPitchForm({...pitchForm, solution: e.target.value})}
-                    placeholder="How does your product/service solve this problem? What makes it unique or better than existing solutions? What's your competitive advantage?"
+                    placeholder="How does your product/service solve this problem? What makes it unique?"
                     className="w-full h-32 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Explain your approach, key features, and what differentiates you</p>
+                  <p className="text-xs text-gray-500 mt-1">Explain your approach and key features</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Competitive Advantage *
+                  </label>
+                  <textarea
+                    value={pitchForm.competitiveAdvantage}
+                    onChange={(e) => setPitchForm({...pitchForm, competitiveAdvantage: e.target.value})}
+                    placeholder="What sets you apart from competitors? What's your unique value proposition or moat?"
+                    className="w-full h-24 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Describe what differentiates you from existing solutions</p>
                 </div>
               </div>
             </div>
@@ -1163,12 +1186,12 @@ const Home = () => {
                     className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
                   >
                     <option value="">Select Stage</option>
-                    <option value="Idea Stage">Idea Stage</option>
-                    <option value="MVP Development">MVP Development</option>
-                    <option value="MVP Stage">MVP Stage</option>
-                    <option value="Early Traction">Early Traction</option>
-                    <option value="Growth Stage">Growth Stage</option>
-                    <option value="Scale Stage">Scale Stage</option>
+                    <option value="idea">Idea Stage</option>
+                    <option value="validation">Validation</option>
+                    <option value="prototype">Prototype</option>
+                    <option value="mvp">MVP Stage</option>
+                    <option value="growth">Growth Stage</option>
+                    <option value="scaling">Scaling</option>
                   </select>
                 </div>
                 <div>
@@ -1314,6 +1337,7 @@ const Home = () => {
                     problem: '',
                     solution: '',
                     targetMarket: '',
+                    competitiveAdvantage: '',
                     businessModel: '',
                     marketSize: '',
                     currentStage: '',
@@ -1335,9 +1359,9 @@ const Home = () => {
                 onClick={handleSubmitPitch}
                 disabled={isSubmittingPitch || !pitchForm.startupName || !pitchForm.industry || !pitchForm.oneLineDescription || 
                          !pitchForm.problem || !pitchForm.solution || !pitchForm.targetMarket || 
-                         !pitchForm.businessModel || !pitchForm.currentStage || !pitchForm.lookingForRole ||
-                         !pitchForm.requiredSkills || !pitchForm.whatYouBring || !pitchForm.location || 
-                         !pitchForm.timeline}
+                         !pitchForm.competitiveAdvantage || !pitchForm.businessModel || !pitchForm.currentStage || 
+                         !pitchForm.lookingForRole || !pitchForm.requiredSkills || !pitchForm.whatYouBring || 
+                         !pitchForm.location || !pitchForm.timeline}
                 className="flex-1 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
               >
                 {isSubmittingPitch ? 'Posting...' : (selectedPitch ? 'Send Pitch' : 'Post Pitch')}
