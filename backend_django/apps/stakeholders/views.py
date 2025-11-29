@@ -4,9 +4,84 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q, Sum, Count
-from .models import Stakeholder, Interaction, Pipeline
-from .serializers import StakeholderSerializer, InteractionSerializer, PipelineSerializer
+from datetime import date, timedelta
+from .models import Stakeholder, Interaction, Pipeline, UserStakeholder
+from .serializers import (
+    StakeholderSerializer, InteractionSerializer, PipelineSerializer,
+    UserStakeholderSerializer
+)
 from apps.projects.models import Project
+
+
+class UserStakeholderViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for user-owned stakeholders (personal CRM).
+    Each user can only see and manage their own stakeholders.
+    """
+    serializer_class = UserStakeholderSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['type', 'is_favorite']
+    search_fields = ['name', 'email', 'company', 'tags', 'notes']
+    ordering_fields = ['created_at', 'last_contact_date', 'name', 'relationship_strength']
+    ordering = ['-created_at']
+    
+    def get_queryset(self):
+        return UserStakeholder.objects.filter(user=self.request.user)
+    
+    @action(detail=False, methods=['get'])
+    def stats(self, request):
+        """Get stakeholder statistics for current user"""
+        queryset = self.get_queryset()
+        today = date.today()
+        next_week = today + timedelta(days=7)
+        
+        # Calculate stats
+        total = queryset.count()
+        favorites = queryset.filter(is_favorite=True).count()
+        
+        # Upcoming follow-ups (within next 7 days)
+        upcoming_followups = queryset.filter(
+            next_followup_date__gte=today,
+            next_followup_date__lte=next_week
+        ).count()
+        
+        # Count by type
+        by_type = {}
+        type_counts = queryset.values('type').annotate(count=Count('id'))
+        for item in type_counts:
+            by_type[item['type']] = item['count']
+        
+        return Response({
+            'total': total,
+            'favorites': favorites,
+            'upcomingFollowups': upcoming_followups,
+            'byType': by_type
+        })
+    
+    @action(detail=False, methods=['get'])
+    def upcoming_followups(self, request):
+        """Get stakeholders with upcoming follow-up dates"""
+        today = date.today()
+        next_month = today + timedelta(days=30)
+        
+        stakeholders = self.get_queryset().filter(
+            next_followup_date__gte=today,
+            next_followup_date__lte=next_month
+        ).order_by('next_followup_date')[:20]
+        
+        serializer = self.get_serializer(stakeholders, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['post'])
+    def toggle_favorite(self, request, pk=None):
+        """Toggle favorite status"""
+        stakeholder = self.get_object()
+        stakeholder.is_favorite = not stakeholder.is_favorite
+        stakeholder.save(update_fields=['is_favorite', 'updated_at'])
+        
+        serializer = self.get_serializer(stakeholder)
+        return Response(serializer.data)
 
 
 class StakeholderViewSet(viewsets.ModelViewSet):

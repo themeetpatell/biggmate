@@ -3,6 +3,74 @@ from django.conf import settings
 from apps.projects.models import Project
 
 
+class UserStakeholder(models.Model):
+    """
+    User-owned stakeholder for personal CRM functionality.
+    This is independent of projects and owned directly by the user.
+    """
+    TYPE_CHOICES = [
+        ('advisor', 'Advisor'),
+        ('investor', 'Investor'),
+        ('mentor', 'Mentor'),
+        ('early-adopter', 'Early Adopter'),
+        ('beta-tester', 'Beta Tester'),
+        ('supporter', 'Supporter'),
+        ('team-prospect', 'Team Prospect'),
+        ('partner', 'Partner'),
+        ('customer', 'Customer'),
+        ('other', 'Other'),
+    ]
+    
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='personal_stakeholders'
+    )
+    
+    # Basic information
+    name = models.CharField(max_length=200)
+    email = models.EmailField(blank=True)
+    phone = models.CharField(max_length=50, blank=True)
+    company = models.CharField(max_length=200, blank=True)
+    title = models.CharField(max_length=100, blank=True)
+    
+    # Stakeholder details
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='advisor')
+    
+    # Social links
+    linkedin_url = models.URLField(blank=True)
+    twitter_handle = models.CharField(max_length=100, blank=True)
+    
+    # Additional details
+    tags = models.JSONField(default=list, blank=True)
+    notes = models.TextField(blank=True)
+    
+    # Relationship tracking
+    relationship_strength = models.IntegerField(default=5, help_text="1-10 scale")
+    is_favorite = models.BooleanField(default=False)
+    
+    # Dates
+    last_contact_date = models.DateField(null=True, blank=True)
+    next_followup_date = models.DateField(null=True, blank=True)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'User Stakeholder'
+        verbose_name_plural = 'User Stakeholders'
+        indexes = [
+            models.Index(fields=['user', 'type']),
+            models.Index(fields=['user', 'is_favorite']),
+            models.Index(fields=['user', '-created_at']),
+        ]
+    
+    def __str__(self):
+        return f"{self.name} ({self.type}) - {self.user.email}"
+
+
 class Stakeholder(models.Model):
     TYPE_CHOICES = [
         ('investor', 'Investor'),

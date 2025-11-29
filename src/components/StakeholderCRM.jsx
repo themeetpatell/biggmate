@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Users,
   Plus,
@@ -32,10 +32,12 @@ import {
   BarChart3,
   ChevronRight,
   Download,
-  Upload
+  Upload,
+  Loader2,
+  AlertTriangle,
+  RefreshCw
 } from 'lucide-react';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+import { userStakeholdersAPI } from '../services/api';
 
 const generateDummyData = () => {
   const today = new Date();
@@ -229,6 +231,7 @@ const StakeholderCRM = () => {
   const [stakeholders, setStakeholders] = useState([]);
   const [stats, setStats] = useState({ total: 0, favorites: 0, upcomingFollowups: 0, byType: {} });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editingStakeholder, setEditingStakeholder] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -238,147 +241,78 @@ const StakeholderCRM = () => {
   const [selectedStakeholder, setSelectedStakeholder] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
 
-  useEffect(() => {
-    fetchStakeholders();
-    fetchStats();
-  }, [filterType, filterFavorite, searchQuery]);
-
-  const fetchStakeholders = async () => {
+  const fetchStakeholders = useCallback(async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
-      const params = new URLSearchParams();
-      if (filterType) params.append('type', filterType);
-      if (filterFavorite) params.append('favorite', 'true');
-      if (searchQuery) params.append('search', searchQuery);
-
-      const response = await fetch(`${API_BASE_URL}/stakeholders?${params}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setStakeholders(data.stakeholders || []);
-      } else {
-        // Use dummy data if API fails or no token
-        let dummyData = generateDummyData();
-        
-        // Apply filters to dummy data
-        if (filterType) {
-          dummyData = dummyData.filter(s => s.type === filterType);
-        }
-        if (filterFavorite) {
-          dummyData = dummyData.filter(s => s.is_favorite);
-        }
-        if (searchQuery) {
-          const query = searchQuery.toLowerCase();
-          dummyData = dummyData.filter(s => 
-            s.name.toLowerCase().includes(query) ||
-            s.company?.toLowerCase().includes(query) ||
-            s.email?.toLowerCase().includes(query)
-          );
-        }
-        
-        setStakeholders(dummyData);
-      }
-    } catch (error) {
-      console.error('Error fetching stakeholders:', error);
-      // Use dummy data on error
-      let dummyData = generateDummyData();
+      setError(null);
       
-      // Apply filters to dummy data
-      if (filterType) {
-        dummyData = dummyData.filter(s => s.type === filterType);
-      }
-      if (filterFavorite) {
-        dummyData = dummyData.filter(s => s.is_favorite);
-      }
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        dummyData = dummyData.filter(s => 
-          s.name.toLowerCase().includes(query) ||
-          s.company?.toLowerCase().includes(query) ||
-          s.email?.toLowerCase().includes(query)
-        );
-      }
-      
-      setStakeholders(dummyData);
+      const params = {};
+      if (filterType) params.type = filterType;
+      if (filterFavorite) params.is_favorite = true;
+      if (searchQuery) params.search = searchQuery;
+
+      const response = await userStakeholdersAPI.getStakeholders(params);
+      const data = response.data.results || response.data || [];
+      setStakeholders(data);
+    } catch (err) {
+      console.error('Error fetching stakeholders:', err);
+      setError('Failed to load stakeholders. Please try again.');
+      setStakeholders([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [filterType, filterFavorite, searchQuery]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE_URL}/stakeholders/stats/summary`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setStats(data);
-      } else {
-        // Use dummy stats if API fails
-        const dummyData = generateDummyData();
-        setStats(getDummyStats(dummyData));
-      }
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-      // Use dummy stats on error
-      const dummyData = generateDummyData();
-      setStats(getDummyStats(dummyData));
+      const response = await userStakeholdersAPI.getStats();
+      setStats(response.data);
+    } catch (err) {
+      console.error('Error fetching stats:', err);
+      // Set default stats on error
+      setStats({ total: stakeholders.length, favorites: 0, upcomingFollowups: 0, byType: {} });
     }
-  };
+  }, [stakeholders.length]);
+
+  useEffect(() => {
+    fetchStakeholders();
+  }, [fetchStakeholders]);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this stakeholder?')) return;
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE_URL}/stakeholders/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        fetchStakeholders();
-        fetchStats();
-        if (selectedStakeholder?.id === id) {
-          setSelectedStakeholder(null);
-        }
+      await userStakeholdersAPI.deleteStakeholder(id);
+      fetchStakeholders();
+      fetchStats();
+      if (selectedStakeholder?.id === id) {
+        setSelectedStakeholder(null);
       }
-    } catch (error) {
-      console.error('Error deleting stakeholder:', error);
+    } catch (err) {
+      console.error('Error deleting stakeholder:', err);
+      alert('Failed to delete stakeholder. Please try again.');
     }
   };
 
   const handleToggleFavorite = async (stakeholder) => {
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE_URL}/stakeholders/${stakeholder.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          is_favorite: !stakeholder.is_favorite
-        })
-      });
-
-      if (response.ok) {
-        fetchStakeholders();
-        fetchStats();
+      await userStakeholdersAPI.toggleFavorite(stakeholder.id);
+      fetchStakeholders();
+      fetchStats();
+      // Update selected stakeholder if it's the one being toggled
+      if (selectedStakeholder?.id === stakeholder.id) {
+        setSelectedStakeholder({
+          ...selectedStakeholder,
+          is_favorite: !selectedStakeholder.is_favorite
+        });
       }
-    } catch (error) {
-      console.error('Error updating favorite:', error);
+    } catch (err) {
+      console.error('Error updating favorite:', err);
+      alert('Failed to update favorite status. Please try again.');
     }
   };
 
@@ -517,12 +451,32 @@ const StakeholderCRM = () => {
           </div>
         </div>
 
+        {/* Error State */}
+        {error && !loading && (
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-6 mb-6">
+            <div className="flex items-center gap-3">
+              <AlertTriangle className="w-6 h-6 text-red-500" />
+              <div className="flex-1">
+                <h3 className="text-red-800 font-semibold">Error Loading Stakeholders</h3>
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
+              <button
+                onClick={fetchStakeholders}
+                className="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition-colors flex items-center gap-2"
+              >
+                <RefreshCw className="w-4 h-4" />
+                Retry
+              </button>
+            </div>
+          </div>
+        )}
+
         {loading ? (
           <div className="text-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+            <Loader2 className="w-12 h-12 text-gray-400 animate-spin mx-auto mb-4" />
             <p className="text-gray-600">Loading stakeholders...</p>
           </div>
-        ) : stakeholders.length === 0 ? (
+        ) : !error && stakeholders.length === 0 ? (
           <div className="bg-white rounded-2xl p-16 border border-gray-200 text-center">
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Users className="w-10 h-10 text-gray-400" />
@@ -542,7 +496,7 @@ const StakeholderCRM = () => {
               Add Your First Stakeholder
             </button>
           </div>
-        ) : (
+        ) : !error && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className={selectedStakeholder ? 'lg:col-span-2' : 'lg:col-span-3'}>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -936,34 +890,28 @@ const StakeholderForm = ({ stakeholder, onClose, onSave }) => {
     setFormData({ ...formData, tags: formData.tags.filter(tag => tag !== tagToRemove) });
   };
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    
     try {
-      const token = localStorage.getItem('token');
-      const url = stakeholder
-        ? `${API_BASE_URL}/stakeholders/${stakeholder.id}`
-        : `${API_BASE_URL}/stakeholders`;
-      
-      const method = stakeholder ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (response.ok) {
-        onSave();
+      if (stakeholder) {
+        await userStakeholdersAPI.updateStakeholder(stakeholder.id, formData);
       } else {
-        const error = await response.json();
-        alert(error.error || 'Failed to save stakeholder');
+        await userStakeholdersAPI.createStakeholder(formData);
       }
-    } catch (error) {
-      console.error('Error saving stakeholder:', error);
-      alert('Failed to save stakeholder');
+      onSave();
+    } catch (err) {
+      console.error('Error saving stakeholder:', err);
+      const errorMessage = err.response?.data?.detail || 
+                          err.response?.data?.message ||
+                          Object.values(err.response?.data || {}).flat().join(', ') ||
+                          'Failed to save stakeholder. Please try again.';
+      alert(errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -976,7 +924,8 @@ const StakeholderForm = ({ stakeholder, onClose, onSave }) => {
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            disabled={isSubmitting}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
           >
             <X className="w-5 h-5 text-gray-600" />
           </button>
@@ -1209,15 +1158,24 @@ const StakeholderForm = ({ stakeholder, onClose, onSave }) => {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-semibold"
+              disabled={isSubmitting}
+              className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-semibold disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-6 py-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-colors font-semibold shadow-lg hover:shadow-xl"
+              disabled={isSubmitting || !formData.name.trim()}
+              className="flex-1 px-6 py-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-colors font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              {stakeholder ? 'Update' : 'Create'} Stakeholder
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>{stakeholder ? 'Update' : 'Create'} Stakeholder</>
+              )}
             </button>
           </div>
         </form>

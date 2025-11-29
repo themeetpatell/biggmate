@@ -246,15 +246,27 @@ export const aiCofounderAPI = {
   createCoachingSession: (data) => api.post('/ai-cofounder/coaching/', data),
 };
 
-// Stakeholders API
+// User Stakeholders API (Personal CRM)
+export const userStakeholdersAPI = {
+  getStakeholders: (params) => api.get('/stakeholders/user-stakeholders/', { params }),
+  getStakeholderById: (id) => api.get(`/stakeholders/user-stakeholders/${id}/`),
+  createStakeholder: (data) => api.post('/stakeholders/user-stakeholders/', data),
+  updateStakeholder: (id, data) => api.patch(`/stakeholders/user-stakeholders/${id}/`, data),
+  deleteStakeholder: (id) => api.delete(`/stakeholders/user-stakeholders/${id}/`),
+  getStats: () => api.get('/stakeholders/user-stakeholders/stats/'),
+  getUpcomingFollowups: () => api.get('/stakeholders/user-stakeholders/upcoming_followups/'),
+  toggleFavorite: (id) => api.post(`/stakeholders/user-stakeholders/${id}/toggle_favorite/`),
+};
+
+// Project Stakeholders API
 export const stakeholdersAPI = {
-  getStakeholders: (params) => api.get('/stakeholders/', { params }),
-  getStakeholderById: (id) => api.get(`/stakeholders/${id}/`),
-  createStakeholder: (data) => api.post('/stakeholders/', data),
-  updateStakeholder: (id, data) => api.patch(`/stakeholders/${id}/`, data),
-  deleteStakeholder: (id) => api.delete(`/stakeholders/${id}/`),
-  addInteraction: (id, data) => api.post(`/stakeholders/${id}/interactions/`, data),
-  getInteractions: (id) => api.get(`/stakeholders/${id}/interactions/`),
+  getStakeholders: (params) => api.get('/stakeholders/stakeholders/', { params }),
+  getStakeholderById: (id) => api.get(`/stakeholders/stakeholders/${id}/`),
+  createStakeholder: (data) => api.post('/stakeholders/stakeholders/', data),
+  updateStakeholder: (id, data) => api.patch(`/stakeholders/stakeholders/${id}/`, data),
+  deleteStakeholder: (id) => api.delete(`/stakeholders/stakeholders/${id}/`),
+  addInteraction: (id, data) => api.post(`/stakeholders/stakeholders/${id}/interactions/`, data),
+  getInteractions: (id) => api.get(`/stakeholders/stakeholders/${id}/interactions/`),
 };
 
 // Sprint Tools API

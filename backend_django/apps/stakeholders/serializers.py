@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Stakeholder, Interaction, Pipeline
+from .models import Stakeholder, Interaction, Pipeline, UserStakeholder
 
 User = get_user_model()
 
@@ -9,6 +9,26 @@ class UserBriefSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
+
+
+class UserStakeholderSerializer(serializers.ModelSerializer):
+    """Serializer for user-owned stakeholders (personal CRM)"""
+    
+    class Meta:
+        model = UserStakeholder
+        fields = [
+            'id', 'name', 'email', 'phone', 'company', 'title', 'type',
+            'linkedin_url', 'twitter_handle', 'tags', 'notes',
+            'relationship_strength', 'is_favorite',
+            'last_contact_date', 'next_followup_date',
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['created_at', 'updated_at']
+    
+    def create(self, validated_data):
+        request = self.context.get('request')
+        validated_data['user'] = request.user
+        return super().create(validated_data)
 
 
 class StakeholderSerializer(serializers.ModelSerializer):
