@@ -57,7 +57,7 @@ class ComprehensiveProfileView(views.APIView):
         
         # Update onboarding data if provided
         onboarding_fields = ['work_experience', 'education', 'mission_statement', 
-                            'selected_values', 'about_self', 'background']
+                            'selected_values', 'about_self', 'background', 'skills']
         
         # Get or create onboarding data
         from apps.users.models import OnboardingData

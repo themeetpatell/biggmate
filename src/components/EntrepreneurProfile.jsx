@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   User, Camera, Edit3, Briefcase, MapPin, Phone, Mail, Linkedin, 
   Globe, Twitter, Instagram, Plus, X, Save, GraduationCap, Rocket, 
@@ -57,7 +57,14 @@ const EntrepreneurProfile = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [newSkillInput, setNewSkillInput] = useState('');
+  
+  // Use ref to always have access to the latest profile state
+  const profileRef = useRef(profile);
+  useEffect(() => {
+    profileRef.current = profile;
+    console.log('Profile updated, skills:', profile.professional.skills);
+  }, [profile]);
   useEffect(() => {
     loadProfileData();
   }, []);
@@ -118,17 +125,28 @@ const EntrepreneurProfile = () => {
       // Extract skills - handle both array of strings and array of objects
       const extractSkills = (skillsData) => {
         if (!skillsData) return [];
+        // If it's already a flat array of strings
         if (Array.isArray(skillsData)) {
-          return skillsData.map(s => typeof s === 'object' ? s.name : s);
+          // Check if it's array of objects with 'name' property or array of strings
+          const flattened = skillsData.map(s => {
+            if (typeof s === 'string') return s;
+            if (typeof s === 'object' && s !== null) return s.name || s;
+            return String(s);
+          }).filter(Boolean);
+          return flattened;
         }
-        // Handle skills object with technical/business
-        if (skillsData.technical || skillsData.business) {
+        // Handle skills object with technical/business categories
+        if (typeof skillsData === 'object' && skillsData !== null) {
           const technical = (skillsData.technical || []).map(s => typeof s === 'object' ? s.name : s);
           const business = (skillsData.business || []).map(s => typeof s === 'object' ? s.name : s);
-          return [...technical, ...business];
+          return [...technical, ...business].filter(Boolean);
         }
         return [];
       };
+
+      // Log API response for debugging
+      console.log('API data received:', apiData);
+      console.log('Skills from API:', apiData?.professional?.skills);
 
       // Transform API data to frontend profile format
       const profileData = {
@@ -148,7 +166,7 @@ const EntrepreneurProfile = () => {
         },
         professional: {
           myself: apiData?.professional?.aboutSelf || apiData?.professional?.background || onboardingData.yourSelf || '',
-          skills: extractSkills(apiData?.professional?.skills) || onboardingData.yourSkills || [],
+          skills: extractSkills(apiData?.professional?.skills) || extractSkills(onboardingData.yourSkills) || [],
           experienceLevel: apiData?.basic?.experience || onboardingData.yourExperience || '',
           industry: (apiData?.startup?.industries?.[0]) || (onboardingData.yourIndustries?.[0]) || ''
         },
@@ -238,6 +256,9 @@ const EntrepreneurProfile = () => {
     setSaveMessage('');
     
     try {
+      // Use ref to get the latest profile data (handles async state updates)
+      const currentProfile = profileRef.current;
+      
       // Transform frontend profile data to API format
       const apiData = {};
       
@@ -245,41 +266,51 @@ const EntrepreneurProfile = () => {
         case 'basic':
         case 'cover':
         case 'profile-pic':
-          apiData.tagline = profile.basic.tagline;
-          apiData.avatar = profile.basic.profilePicture;
-          apiData.cover_image = profile.basic.coverPicture;
-          apiData.location = profile.basic.location;
-          apiData.linkedin_url = profile.basic.linkedin;
-          apiData.twitter_url = profile.basic.twitter;
-          apiData.website_url = profile.basic.website;
+          apiData.tagline = currentProfile.basic.tagline;
+          apiData.avatar = currentProfile.basic.profilePicture;
+          apiData.cover_image = currentProfile.basic.coverPicture;
+          apiData.location = currentProfile.basic.location;
+          apiData.linkedin_url = currentProfile.basic.linkedin;
+          apiData.twitter_url = currentProfile.basic.twitter;
+          apiData.website_url = currentProfile.basic.website;
           break;
           
         case 'about':
-          apiData.bio = profile.professional.myself;
-          apiData.about_self = profile.professional.myself;
+          apiData.bio = currentProfile.professional.myself;
+          apiData.about_self = currentProfile.professional.myself;
           break;
           
         case 'skills':
-          apiData.skills = profile.professional.skills;
-          apiData.experience = profile.professional.experienceLevel;
-          apiData.industries = profile.professional.industry ? [profile.professional.industry] : [];
+          // Send skills as flat array - backend will store in both Profile.skills and OnboardingData.skills
+          // Ensure skills is always an array
+          const skillsArray = Array.isArray(currentProfile.professional.skills) 
+            ? currentProfile.professional.skills 
+            : [];
+          apiData.skills = skillsArray;
+          console.log('Skills to save:', skillsArray);
+          if (currentProfile.professional.experienceLevel) {
+            apiData.experience = currentProfile.professional.experienceLevel;
+          }
+          if (currentProfile.professional.industry) {
+            apiData.industries = [currentProfile.professional.industry];
+          }
           break;
           
         case 'contact':
-          apiData.linkedin_url = profile.basic.linkedin;
-          apiData.twitter_url = profile.basic.twitter;
-          apiData.website_url = profile.basic.website;
+          apiData.linkedin_url = currentProfile.basic.linkedin;
+          apiData.twitter_url = currentProfile.basic.twitter;
+          apiData.website_url = currentProfile.basic.website;
           break;
           
         case 'founder':
           // Save founder journey data to onboarding
-          apiData.mission_statement = profile.founderJourney.vision;
-          apiData.selected_values = profile.founderJourney.values;
+          apiData.mission_statement = currentProfile.founderJourney.vision;
+          apiData.selected_values = currentProfile.founderJourney.values;
           break;
           
         case 'experience':
           // Transform experience data to API format
-          apiData.work_experience = profile.experience.map(exp => ({
+          apiData.work_experience = currentProfile.experience.map(exp => ({
             id: exp.id,
             company: exp.companyName,
             position: exp.jobTitle,
@@ -293,7 +324,7 @@ const EntrepreneurProfile = () => {
           
         case 'education':
           // Transform education data to API format
-          apiData.education = profile.education.map(edu => ({
+          apiData.education = currentProfile.education.map(edu => ({
             id: edu.id,
             school: edu.schoolName,
             degree: edu.degree,
@@ -307,18 +338,20 @@ const EntrepreneurProfile = () => {
           
         default:
           // Save all relevant fields
-          apiData.tagline = profile.basic.tagline;
-          apiData.bio = profile.professional.myself;
-          apiData.skills = profile.professional.skills;
-          apiData.location = profile.basic.location;
-          apiData.linkedin_url = profile.basic.linkedin;
-          apiData.twitter_url = profile.basic.twitter;
-          apiData.website_url = profile.basic.website;
+          apiData.tagline = currentProfile.basic.tagline;
+          apiData.bio = currentProfile.professional.myself;
+          apiData.skills = currentProfile.professional.skills;
+          apiData.location = currentProfile.basic.location;
+          apiData.linkedin_url = currentProfile.basic.linkedin;
+          apiData.twitter_url = currentProfile.basic.twitter;
+          apiData.website_url = currentProfile.basic.website;
       }
       
       // Only call API if we have data to update
       if (Object.keys(apiData).length > 0) {
-        await profileAPI.updateComprehensiveProfile(apiData);
+        console.log('Sending to API:', apiData);
+        const response = await profileAPI.updateComprehensiveProfile(apiData);
+        console.log('API response:', response.data);
       }
       
       setSaveMessage('Profile updated successfully!');
@@ -707,16 +740,17 @@ const EntrepreneurProfile = () => {
                 {editingSection === 'skills' ? (
                   <div className="space-y-4">
                     <div className="flex flex-wrap gap-2">
-                      {profile.professional.skills.map((skill, idx) => (
+                      {(profile.professional.skills || []).map((skill, idx) => (
                         <span key={idx} className="inline-flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-semibold shadow-md">
                           {skill}
                           <button 
                             onClick={() => {
+                              console.log('Removing skill:', skill);
                               setProfile(prev => ({
                                 ...prev,
                                 professional: {
                                   ...prev.professional,
-                                  skills: prev.professional.skills.filter(s => s !== skill)
+                                  skills: (prev.professional.skills || []).filter(s => s !== skill)
                                 }
                               }));
                             }} 
@@ -727,31 +761,65 @@ const EntrepreneurProfile = () => {
                         </span>
                       ))}
                     </div>
-                    <input
-                      type="text"
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter' && e.target.value.trim()) {
-                          const skill = e.target.value.trim();
-                          if (!profile.professional.skills.includes(skill)) {
-                            setProfile(prev => ({
-                              ...prev,
-                              professional: {
-                                ...prev.professional,
-                                skills: [...prev.professional.skills, skill]
-                              }
-                            }));
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={newSkillInput}
+                        onChange={(e) => setNewSkillInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const skill = newSkillInput.trim();
+                            console.log('Adding skill via Enter:', skill);
+                            if (skill && !(profile.professional.skills || []).includes(skill)) {
+                              setProfile(prev => {
+                                const newSkills = [...(prev.professional.skills || []), skill];
+                                console.log('New skills array:', newSkills);
+                                return {
+                                  ...prev,
+                                  professional: {
+                                    ...prev.professional,
+                                    skills: newSkills
+                                  }
+                                };
+                              });
+                              setNewSkillInput('');
+                            }
                           }
-                          e.target.value = '';
-                        }
-                      }}
-                      placeholder="Type a skill and press Enter"
-                      className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all"
-                    />
+                        }}
+                        placeholder="Type a skill and press Enter or click Add"
+                        className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const skill = newSkillInput.trim();
+                          console.log('Adding skill via button:', skill);
+                          if (skill && !(profile.professional.skills || []).includes(skill)) {
+                            setProfile(prev => {
+                              const newSkills = [...(prev.professional.skills || []), skill];
+                              console.log('New skills array:', newSkills);
+                              return {
+                                ...prev,
+                                professional: {
+                                  ...prev.professional,
+                                  skills: newSkills
+                                }
+                              };
+                            });
+                            setNewSkillInput('');
+                          }
+                        }}
+                        className="px-4 py-3 bg-blue-600 text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors"
+                      >
+                        Add
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <div className="flex flex-wrap gap-2">
-                    {profile.professional.skills.length > 0 ? (
-                      profile.professional.skills.map((skill, idx) => (
+                    {(profile.professional.skills || []).length > 0 ? (
+                      (profile.professional.skills || []).map((skill, idx) => (
                         <span key={idx} className="px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-semibold shadow-md">
                           {skill}
                         </span>
