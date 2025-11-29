@@ -123,6 +123,7 @@ const Home = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [likedPitches, setLikedPitches] = useState(new Set());
+  const [savedPitches, setSavedPitches] = useState(new Set());
   const [showPitchModal, setShowPitchModal] = useState(false);
   const [selectedPitch, setSelectedPitch] = useState(null);
   const [pitchMessage, setPitchMessage] = useState('');
@@ -328,10 +329,13 @@ const Home = () => {
       tags: apiPitch.industries || [],
       metrics: {
         views: apiPitch.views_count || 0,
-        likes: apiPitch.saves_count || 0,
+        likes: apiPitch.likes_count || 0,
+        saves: apiPitch.saves_count || 0,
         pitches: 0,
         comments: 0
       },
+      isLiked: apiPitch.is_liked || false,
+      isSaved: apiPitch.is_saved || false,
       timeline: apiPitch.timeline || '',
       market: apiPitch.market_size || '',
       funding: apiPitch.funding_needs ? `Seeking $${Number(apiPitch.funding_needs).toLocaleString()}` : '',
@@ -359,6 +363,17 @@ const Home = () => {
       } else {
         // Transform API data to frontend format
         const transformedPitches = apiPitches.map(transformPitchData);
+        
+        // Update liked/saved sets based on API response
+        const newLikedIds = new Set();
+        const newSavedIds = new Set();
+        transformedPitches.forEach(p => {
+          if (p.isLiked) newLikedIds.add(p.id);
+          if (p.isSaved) newSavedIds.add(p.id);
+        });
+        
+        setLikedPitches(prev => new Set([...prev, ...newLikedIds]));
+        setSavedPitches(prev => new Set([...prev, ...newSavedIds]));
         
         setPitches(prev => {
           const existingIds = new Set(prev.map(p => p.id));
@@ -394,16 +409,23 @@ const Home = () => {
     }
   }, [loading, hasMore, page, pitches.length]);
 
-  // Load user's saved pitches to show which ones are liked
-  const loadSavedPitches = async () => {
+  // Load user's liked and saved pitches to show correct states
+  const loadUserInteractions = async () => {
     try {
-      const response = await pitchesAPI.getSavedPitches();
-      const savedPitches = response.data.results || response.data || [];
-      const savedIds = new Set(savedPitches.map(p => p.id));
-      setLikedPitches(savedIds);
+      // Load liked pitches
+      const likedResponse = await pitchesAPI.getLikedPitches();
+      const likedPitchesData = likedResponse.data.results || likedResponse.data || [];
+      const likedIds = new Set(likedPitchesData.map(p => p.id));
+      setLikedPitches(likedIds);
+      
+      // Load saved pitches
+      const savedResponse = await pitchesAPI.getSavedPitches();
+      const savedPitchesData = savedResponse.data.results || savedResponse.data || [];
+      const savedIds = new Set(savedPitchesData.map(p => p.pitch || p.id));
+      setSavedPitches(savedIds);
     } catch (error) {
-      console.log('Could not load saved pitches:', error);
-      // Not critical - continue with empty liked set
+      console.log('Could not load user interactions:', error);
+      // Not critical - continue with empty sets
     }
   };
 
@@ -413,7 +435,7 @@ const Home = () => {
     if (!initialLoadDone.current) {
       initialLoadDone.current = true;
       loadPitchesFromAPI();
-      loadSavedPitches();
+      loadUserInteractions();
     }
   }, []);
 
@@ -429,6 +451,7 @@ const Home = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [loadPitchesFromAPI]);
 
+  // Handle Like (Heart button)
   const handleLike = async (pitchId) => {
     const isCurrentlyLiked = likedPitches.has(pitchId);
     
@@ -461,12 +484,12 @@ const Home = () => {
     // Call API
     try {
       if (isCurrentlyLiked) {
-        await pitchesAPI.unsavePitch(pitchId);
+        await pitchesAPI.unlikePitch(pitchId);
       } else {
-        await pitchesAPI.savePitch(pitchId);
+        await pitchesAPI.likePitch(pitchId);
       }
     } catch (error) {
-      console.error('Error saving/unsaving pitch:', error);
+      console.error('Error liking/unliking pitch:', error);
       // Revert on error
       setLikedPitches(prev => {
         const newLiked = new Set(prev);
@@ -486,6 +509,72 @@ const Home = () => {
                 metrics: { 
                   ...pitch.metrics, 
                   likes: pitch.metrics.likes + (isCurrentlyLiked ? 1 : -1) 
+                } 
+              }
+            : pitch
+        )
+      );
+    }
+  };
+
+  // Handle Save (Bookmark button)
+  const handleSave = async (pitchId) => {
+    const isCurrentlySaved = savedPitches.has(pitchId);
+    
+    // Optimistically update UI
+    setSavedPitches(prev => {
+      const newSaved = new Set(prev);
+      if (newSaved.has(pitchId)) {
+        newSaved.delete(pitchId);
+      } else {
+        newSaved.add(pitchId);
+      }
+      return newSaved;
+    });
+    
+    // Update local count
+    setPitches(prevPitches => 
+      prevPitches.map(pitch => 
+        pitch.id === pitchId 
+          ? { 
+              ...pitch, 
+              metrics: { 
+                ...pitch.metrics, 
+                saves: (pitch.metrics.saves || 0) + (isCurrentlySaved ? -1 : 1) 
+              } 
+            }
+          : pitch
+      )
+    );
+    
+    // Call API
+    try {
+      if (isCurrentlySaved) {
+        await pitchesAPI.unsavePitch(pitchId);
+      } else {
+        await pitchesAPI.savePitch(pitchId);
+      }
+    } catch (error) {
+      console.error('Error saving/unsaving pitch:', error);
+      // Revert on error
+      setSavedPitches(prev => {
+        const newSaved = new Set(prev);
+        if (isCurrentlySaved) {
+          newSaved.add(pitchId);
+        } else {
+          newSaved.delete(pitchId);
+        }
+        return newSaved;
+      });
+      // Revert count
+      setPitches(prevPitches => 
+        prevPitches.map(pitch => 
+          pitch.id === pitchId 
+            ? { 
+                ...pitch, 
+                metrics: { 
+                  ...pitch.metrics, 
+                  saves: (pitch.metrics.saves || 0) + (isCurrentlySaved ? 1 : -1) 
                 } 
               }
             : pitch
