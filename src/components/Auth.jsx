@@ -34,8 +34,7 @@ const Auth = () => {
     countryCode: '+1',
     whatsappNumber: '',
     username: '',
-    password: '',
-    confirmPassword: ''
+    password: ''
   });
   const [resetData, setResetData] = useState({
     countryCode: '+1',
@@ -119,11 +118,6 @@ const Auth = () => {
         newErrors.password = 'Password is required';
       } else if (formData.password.length < 6) {
         newErrors.password = 'Password must be at least 6 characters';
-      }
-      if (!formData.confirmPassword) {
-        newErrors.confirmPassword = 'Please confirm your password';
-      } else if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = 'Passwords do not match';
       }
     }
 
@@ -276,12 +270,12 @@ const Auth = () => {
             </span>
           </div>
           <h1 className="text-4xl font-bold text-white mb-2">
-            {authMode === 'signup' ? 'Let\'s Find Your Cofounder' : 
+            {authMode === 'signup' ? 'Find Your Cofoundership' : 
              authMode === 'signin' ? 'Welcome Back!' : 
              'Reset Username or Password'}
           </h1>
           <p className="text-gray-300">
-            {authMode === 'signup' ? 'Start Your Journey to Building the Next Unicorn' : 
+            {authMode === 'signup' ? 'Get pitch-matched with builders ready to team up' : 
              authMode === 'signin' ? 'Continue Building Your Startup Empire' : 
              'Enter WhatsApp Number and OTP'}
           </p>
@@ -696,31 +690,6 @@ const Auth = () => {
                 )}
               </div>
 
-              {authMode === 'signup' && (
-                <div>
-                  <label className="block text-white font-semibold mb-2">Confirm Password</label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleInputChange}
-                      className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-300 ${
-                        errors.confirmPassword ? 'border-red-500' : 'border-white/20'
-                      }`}
-                      placeholder="••••••••"
-                    />
-                  </div>
-                  {errors.confirmPassword && (
-                    <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-4 h-4" />
-                      {errors.confirmPassword}
-                    </p>
-                  )}
-                </div>
-              )}
-
               {error && (
                 <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-3">
                   <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
@@ -780,15 +749,15 @@ const Auth = () => {
           <div className="mt-8 grid grid-cols-3 gap-4 text-center">
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
               <Heart className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-              <p className="text-white text-sm font-semibold">AI Matching</p>
+              <p className="text-white text-sm font-semibold">Cofoundership</p>
             </div>
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
               <Sparkles className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-              <p className="text-white text-sm font-semibold">Pitch Based</p>
+              <p className="text-white text-sm font-semibold">Pitch-Matching</p>
             </div>
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
               <Crown className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
-              <p className="text-white text-sm font-semibold">Startup Ready</p>
+              <p className="text-white text-sm font-semibold">Startup-builder</p>
             </div>
           </div>
         )}

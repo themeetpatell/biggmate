@@ -18,8 +18,7 @@ import {
   Users,
   TrendingUp,
   DollarSign,
-  Clock,
-  Calendar
+  Clock
 } from 'lucide-react';
 
 const AnonymousProfileFixed = () => {
@@ -34,7 +33,6 @@ const AnonymousProfileFixed = () => {
     location: '',
     industry: [],
     workStyle: '',
-    availability: '',
     commitment: ''
   });
 
@@ -194,7 +192,7 @@ const AnonymousProfileFixed = () => {
             </div>
 
             {/* Preferences Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
                 <label className="block text-gray-900 font-semibold mb-4 flex items-center gap-3">
                   <div className="w-8 h-8 bg-gray-200 rounded-xl flex items-center justify-center">
@@ -233,26 +231,6 @@ const AnonymousProfileFixed = () => {
                   <option value="flexible">Flexible (10-20 hrs/week)</option>
                   <option value="weekends">Weekends Only</option>
                   <option value="evenings">Evenings Only</option>
-                </select>
-              </div>
-
-              <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
-                <label className="block text-gray-900 font-semibold mb-4 flex items-center gap-3">
-                  <div className="w-8 h-8 bg-gray-200 rounded-xl flex items-center justify-center">
-                    <Calendar className="w-5 h-5 text-gray-700" />
-                  </div>
-                  Availability
-                </label>
-                <select
-                  value={cofounderPreferences.availability}
-                  onChange={(e) => setCofounderPreferences(prev => ({...prev, availability: e.target.value}))}
-                  className="w-full p-4 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
-                >
-                  <option value="">Select availability</option>
-                  <option value="immediately">Immediately</option>
-                  <option value="1-month">Within 1 month</option>
-                  <option value="3-months">Within 3 months</option>
-                  <option value="6-months">Within 6 months</option>
                 </select>
               </div>
 
