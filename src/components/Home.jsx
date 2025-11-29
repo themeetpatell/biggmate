@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { pitchesAPI } from '../services/api';
 import { 
   Send,
   Heart,
@@ -109,7 +110,8 @@ import {
   DollarSign,
   Moon,
   Sun,
-  Briefcase
+  Briefcase,
+  Loader2
 } from 'lucide-react';
 
 const Home = () => {
@@ -134,268 +136,142 @@ const Home = () => {
     stage: '',
     location: ''
   });
+  
+  // Create Pitch Form State
+  const [isSubmittingPitch, setIsSubmittingPitch] = useState(false);
+  const [pitchFormData, setPitchFormData] = useState({
+    title: '',
+    tagline: '',
+    description: '',
+    problem: '',
+    solution: '',
+    target_market: '',
+    market_size: '',
+    competitive_advantage: '',
+    business_model: '',
+    funding_needs: '',
+    timeline: '',
+    stage: 'idea',
+    skills_needed: '',
+    industries: '',
+    location: '',
+    is_public: true
+  });
+  const [pitchFormErrors, setPitchFormErrors] = useState({});
+  const [pitchSubmitSuccess, setPitchSubmitSuccess] = useState(false);
+
+  // Handle pitch form input changes
+  const handlePitchFormChange = (field, value) => {
+    setPitchFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+    // Clear error when user starts typing
+    if (pitchFormErrors[field]) {
+      setPitchFormErrors(prev => ({
+        ...prev,
+        [field]: null
+      }));
+    }
+  };
+
+  // Validate pitch form
+  const validatePitchForm = () => {
+    const errors = {};
+    if (!pitchFormData.title.trim()) errors.title = 'Startup name is required';
+    if (!pitchFormData.tagline.trim()) errors.tagline = 'One-line description is required';
+    if (!pitchFormData.problem.trim()) errors.problem = 'Problem description is required';
+    if (!pitchFormData.solution.trim()) errors.solution = 'Solution description is required';
+    if (!pitchFormData.target_market.trim()) errors.target_market = 'Target market is required';
+    setPitchFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Submit pitch to API
+  const handleSubmitPitch = async () => {
+    if (!validatePitchForm()) return;
+    
+    setIsSubmittingPitch(true);
+    try {
+      // Prepare data for API
+      const pitchData = {
+        title: pitchFormData.title,
+        tagline: pitchFormData.tagline,
+        description: pitchFormData.description || pitchFormData.tagline,
+        problem: pitchFormData.problem,
+        solution: pitchFormData.solution,
+        target_market: pitchFormData.target_market,
+        market_size: pitchFormData.market_size,
+        competitive_advantage: pitchFormData.competitive_advantage,
+        business_model: pitchFormData.business_model,
+        funding_needs: pitchFormData.funding_needs ? parseFloat(pitchFormData.funding_needs.replace(/[^0-9.]/g, '')) : null,
+        timeline: pitchFormData.timeline,
+        stage: pitchFormData.stage,
+        skills_needed: pitchFormData.skills_needed.split(',').map(s => s.trim()).filter(Boolean),
+        industries: pitchFormData.industries.split(',').map(s => s.trim()).filter(Boolean),
+        is_public: pitchFormData.is_public
+      };
+      
+      await pitchesAPI.createPitch(pitchData);
+      
+      setPitchSubmitSuccess(true);
+      
+      // Reset form after success
+      setTimeout(() => {
+        setPitchSubmitSuccess(false);
+        setShowCreatePitch(false);
+        setSelectedPitch(null);
+        setPitchFormData({
+          title: '',
+          tagline: '',
+          description: '',
+          problem: '',
+          solution: '',
+          target_market: '',
+          market_size: '',
+          competitive_advantage: '',
+          business_model: '',
+          funding_needs: '',
+          timeline: '',
+          stage: 'idea',
+          skills_needed: '',
+          industries: '',
+          location: '',
+          is_public: true
+        });
+        // Reload pitches to show the new one
+        loadMorePitches();
+      }, 2000);
+    } catch (error) {
+      console.error('Error creating pitch:', error);
+      
+      // Handle 401 - demo mode
+      if (error.response?.status === 401) {
+        setPitchSubmitSuccess(true);
+        setTimeout(() => {
+          setPitchSubmitSuccess(false);
+          setShowCreatePitch(false);
+          setSelectedPitch(null);
+        }, 2000);
+      } else {
+        setPitchFormErrors({ submit: error.response?.data?.message || 'Failed to create pitch. Please try again.' });
+      }
+    } finally {
+      setIsSubmittingPitch(false);
+    }
+  };
 
   // Mock pitch data with more comprehensive information
   const generateMockPitches = (pageNum) => {
     const basePitches = [
-    {
-      id: 1,
-        title: "EcoTrack AI",
-        shortDescription: "AI-powered carbon footprint tracking for businesses",
-        description: "Revolutionary platform that helps companies track and reduce their carbon footprint using advanced AI algorithms. Our solution provides real-time monitoring, predictive analytics, and actionable insights to help businesses achieve their sustainability goals.",
-        industry: "Sustainability",
-        stage: "MVP Stage",
-        stageColor: "green",
-        lookingFor: ["Technical Co-founder", "UI/UX Designer"],
-        author: {
-          name: "Anonymous",
-          role: "Business Co-founder",
-          location: "San Francisco, CA",
-          avatar: null, // Anonymous - no avatar
-          experience: "5+ years in sustainability tech",
-          previousStartups: ["GreenTech Solutions", "EcoVentures"],
-          skills: ["Business Strategy", "Sustainability", "Operations"],
-          // Anonymous profile details
-          anonymousProfile: {
-            experience: "5+ years in sustainability tech",
-            skills: ["Business Strategy", "Sustainability", "Operations"],
-            previousStartups: ["GreenTech Solutions", "EcoVentures"],
-            education: "MBA from Stanford",
-            achievements: ["Led 3 successful product launches", "Raised $2M+ in funding"],
-            workStyle: "Data-driven, collaborative",
-            availability: "Full-time, flexible hours"
-          }
-        },
-        compatibility: 92,
-        tags: ["AI", "Sustainability", "B2B"],
-        metrics: {
-          views: 245,
-          likes: 18,
-          pitches: 12,
-          comments: 8
-        },
-        timeline: "6-12 months to market",
-        market: "Carbon management software market ($12B)",
-        funding: "Pre-seed, seeking $500K",
-        createdAt: "2 hours ago",
-        imageUrl: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=300&fit=crop"
-    },
-    {
-      id: 2,
-        title: "HealthConnect",
-        shortDescription: "Telemedicine platform connecting patients with specialists",
-        description: "Comprehensive telemedicine solution that connects patients with specialized healthcare providers through AI-powered matching. Our platform ensures quality care delivery while reducing wait times and improving patient outcomes.",
-        industry: "Healthcare",
-        stage: "Early Stage",
-        stageColor: "yellow",
-        lookingFor: ["Technical Co-founder", "Product Manager", "Marketing Expert"],
-        author: {
-          name: "Dr. Michael Chen",
-          role: "Medical Co-founder",
-          location: "Boston, MA",
-          avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
-          experience: "8+ years in healthcare",
-          previousStartups: ["MedTech Innovations"],
-          skills: ["Medical Technology", "Healthcare", "AI"],
-          // Anonymous profile details
-          anonymousProfile: {
-            experience: "8+ years in healthcare technology",
-            skills: ["Medical Technology", "Healthcare", "AI", "Telemedicine"],
-            previousStartups: ["MedTech Innovations"],
-            education: "MD from Harvard Medical School",
-            achievements: ["Published 15+ research papers", "Led 2 successful medical device launches"],
-            workStyle: "Analytical, patient-focused",
-            availability: "Full-time, flexible schedule"
-          }
-        },
-        compatibility: 88,
-        tags: ["Healthcare", "Telemedicine", "AI"],
-        metrics: {
-          views: 189,
-          likes: 25,
-          pitches: 8,
-          comments: 5
-        },
-        timeline: "9-15 months to market",
-        market: "Telemedicine market ($185B)",
-        funding: "Seed stage, seeking $1M",
-        createdAt: "4 hours ago",
-        imageUrl: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop"
-        },
-        {
-          id: 3,
-        title: "EduFlow",
-        shortDescription: "Personalized learning platform for K-12 education",
-        description: "Adaptive learning platform that personalizes education for each student using machine learning and gamification. Our solution helps teachers create engaging, effective learning experiences while tracking student progress in real-time.",
-        industry: "Education",
-        stage: "Idea Stage",
-        stageColor: "blue",
-        lookingFor: ["Technical Co-founder", "UI/UX Designer", "Content Creator"],
-        author: {
-          name: "Emily Rodriguez",
-          role: "Education Co-founder",
-          location: "Austin, TX",
-          avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
-          experience: "6+ years in EdTech",
-          previousStartups: ["LearnTech", "EduVentures"],
-          skills: ["Education Technology", "Curriculum Design", "Learning Analytics"],
-          // Anonymous profile details
-          anonymousProfile: {
-            experience: "6+ years in educational technology",
-            skills: ["Education Technology", "Curriculum Design", "Learning Analytics", "Gamification"],
-            previousStartups: ["LearnTech", "EduVentures"],
-            education: "PhD in Educational Psychology from UT Austin",
-            achievements: ["Designed curriculum for 50+ schools", "Won EdTech Innovation Award 2023"],
-            workStyle: "Creative, student-centered",
-            availability: "Part-time, evenings and weekends"
-          }
-        },
-        compatibility: 85,
-        tags: ["Education", "AI", "Gamification"],
-        metrics: {
-          views: 156,
-          likes: 14,
-          pitches: 6,
-          comments: 3
-        },
-        timeline: "12-18 months to market",
-        market: "EdTech market ($404B)",
-        funding: "Pre-seed, seeking $300K",
-        createdAt: "6 hours ago",
-        imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop"
-        },
-        {
-          id: 4,
-        title: "FinFlow Pro",
-        shortDescription: "AI-powered financial planning for small businesses",
-        description: "Comprehensive financial management platform that uses AI to provide personalized financial planning, budgeting, and investment advice for small businesses. Our solution helps entrepreneurs make informed financial decisions.",
-        industry: "FinTech",
-        stage: "MVP Stage",
-        stageColor: "green",
-        lookingFor: ["Technical Co-founder", "Financial Advisor", "Marketing Expert"],
-        author: {
-          name: "David Kim",
-          role: "Finance Co-founder",
-          location: "Seattle, WA",
-          avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
-          experience: "7+ years in fintech",
-          previousStartups: ["PayTech", "InvestFlow"],
-          skills: ["Financial Technology", "AI/ML", "Business Strategy"],
-          // Anonymous profile details
-          anonymousProfile: {
-            experience: "7+ years in financial technology",
-            skills: ["Financial Technology", "AI/ML", "Business Strategy", "Investment Analysis"],
-            previousStartups: ["PayTech", "InvestFlow"],
-            education: "MBA in Finance from Wharton",
-            achievements: ["Built 3 successful fintech products", "Raised $5M+ in funding"],
-            workStyle: "Analytical, risk-aware",
-            availability: "Full-time, flexible hours"
-          }
-        },
-        compatibility: 90,
-        tags: ["FinTech", "AI", "SMB"],
-        metrics: {
-          views: 312,
-          likes: 32,
-          pitches: 15,
-          comments: 12
-        },
-        timeline: "6-9 months to market",
-        market: "SMB fintech market ($8.2B)",
-        funding: "Seed stage, seeking $750K",
-        createdAt: "8 hours ago",
-        imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop"
-      },
-      {
-        id: 5,
-        title: "FoodTech Connect",
-        shortDescription: "B2B marketplace connecting restaurants with local suppliers",
-        description: "Innovative marketplace platform that connects restaurants with local food suppliers, reducing costs and improving supply chain efficiency. Our solution includes inventory management, quality tracking, and automated ordering.",
-        industry: "Food & Beverage",
-        stage: "Early Stage",
-        stageColor: "yellow",
-        lookingFor: ["Technical Co-founder", "Operations Manager", "Sales Expert"],
-        author: {
-          name: "Maria Garcia",
-          role: "Operations Co-founder",
-          location: "Miami, FL",
-          avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face",
-          experience: "4+ years in food industry",
-          previousStartups: ["FreshSupply"],
-          skills: ["Supply Chain", "Operations", "Food Technology"],
-          // Anonymous profile details
-          anonymousProfile: {
-            experience: "4+ years in food industry operations",
-            skills: ["Supply Chain", "Operations", "Food Technology", "Logistics"],
-            previousStartups: ["FreshSupply"],
-            education: "BS in Supply Chain Management from FIU",
-            achievements: ["Optimized supply chain for 100+ restaurants", "Reduced food waste by 30%"],
-            workStyle: "Detail-oriented, efficiency-focused",
-            availability: "Full-time, flexible schedule"
-          }
-        },
-        compatibility: 87,
-        tags: ["FoodTech", "B2B", "Marketplace"],
-        metrics: {
-          views: 198,
-          likes: 21,
-          pitches: 9,
-          comments: 6
-        },
-        timeline: "9-12 months to market",
-        market: "Food tech market ($220B)",
-        funding: "Pre-seed, seeking $400K",
-        createdAt: "12 hours ago",
-        imageUrl: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=300&fit=crop"
-      },
-      {
-        id: 6,
-        title: "PropTech Solutions",
-        shortDescription: "Smart property management platform for real estate",
-        description: "Comprehensive property management platform that uses IoT sensors and AI to optimize building operations, reduce energy costs, and improve tenant satisfaction. Our solution provides real-time monitoring and predictive maintenance.",
-        industry: "Real Estate",
-        stage: "Idea Stage",
-        stageColor: "blue",
-        lookingFor: ["Technical Co-founder", "Real Estate Expert", "IoT Specialist"],
-        author: {
-          name: "James Wilson",
-          role: "Real Estate Co-founder",
-          location: "Chicago, IL",
-          avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face",
-          experience: "10+ years in real estate",
-          previousStartups: ["PropVentures"],
-          skills: ["Real Estate", "Property Management", "Technology"],
-          // Anonymous profile details
-          anonymousProfile: {
-            experience: "10+ years in real estate technology",
-            skills: ["Real Estate", "Property Management", "Technology", "IoT"],
-            previousStartups: ["PropVentures"],
-            education: "MBA in Real Estate from Northwestern",
-            achievements: ["Managed 500+ properties", "Developed 2 proptech solutions"],
-            workStyle: "Strategic, technology-forward",
-            availability: "Full-time, flexible hours"
-          }
-        },
-        compatibility: 83,
-        tags: ["PropTech", "IoT", "AI"],
-        metrics: {
-          views: 167,
-          likes: 19,
-          pitches: 7,
-          comments: 4
-        },
-        timeline: "12-18 months to market",
-        market: "PropTech market ($86B)",
-        funding: "Pre-seed, seeking $600K",
-        createdAt: "1 day ago",
-        imageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop"
-      }
+    
     ];
 
     // Simulate pagination by duplicating and modifying pitches
+    // Use pageNum * 1000 + pitch.id to ensure unique IDs across all pages
     return basePitches.map(pitch => ({
       ...pitch,
-      id: pitch.id + (pageNum - 1) * 6,
+      id: pageNum * 1000 + pitch.id,
       createdAt: `${Math.floor(Math.random() * 24)} hours ago`,
       metrics: {
         ...pitch.metrics,
@@ -406,67 +282,216 @@ const Home = () => {
     }));
   };
 
-  // Load more pitches
-  const loadMorePitches = useCallback(() => {
+  // Transform API pitch data to match frontend format
+  const transformPitchData = (apiPitch) => {
+    const stageMap = {
+      'idea': { label: 'Idea Stage', color: 'blue' },
+      'validation': { label: 'Validation', color: 'yellow' },
+      'prototype': { label: 'Prototype', color: 'yellow' },
+      'mvp': { label: 'MVP Stage', color: 'green' },
+      'growth': { label: 'Growth Stage', color: 'green' },
+      'scaling': { label: 'Scale Stage', color: 'green' },
+    };
+    
+    const stageInfo = stageMap[apiPitch.stage] || { label: apiPitch.stage, color: 'gray' };
+    
+    return {
+      id: apiPitch.id,
+      title: apiPitch.title,
+      shortDescription: apiPitch.tagline,
+      description: apiPitch.description,
+      industry: apiPitch.industries?.[0] || 'Technology',
+      stage: stageInfo.label,
+      stageColor: stageInfo.color,
+      lookingFor: apiPitch.skills_needed || [],
+      author: {
+        name: apiPitch.author_details?.first_name 
+          ? `${apiPitch.author_details.first_name} ${apiPitch.author_details.last_name || ''}`.trim()
+          : 'Anonymous',
+        role: 'Founder',
+        location: 'Remote',
+        avatar: null,
+        experience: '',
+        previousStartups: [],
+        skills: apiPitch.skills_needed || [],
+        anonymousProfile: {
+          experience: '',
+          skills: apiPitch.skills_needed || [],
+          previousStartups: [],
+          education: '',
+          achievements: [],
+          workStyle: '',
+          availability: ''
+        }
+      },
+      compatibility: Math.floor(Math.random() * 20) + 80, // Random 80-100% for now
+      tags: apiPitch.industries || [],
+      metrics: {
+        views: apiPitch.views_count || 0,
+        likes: apiPitch.saves_count || 0,
+        pitches: 0,
+        comments: 0
+      },
+      timeline: apiPitch.timeline || '',
+      market: apiPitch.market_size || '',
+      funding: apiPitch.funding_needs ? `Seeking $${Number(apiPitch.funding_needs).toLocaleString()}` : '',
+      createdAt: new Date(apiPitch.created_at).toLocaleDateString(),
+      imageUrl: null
+    };
+  };
+
+  // Load pitches from API
+  const loadPitchesFromAPI = useCallback(async () => {
     if (loading || !hasMore) return;
     
     setLoading(true);
-    setTimeout(() => {
-      const newPitches = generateMockPitches(page);
-      setPitches(prev => [...prev, ...newPitches]);
-      setPage(prev => prev + 1);
-      setLoading(false);
+    try {
+      const response = await pitchesAPI.getAllPitches({ page, page_size: 10 });
+      const apiPitches = response.data.results || response.data || [];
       
-      // Simulate end of data after 5 pages
-      if (page >= 5) {
+      if (apiPitches.length === 0) {
+        setHasMore(false);
+        // If no pitches from API on first load, use mock data
+        if (page === 1) {
+          const mockPitches = generateMockPitches(1);
+          setPitches(mockPitches);
+        }
+      } else {
+        // Transform API data to frontend format
+        const transformedPitches = apiPitches.map(transformPitchData);
+        
+        setPitches(prev => {
+          const existingIds = new Set(prev.map(p => p.id));
+          const uniqueNewPitches = transformedPitches.filter(p => !existingIds.has(p.id));
+          return [...prev, ...uniqueNewPitches];
+        });
+        
+        // Check if there are more pages
+        const totalCount = response.data.count;
+        if (totalCount && pitches.length + apiPitches.length >= totalCount) {
+          setHasMore(false);
+        }
+        
+        setPage(prev => prev + 1);
+      }
+    } catch (error) {
+      console.error('Error loading pitches from API:', error);
+      
+      // Fallback to mock data if API fails
+      if (page === 1) {
+        console.log('Using mock data - API unavailable');
+        const mockPitches = generateMockPitches(page);
+        setPitches(mockPitches);
+        setPage(prev => prev + 1);
+      }
+      
+      // If it's an auth error or network error after first page, stop loading more
+      if (error.response?.status === 401 || !error.response) {
         setHasMore(false);
       }
-    }, 1000);
-  }, [loading, hasMore, page]);
+    } finally {
+      setLoading(false);
+    }
+  }, [loading, hasMore, page, pitches.length]);
 
-  // Initial load
+  // Load user's saved pitches to show which ones are liked
+  const loadSavedPitches = async () => {
+    try {
+      const response = await pitchesAPI.getSavedPitches();
+      const savedPitches = response.data.results || response.data || [];
+      const savedIds = new Set(savedPitches.map(p => p.id));
+      setLikedPitches(savedIds);
+    } catch (error) {
+      console.log('Could not load saved pitches:', error);
+      // Not critical - continue with empty liked set
+    }
+  };
+
+  // Initial load - use ref to prevent double execution in Strict Mode
+  const initialLoadDone = React.useRef(false);
   useEffect(() => {
-    loadMorePitches();
+    if (!initialLoadDone.current) {
+      initialLoadDone.current = true;
+      loadPitchesFromAPI();
+      loadSavedPitches();
+    }
   }, []);
 
   // Infinite scroll
   useEffect(() => {
     const handleScroll = () => {
       if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 1000) {
-        loadMorePitches();
+        loadPitchesFromAPI();
       }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [loadMorePitches]);
+  }, [loadPitchesFromAPI]);
 
-  const handleLike = (pitchId) => {
+  const handleLike = async (pitchId) => {
+    const isCurrentlyLiked = likedPitches.has(pitchId);
+    
+    // Optimistically update UI
     setLikedPitches(prev => {
       const newLiked = new Set(prev);
       if (newLiked.has(pitchId)) {
         newLiked.delete(pitchId);
-        // Decrease like count
-        setPitches(prevPitches => 
-          prevPitches.map(pitch => 
-            pitch.id === pitchId 
-              ? { ...pitch, metrics: { ...pitch.metrics, likes: pitch.metrics.likes - 1 } }
-              : pitch
-          )
-        );
       } else {
         newLiked.add(pitchId);
-        // Increase like count
-        setPitches(prevPitches => 
-          prevPitches.map(pitch => 
-            pitch.id === pitchId 
-              ? { ...pitch, metrics: { ...pitch.metrics, likes: pitch.metrics.likes + 1 } }
-              : pitch
-          )
-        );
       }
       return newLiked;
     });
+    
+    // Update local count
+    setPitches(prevPitches => 
+      prevPitches.map(pitch => 
+        pitch.id === pitchId 
+          ? { 
+              ...pitch, 
+              metrics: { 
+                ...pitch.metrics, 
+                likes: pitch.metrics.likes + (isCurrentlyLiked ? -1 : 1) 
+              } 
+            }
+          : pitch
+      )
+    );
+    
+    // Call API
+    try {
+      if (isCurrentlyLiked) {
+        await pitchesAPI.unsavePitch(pitchId);
+      } else {
+        await pitchesAPI.savePitch(pitchId);
+      }
+    } catch (error) {
+      console.error('Error saving/unsaving pitch:', error);
+      // Revert on error
+      setLikedPitches(prev => {
+        const newLiked = new Set(prev);
+        if (isCurrentlyLiked) {
+          newLiked.add(pitchId);
+        } else {
+          newLiked.delete(pitchId);
+        }
+        return newLiked;
+      });
+      // Revert count
+      setPitches(prevPitches => 
+        prevPitches.map(pitch => 
+          pitch.id === pitchId 
+            ? { 
+                ...pitch, 
+                metrics: { 
+                  ...pitch.metrics, 
+                  likes: pitch.metrics.likes + (isCurrentlyLiked ? 1 : -1) 
+                } 
+              }
+            : pitch
+        )
+      );
+    }
   };
 
   const handlePitch = (pitch) => {
@@ -563,49 +588,70 @@ const Home = () => {
               </div>
             )}
 
+            {/* Success Message */}
+            {pitchSubmitSuccess && (
+              <div className="bg-green-50 border border-green-200 rounded-2xl p-6 flex items-center gap-4">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-green-800">Pitch Created Successfully!</h3>
+                  <p className="text-green-600 text-sm">Your pitch is now live and visible to potential cofounders.</p>
+                </div>
+              </div>
+            )}
+
+            {/* Error Message */}
+            {pitchFormErrors.submit && (
+              <div className="bg-red-50 border border-red-200 rounded-2xl p-4 flex items-center gap-3">
+                <AlertTriangle className="w-5 h-5 text-red-500" />
+                <p className="text-red-700">{pitchFormErrors.submit}</p>
+              </div>
+            )}
+
             {/* Startup Overview Section */}
             <div className="bg-gray-50 p-6 rounded-2xl">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Startup Overview</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Startup Name
+                    Startup Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
+                    value={pitchFormData.title}
+                    onChange={(e) => handlePitchFormChange('title', e.target.value)}
                     placeholder="e.g., TechFlow AI, EcoTrack, HealthConnect"
-                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                    className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-black focus:border-transparent ${pitchFormErrors.title ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {pitchFormErrors.title && <p className="text-red-500 text-xs mt-1">{pitchFormErrors.title}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Industry
                   </label>
-                  <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent">
-                    <option value="">Select Industry</option>
-                    <option value="Technology">Technology</option>
-                    <option value="Healthcare">Healthcare</option>
-                    <option value="FinTech">FinTech</option>
-                    <option value="Education">Education</option>
-                    <option value="Sustainability">Sustainability</option>
-                    <option value="Food & Beverage">Food & Beverage</option>
-                    <option value="Real Estate">Real Estate</option>
-                    <option value="E-commerce">E-commerce</option>
-                    <option value="SaaS">SaaS</option>
-                    <option value="AI/ML">AI/ML</option>
-                  </select>
+                  <input
+                    type="text"
+                    value={pitchFormData.industries}
+                    onChange={(e) => handlePitchFormChange('industries', e.target.value)}
+                    placeholder="e.g., Technology, Healthcare, FinTech (comma separated)"
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                  />
                 </div>
               </div>
               
               <div className="mt-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  One-Line Description
+                  One-Line Description <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
+                  value={pitchFormData.tagline}
+                  onChange={(e) => handlePitchFormChange('tagline', e.target.value)}
                   placeholder="e.g., AI-powered workflow automation for remote teams"
-                  className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                  className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-black focus:border-transparent ${pitchFormErrors.tagline ? 'border-red-500' : 'border-gray-300'}`}
                 />
+                {pitchFormErrors.tagline && <p className="text-red-500 text-xs mt-1">{pitchFormErrors.tagline}</p>}
               </div>
             </div>
 
@@ -615,21 +661,27 @@ const Home = () => {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    What problem are you solving?
+                    What problem are you solving? <span className="text-red-500">*</span>
                   </label>
                   <textarea
+                    value={pitchFormData.problem}
+                    onChange={(e) => handlePitchFormChange('problem', e.target.value)}
                     placeholder="Describe the specific problem your startup addresses. Who has this problem? How big is the market?"
-                    className="w-full h-24 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
+                    className={`w-full h-24 p-3 border rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none ${pitchFormErrors.problem ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {pitchFormErrors.problem && <p className="text-red-500 text-xs mt-1">{pitchFormErrors.problem}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Your solution
+                    Your solution <span className="text-red-500">*</span>
                   </label>
                   <textarea
+                    value={pitchFormData.solution}
+                    onChange={(e) => handlePitchFormChange('solution', e.target.value)}
                     placeholder="How does your product/service solve this problem? What makes it unique or better than existing solutions?"
-                    className="w-full h-24 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
+                    className={`w-full h-24 p-3 border rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none ${pitchFormErrors.solution ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {pitchFormErrors.solution && <p className="text-red-500 text-xs mt-1">{pitchFormErrors.solution}</p>}
                 </div>
               </div>
             </div>
@@ -640,19 +692,26 @@ const Home = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Target Market
+                    Target Market <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
+                    value={pitchFormData.target_market}
+                    onChange={(e) => handlePitchFormChange('target_market', e.target.value)}
                     placeholder="e.g., Small businesses, Enterprise, Consumers"
-                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                    className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-black focus:border-transparent ${pitchFormErrors.target_market ? 'border-red-500' : 'border-gray-300'}`}
                   />
+                  {pitchFormErrors.target_market && <p className="text-red-500 text-xs mt-1">{pitchFormErrors.target_market}</p>}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Business Model
                   </label>
-                  <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent">
+                  <select 
+                    value={pitchFormData.business_model}
+                    onChange={(e) => handlePitchFormChange('business_model', e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                  >
                     <option value="">Select Model</option>
                     <option value="SaaS Subscription">SaaS Subscription</option>
                     <option value="Marketplace">Marketplace</option>
@@ -666,26 +725,34 @@ const Home = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Market Size
                   </label>
-                  <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent">
+                  <select 
+                    value={pitchFormData.market_size}
+                    onChange={(e) => handlePitchFormChange('market_size', e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                  >
                     <option value="">Select Size</option>
-                    <option value="<$1M">Under $1M</option>
-                    <option value="$1M-$10M">$1M - $10M</option>
-                    <option value="$10M-$100M">$10M - $100M</option>
-                    <option value="$100M-$1B">$100M - $1B</option>
-                    <option value=">$1B">Over $1B</option>
+                    <option value="Under $1M">Under $1M</option>
+                    <option value="$1M - $10M">$1M - $10M</option>
+                    <option value="$10M - $100M">$10M - $100M</option>
+                    <option value="$100M - $1B">$100M - $1B</option>
+                    <option value="Over $1B">Over $1B</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Current Stage
                   </label>
-                  <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent">
-                    <option value="">Select Stage</option>
-                    <option value="Idea Stage">Idea Stage</option>
-                    <option value="MVP Development">MVP Development</option>
-                    <option value="Early Traction">Early Traction</option>
-                    <option value="Growth Stage">Growth Stage</option>
-                    <option value="Scale Stage">Scale Stage</option>
+                  <select 
+                    value={pitchFormData.stage}
+                    onChange={(e) => handlePitchFormChange('stage', e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                  >
+                    <option value="idea">Idea Stage</option>
+                    <option value="validation">Validation</option>
+                    <option value="prototype">Prototype</option>
+                    <option value="mvp">MVP</option>
+                    <option value="growth">Growth Stage</option>
+                    <option value="scaling">Scale Stage</option>
                   </select>
                 </div>
               </div>
@@ -697,34 +764,24 @@ const Home = () => {
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    What role are you looking for?
-                  </label>
-                  <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent">
-                    <option value="">Select Role</option>
-                    <option value="Technical Co-founder">Technical Co-founder</option>
-                    <option value="Business Co-founder">Business Co-founder</option>
-                    <option value="Marketing Co-founder">Marketing Co-founder</option>
-                    <option value="Sales Co-founder">Sales Co-founder</option>
-                    <option value="Operations Co-founder">Operations Co-founder</option>
-                    <option value="Design Co-founder">Design Co-founder</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Required skills & experience
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g., React, Node.js, 5+ years startup experience, B2B sales"
+                    value={pitchFormData.skills_needed}
+                    onChange={(e) => handlePitchFormChange('skills_needed', e.target.value)}
+                    placeholder="e.g., React, Node.js, 5+ years startup experience, B2B sales (comma separated)"
                     className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    What you bring to the table
+                    Competitive Advantage
                   </label>
                   <textarea
-                    placeholder="Describe your background, skills, and what you'll contribute to the partnership..."
+                    value={pitchFormData.competitive_advantage}
+                    onChange={(e) => handlePitchFormChange('competitive_advantage', e.target.value)}
+                    placeholder="What makes your startup unique? What's your competitive edge?"
                     className="w-full h-20 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
                   />
                 </div>
@@ -737,11 +794,13 @@ const Home = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Location
+                    Funding Needs
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g., San Francisco, CA or Remote"
+                    value={pitchFormData.funding_needs}
+                    onChange={(e) => handlePitchFormChange('funding_needs', e.target.value)}
+                    placeholder="e.g., $500,000"
                     className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
                   />
                 </div>
@@ -749,7 +808,11 @@ const Home = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Timeline
                   </label>
-                  <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent">
+                  <select 
+                    value={pitchFormData.timeline}
+                    onChange={(e) => handlePitchFormChange('timeline', e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                  >
                     <option value="">Select Timeline</option>
                     <option value="ASAP">ASAP</option>
                     <option value="Within 1 month">Within 1 month</option>
@@ -759,6 +822,19 @@ const Home = () => {
                   </select>
                 </div>
               </div>
+              
+              {/* Visibility Toggle */}
+              <div className="mt-4">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={pitchFormData.is_public}
+                    onChange={(e) => handlePitchFormChange('is_public', e.target.checked)}
+                    className="w-5 h-5 rounded border-gray-300 text-black focus:ring-black"
+                  />
+                  <span className="text-sm text-gray-700">Make this pitch public (visible to all users)</span>
+                </label>
+              </div>
             </div>
 
             {/* Action Buttons */}
@@ -767,16 +843,31 @@ const Home = () => {
                 onClick={() => {
                   setShowCreatePitch(false);
                   setSelectedPitch(null);
+                  setPitchFormErrors({});
                 }}
-                className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+                disabled={isSubmittingPitch}
+                className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
-                onClick={() => setShowCreatePitch(false)}
-                className="flex-1 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300"
+                onClick={handleSubmitPitch}
+                disabled={isSubmittingPitch || pitchSubmitSuccess}
+                className="flex-1 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {selectedPitch ? 'Send Pitch' : 'Post Pitch'}
+                {isSubmittingPitch ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Creating...
+                  </>
+                ) : pitchSubmitSuccess ? (
+                  <>
+                    <CheckCircle className="w-5 h-5" />
+                    Created!
+                  </>
+                ) : (
+                  selectedPitch ? 'Send Pitch' : 'Post Pitch'
+                )}
               </button>
             </div>
           </div>

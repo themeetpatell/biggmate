@@ -39,7 +39,7 @@ api.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem('refreshToken');
         if (refreshToken) {
-          const response = await axios.post(`${API_BASE_URL}/auth/refresh/`, {
+          const response = await axios.post(`${API_BASE_URL}/auth/token/refresh/`, {
             refresh: refreshToken,
           });
 
@@ -68,7 +68,7 @@ export const authAPI = {
   register: (data) => api.post('/auth/register/', data),
   login: (data) => api.post('/auth/login/', data),
   logout: (data) => api.post('/auth/logout/', data),
-  refreshToken: (refresh) => api.post('/auth/refresh/', { refresh }),
+  refreshToken: (refresh) => api.post('/auth/token/refresh/', { refresh }),
   getCurrentUser: () => api.get('/auth/me/'),
   updateProfile: (data) => api.patch('/auth/me/', data),
   changePassword: (data) => api.post('/auth/change-password/', data),
@@ -108,16 +108,26 @@ export const profileAPI = {
   deleteTestimonial: (id) => api.delete(`/profiles/me/testimonials/${id}/`),
 };
 
-// Pitches API
+// Pitches API - matches Django ViewSet at /api/pitches/pitches/
 export const pitchesAPI = {
-  getMyPitches: (params) => api.get('/pitches/my-pitches/', { params }),
-  getPitchById: (id) => api.get(`/pitches/${id}/`),
-  createPitch: (data) => api.post('/pitches/', data),
-  updatePitch: (id, data) => api.patch(`/pitches/${id}/`, data),
-  deletePitch: (id) => api.delete(`/pitches/${id}/`),
-  getReceivedPitches: (params) => api.get('/pitches/received/', { params }),
-  respondToPitch: (id, data) => api.post(`/pitches/${id}/respond/`, data),
-  archivePitch: (id) => api.post(`/pitches/${id}/archive/`),
+  // List all pitches (public + user's own)
+  getAllPitches: (params) => api.get('/pitches/pitches/', { params }),
+  // Get user's own pitches
+  getMyPitches: (params) => api.get('/pitches/pitches/my_pitches/', { params }),
+  // Get a single pitch by ID
+  getPitchById: (id) => api.get(`/pitches/pitches/${id}/`),
+  // Create a new pitch
+  createPitch: (data) => api.post('/pitches/pitches/', data),
+  // Update an existing pitch
+  updatePitch: (id, data) => api.patch(`/pitches/pitches/${id}/`, data),
+  // Delete a pitch
+  deletePitch: (id) => api.delete(`/pitches/pitches/${id}/`),
+  // Save a pitch (bookmark)
+  savePitch: (id) => api.post(`/pitches/pitches/${id}/save/`),
+  // Unsave a pitch
+  unsavePitch: (id) => api.post(`/pitches/pitches/${id}/unsave/`),
+  // Get saved pitches
+  getSavedPitches: (params) => api.get('/pitches/pitches/saved/', { params }),
 };
 
 // Pitchbacks API

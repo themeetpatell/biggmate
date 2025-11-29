@@ -25,11 +25,16 @@ class PitchViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = super().get_queryset()
         
-        # If not authenticated or not the author, only show public pitches
+        # If not authenticated, only show public pitches
         if not self.request.user.is_authenticated:
             return queryset.filter(is_public=True)
         
-        # Show all public pitches + user's own pitches
+        # For list action (home feed), exclude current user's pitches
+        # Users should see other people's pitches, not their own
+        if self.action == 'list':
+            return queryset.filter(is_public=True).exclude(author=self.request.user)
+        
+        # For retrieve, my_pitches, and other actions, include user's own pitches
         return queryset.filter(
             Q(is_public=True) | Q(author=self.request.user)
         )
