@@ -137,6 +137,10 @@ class OnboardingData(models.Model):
     about_self = models.TextField(blank=True)
     birth_place = models.CharField(max_length=200, blank=True)
     
+    # Work Experience & Education
+    work_experience = models.JSONField(default=list)  # List of work experiences
+    education = models.JSONField(default=list)  # List of education entries
+    
     # Pitch & Media
     pitch_text = models.TextField(blank=True)
     pitch_format = models.CharField(max_length=20, default='text')  # 'text' or 'voice'

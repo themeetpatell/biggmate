@@ -4,12 +4,14 @@ import {
   Globe, Twitter, Instagram, Plus, X, Save, GraduationCap, Rocket, 
   Target, Heart, DollarSign, CheckCircle, Calendar, Trash2,
   Pencil, Building2, Award, Star, ChevronRight, Sparkles, Zap,
-  TrendingUp, Users, Eye, MessageSquare, ExternalLink
+  TrendingUp, Users, Eye, MessageSquare, ExternalLink, AlertCircle, RefreshCw
 } from 'lucide-react';
 import { profileAPI } from '../services/api';
 
 const EntrepreneurProfile = () => {
   const [editingSection, setEditingSection] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
   const [profile, setProfile] = useState({
     basic: {
       profilePicture: '',
@@ -64,8 +66,11 @@ const EntrepreneurProfile = () => {
     setIsLoading(true);
     setError(null);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Try to load from API first
+      const response = await profileAPI.getComprehensiveProfile();
+      const apiData = response.data;
       
+      // Also load any onboarding data from localStorage as fallback
       const onboardingData = {
         yourSkills: JSON.parse(localStorage.getItem('yourSkills') || '[]'),
         yourIndustries: JSON.parse(localStorage.getItem('yourIndustries') || '[]'),
@@ -105,94 +110,91 @@ const EntrepreneurProfile = () => {
         'adventure': 'Heart & Connections'
       };
 
-      const mappedValues = onboardingData.selectedValues.map(val => valueGroups[val] || val);
+      // Map values from API or localStorage
+      const apiValues = apiData?.personal?.values || onboardingData.selectedValues || [];
+      const mappedValues = apiValues.map(val => valueGroups[val] || val);
       const uniqueValues = [...new Set(mappedValues)];
       
+      // Extract skills - handle both array of strings and array of objects
+      const extractSkills = (skillsData) => {
+        if (!skillsData) return [];
+        if (Array.isArray(skillsData)) {
+          return skillsData.map(s => typeof s === 'object' ? s.name : s);
+        }
+        // Handle skills object with technical/business
+        if (skillsData.technical || skillsData.business) {
+          const technical = (skillsData.technical || []).map(s => typeof s === 'object' ? s.name : s);
+          const business = (skillsData.business || []).map(s => typeof s === 'object' ? s.name : s);
+          return [...technical, ...business];
+        }
+        return [];
+      };
+
+      // Transform API data to frontend profile format
       const profileData = {
         basic: {
-          profilePicture: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-          coverPicture: 'https://images.unsplash.com/photo-1551434678-e076c223a692?w=1200&h=400&fit=crop',
-          tagline: onboardingData.whyHere || 'Building the future of AI-powered startups',
-          firstName: 'Alex',
-          lastName: 'Chen',
-          phone: '+1 (555) 123-4567',
-          email: 'alex.chen@example.com',
-          linkedin: 'linkedin.com/in/alexchen',
-          website: 'alexchen.dev',
-          twitter: '@alexchen',
-          instagram: '@alexchen',
-          location: 'San Francisco, CA'
+          profilePicture: apiData?.basic?.avatar || '',
+          coverPicture: apiData?.basic?.coverPhoto || '',
+          tagline: apiData?.basic?.tagline || onboardingData.whyHere || '',
+          firstName: apiData?.basic?.firstName || '',
+          lastName: apiData?.basic?.lastName || '',
+          phone: apiData?.basic?.whatsappNumber || '',
+          email: apiData?.basic?.email || '',
+          linkedin: apiData?.basic?.socialLinks?.linkedin || '',
+          website: apiData?.basic?.socialLinks?.website || '',
+          twitter: apiData?.basic?.socialLinks?.twitter || '',
+          instagram: '',
+          location: apiData?.basic?.location || ''
         },
         professional: {
-          myself: onboardingData.yourSelf || 'Full-stack developer with 8 years experience building scalable web applications. Passionate about AI and fintech.',
-          skills: onboardingData.yourSkills.length > 0 ? onboardingData.yourSkills : ['React', 'Node.js', 'Python', 'AWS', 'Machine Learning', 'Docker'],
-          experienceLevel: onboardingData.yourExperience || 'Senior',
-          industry: onboardingData.yourIndustries.length > 0 ? onboardingData.yourIndustries[0] : 'Fintech'
+          myself: apiData?.professional?.aboutSelf || apiData?.professional?.background || onboardingData.yourSelf || '',
+          skills: extractSkills(apiData?.professional?.skills) || onboardingData.yourSkills || [],
+          experienceLevel: apiData?.basic?.experience || onboardingData.yourExperience || '',
+          industry: (apiData?.startup?.industries?.[0]) || (onboardingData.yourIndustries?.[0]) || ''
         },
-        experience: [
-          {
-            id: 1,
-            companyName: 'TechFlow Solutions',
-            jobTitle: 'Founder & CTO',
-            employmentType: 'Full-time',
-            startDate: '2022-01',
-            endDate: 'Present',
-            location: 'San Francisco, CA',
-            description: 'Leading technical development of AI-powered business solutions. Raised $2.5M Series A.'
-          },
-          {
-            id: 2,
-            companyName: 'Google',
-            jobTitle: 'Senior Software Engineer',
-            employmentType: 'Full-time',
-            startDate: '2019-06',
-            endDate: '2022-01',
-            location: 'Mountain View, CA',
-            description: 'Developed scalable backend systems for Google Cloud Platform.'
-          }
-        ],
-        education: [
-          {
-            id: 1,
-            schoolName: 'Stanford University',
-            degree: 'Master of Science',
-            fieldOfStudy: 'Computer Science',
-            startDate: '2015-09',
-            endDate: '2017-06',
-            grade: '3.9/4.0',
-            activities: 'Graduate Research Assistant, ACM Member'
-          },
-          {
-            id: 2,
-            schoolName: 'UC Berkeley',
-            degree: 'Bachelor of Science',
-            fieldOfStudy: 'Computer Science',
-            startDate: '2011-09',
-            endDate: '2015-06',
-            grade: '3.8/4.0',
-            activities: 'Dean\'s List, Hackathon Winner'
-          }
-        ],
+        experience: (apiData?.professional?.workExperience || []).map((exp, idx) => ({
+          id: exp.id || idx + 1,
+          companyName: exp.company || '',
+          jobTitle: exp.position || '',
+          employmentType: exp.type || 'Full-time',
+          startDate: exp.startDate || '',
+          endDate: exp.endDate || exp.duration || 'Present',
+          location: exp.location || '',
+          description: exp.description || ''
+        })),
+        education: (apiData?.professional?.education || []).map((edu, idx) => ({
+          id: edu.id || idx + 1,
+          schoolName: edu.school || edu.institution || '',
+          degree: edu.degree || '',
+          fieldOfStudy: edu.field || edu.major || '',
+          startDate: edu.startDate || '',
+          endDate: edu.endDate || '',
+          grade: edu.grade || edu.gpa || '',
+          activities: edu.activities || ''
+        })),
         founderJourney: {
-          vision: onboardingData.whyHere || 'To democratize access to AI technology and empower entrepreneurs to build world-changing startups.',
-          purpose: onboardingData.selectedIntent === 'find-cofounder' ? 'Find A Co-founder' : 
+          vision: apiData?.personal?.missionStatement || onboardingData.whyHere || '',
+          purpose: apiData?.basic?.userIntent === 'find-cofounder' ? 'Find A Co-founder' : 
+                   apiData?.basic?.userIntent === 'offer-skills' ? 'Offer Skills' : 
+                   apiData?.basic?.userIntent === 'idea-sprint' ? 'Idea Sprint' : 
+                   onboardingData.selectedIntent === 'find-cofounder' ? 'Find A Co-founder' : 
                    onboardingData.selectedIntent === 'offer-skills' ? 'Offer Skills' : 
                    onboardingData.selectedIntent === 'idea-sprint' ? 'Idea Sprint' : 'Find A Co-founder',
           values: uniqueValues.length > 0 ? uniqueValues : ['Vision & Creation', 'Grit & Growth', 'Heart & Connections']
         },
         marketplace: {
-          workAreas: onboardingData.offerSkillsPreferences?.workType || [],
-          services: onboardingData.offerSkillsPreferences?.workType || [],
+          workAreas: apiData?.startup?.lookingFor || onboardingData.offerSkillsPreferences?.workType || [],
+          services: apiData?.startup?.lookingFor || onboardingData.offerSkillsPreferences?.workType || [],
           rate: onboardingData.offerSkillsPreferences?.hourlyRate || '',
-          availability: onboardingData.offerSkillsPreferences?.availability || '',
-          location: onboardingData.offerSkillsPreferences?.location || '',
-          portfolio: [],
+          availability: apiData?.startup?.availability || onboardingData.offerSkillsPreferences?.availability || '',
+          location: apiData?.basic?.location || onboardingData.offerSkillsPreferences?.location || '',
+          portfolio: apiData?.portfolio?.items || [],
           packages: []
         },
         reputation: {
           rating: 4.8,
           reviews: [],
-          followers: 1250
+          followers: apiData?.stats?.totalConnections || 0
         }
       };
       
@@ -230,8 +232,112 @@ const EntrepreneurProfile = () => {
     }
   };
 
-  const handleSave = () => {
+  // Save profile section to API
+  const handleSave = async (section) => {
+    setIsSaving(true);
+    setSaveMessage('');
+    
+    try {
+      // Transform frontend profile data to API format
+      const apiData = {};
+      
+      switch (section || editingSection) {
+        case 'basic':
+        case 'cover':
+        case 'profile-pic':
+          apiData.tagline = profile.basic.tagline;
+          apiData.avatar = profile.basic.profilePicture;
+          apiData.cover_image = profile.basic.coverPicture;
+          apiData.location = profile.basic.location;
+          apiData.linkedin_url = profile.basic.linkedin;
+          apiData.twitter_url = profile.basic.twitter;
+          apiData.website_url = profile.basic.website;
+          break;
+          
+        case 'about':
+          apiData.bio = profile.professional.myself;
+          apiData.about_self = profile.professional.myself;
+          break;
+          
+        case 'skills':
+          apiData.skills = profile.professional.skills;
+          apiData.experience = profile.professional.experienceLevel;
+          apiData.industries = profile.professional.industry ? [profile.professional.industry] : [];
+          break;
+          
+        case 'contact':
+          apiData.linkedin_url = profile.basic.linkedin;
+          apiData.twitter_url = profile.basic.twitter;
+          apiData.website_url = profile.basic.website;
+          break;
+          
+        case 'founder':
+          // Save founder journey data to onboarding
+          apiData.mission_statement = profile.founderJourney.vision;
+          apiData.selected_values = profile.founderJourney.values;
+          break;
+          
+        case 'experience':
+          // Transform experience data to API format
+          apiData.work_experience = profile.experience.map(exp => ({
+            id: exp.id,
+            company: exp.companyName,
+            position: exp.jobTitle,
+            type: exp.employmentType,
+            startDate: exp.startDate,
+            endDate: exp.endDate,
+            location: exp.location,
+            description: exp.description
+          }));
+          break;
+          
+        case 'education':
+          // Transform education data to API format
+          apiData.education = profile.education.map(edu => ({
+            id: edu.id,
+            school: edu.schoolName,
+            degree: edu.degree,
+            field: edu.fieldOfStudy,
+            startDate: edu.startDate,
+            endDate: edu.endDate,
+            grade: edu.grade,
+            activities: edu.activities
+          }));
+          break;
+          
+        default:
+          // Save all relevant fields
+          apiData.tagline = profile.basic.tagline;
+          apiData.bio = profile.professional.myself;
+          apiData.skills = profile.professional.skills;
+          apiData.location = profile.basic.location;
+          apiData.linkedin_url = profile.basic.linkedin;
+          apiData.twitter_url = profile.basic.twitter;
+          apiData.website_url = profile.basic.website;
+      }
+      
+      // Only call API if we have data to update
+      if (Object.keys(apiData).length > 0) {
+        await profileAPI.updateComprehensiveProfile(apiData);
+      }
+      
+      setSaveMessage('Profile updated successfully!');
+      setTimeout(() => setSaveMessage(''), 3000);
+      setEditingSection(null);
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      setSaveMessage('Failed to save. Please try again.');
+      setTimeout(() => setSaveMessage(''), 3000);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Cancel editing without saving
+  const handleCancelEdit = () => {
     setEditingSection(null);
+    // Reload profile data to discard changes
+    loadProfileData();
   };
 
   const handleAddExperience = () => {
@@ -326,6 +432,34 @@ const EntrepreneurProfile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      {/* Save Message Toast */}
+      {saveMessage && (
+        <div className={`fixed top-6 right-6 z-50 px-6 py-4 rounded-xl shadow-2xl transition-all duration-300 ${
+          saveMessage.includes('success') 
+            ? 'bg-green-500 text-white' 
+            : 'bg-red-500 text-white'
+        }`}>
+          <div className="flex items-center gap-3">
+            {saveMessage.includes('success') ? (
+              <CheckCircle className="w-5 h-5" />
+            ) : (
+              <AlertCircle className="w-5 h-5" />
+            )}
+            <span className="font-medium">{saveMessage}</span>
+          </div>
+        </div>
+      )}
+      
+      {/* Saving Overlay */}
+      {isSaving && (
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 flex items-center justify-center">
+          <div className="bg-white rounded-2xl p-6 shadow-2xl flex items-center gap-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-4 border-gray-200 border-t-gray-900"></div>
+            <span className="text-gray-700 font-medium">Saving changes...</span>
+          </div>
+        </div>
+      )}
+      
       <div className="max-w-6xl mx-auto pb-16 px-4 sm:px-6">
         {/* Hero Section */}
         <div className="relative mb-10">
@@ -444,17 +578,18 @@ const EntrepreneurProfile = () => {
                 <button
                   onClick={() => {
                     if (editingSection === 'basic') {
-                      handleSave();
+                      handleSave('basic');
                     } else {
                       setEditingSection('basic');
                     }
                   }}
-                  className="px-5 py-2 bg-white text-gray-900 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-xl flex items-center gap-2 border border-white/70"
+                  disabled={isSaving}
+                  className="px-5 py-2 bg-white text-gray-900 rounded-full text-sm font-semibold transition-all shadow-lg hover:shadow-xl flex items-center gap-2 border border-white/70 disabled:opacity-50"
                 >
                   {editingSection === 'basic' ? (
                     <>
                       <CheckCircle className="w-4 h-4" />
-                      Save
+                      {isSaving ? 'Saving...' : 'Save'}
                     </>
                   ) : (
                     <>
@@ -484,17 +619,19 @@ const EntrepreneurProfile = () => {
                   {editingSection === 'about' ? (
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => setEditingSection(null)}
+                        onClick={handleCancelEdit}
                         className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors"
+                        disabled={isSaving}
                       >
                         Cancel
                       </button>
                       <button
-                        onClick={handleSave}
-                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2"
+                        onClick={() => handleSave('about')}
+                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2 disabled:opacity-50"
+                        disabled={isSaving}
                       >
                         <CheckCircle className="w-4 h-4" />
-                        Save
+                        {isSaving ? 'Saving...' : 'Save'}
                       </button>
                     </div>
                   ) : (
@@ -540,17 +677,19 @@ const EntrepreneurProfile = () => {
                   {editingSection === 'skills' ? (
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => setEditingSection(null)}
+                        onClick={handleCancelEdit}
                         className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors"
+                        disabled={isSaving}
                       >
                         Cancel
                       </button>
                       <button
-                        onClick={handleSave}
-                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2"
+                        onClick={() => handleSave('skills')}
+                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2 disabled:opacity-50"
+                        disabled={isSaving}
                       >
                         <CheckCircle className="w-4 h-4" />
-                        Save
+                        {isSaving ? 'Saving...' : 'Save'}
                       </button>
                     </div>
                   ) : (
@@ -638,19 +777,19 @@ const EntrepreneurProfile = () => {
                   {editingSection === 'experience' ? (
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => {
-                          setEditingSection(null);
-                        }}
+                        onClick={handleCancelEdit}
                         className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors"
+                        disabled={isSaving}
                       >
                         Cancel
                       </button>
                       <button
-                        onClick={handleSave}
-                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2"
+                        onClick={() => handleSave('experience')}
+                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2 disabled:opacity-50"
+                        disabled={isSaving}
                       >
                         <CheckCircle className="w-4 h-4" />
-                        Save
+                        {isSaving ? 'Saving...' : 'Save'}
                       </button>
                     </div>
                   ) : (
@@ -882,17 +1021,19 @@ const EntrepreneurProfile = () => {
                   {editingSection === 'education' ? (
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => setEditingSection(null)}
+                        onClick={handleCancelEdit}
                         className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors"
+                        disabled={isSaving}
                       >
                         Cancel
                       </button>
                       <button
-                        onClick={handleSave}
-                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2"
+                        onClick={() => handleSave('education')}
+                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2 disabled:opacity-50"
+                        disabled={isSaving}
                       >
                         <CheckCircle className="w-4 h-4" />
-                        Save
+                        {isSaving ? 'Saving...' : 'Save'}
                       </button>
                     </div>
                   ) : (
@@ -1124,15 +1265,16 @@ const EntrepreneurProfile = () => {
                 <button
                   onClick={() => {
                     if (editingSection === 'founder') {
-                      handleSave();
+                      handleSave('founder');
                     } else {
                       setEditingSection('founder');
                     }
                   }}
-                  className="absolute top-6 right-6 p-2 hover:bg-white/50 rounded-lg transition-colors"
+                  disabled={isSaving}
+                  className="absolute top-6 right-6 p-2 hover:bg-white/50 rounded-lg transition-colors disabled:opacity-50"
                 >
                   {editingSection === 'founder' ? (
-                    <span className="text-sm font-semibold text-blue-600">Save</span>
+                    <span className="text-sm font-semibold text-blue-600">{isSaving ? 'Saving...' : 'Save'}</span>
                   ) : (
                     <Pencil className="w-5 h-5 text-gray-600" />
                   )}
@@ -1301,17 +1443,19 @@ const EntrepreneurProfile = () => {
                   {editingSection === 'contact' ? (
                     <div className="flex items-center gap-2">
                       <button
-                        onClick={() => setEditingSection(null)}
+                        onClick={handleCancelEdit}
                         className="px-4 py-2 rounded-full border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-100 transition-colors"
+                        disabled={isSaving}
                       >
                         Cancel
                       </button>
                       <button
-                        onClick={handleSave}
-                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2"
+                        onClick={() => handleSave('contact')}
+                        className="px-4 py-2 rounded-full bg-gray-900 text-white text-sm font-semibold hover:bg-black transition-colors flex items-center gap-2 disabled:opacity-50"
+                        disabled={isSaving}
                       >
                         <CheckCircle className="w-4 h-4" />
-                        Save
+                        {isSaving ? 'Saving...' : 'Save'}
                       </button>
                     </div>
                   ) : (

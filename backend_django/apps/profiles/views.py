@@ -55,6 +55,23 @@ class ComprehensiveProfileView(views.APIView):
         
         profile.save()
         
+        # Update onboarding data if provided
+        onboarding_fields = ['work_experience', 'education', 'mission_statement', 
+                            'selected_values', 'about_self', 'background']
+        
+        # Get or create onboarding data
+        from apps.users.models import OnboardingData
+        onboarding, _ = OnboardingData.objects.get_or_create(user=user)
+        
+        onboarding_updated = False
+        for field in onboarding_fields:
+            if field in data:
+                setattr(onboarding, field, data[field])
+                onboarding_updated = True
+        
+        if onboarding_updated:
+            onboarding.save()
+        
         # Return updated comprehensive profile
         serializer = ComprehensiveProfileSerializer(profile, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)

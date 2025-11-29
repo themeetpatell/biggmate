@@ -385,6 +385,8 @@ class ComprehensiveProfileSerializer(serializers.ModelSerializer):
                 'background': onboarding.background or '',
                 'about_self': onboarding.about_self or '',
                 'birth_place': onboarding.birth_place or '',
+                'work_experience': onboarding.work_experience or [],
+                'education': onboarding.education or [],
                 'pitch_text': onboarding.pitch_text or '',
                 'pitch_format': onboarding.pitch_format or 'text',
                 'has_voice_note': onboarding.has_voice_note,
