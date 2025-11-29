@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { pitchesAPI } from '../services/api';
+import { pitchesAPI, pitchbacksAPI } from '../services/api';
 import { 
   Send,
   Heart,
@@ -776,37 +776,45 @@ const Home = () => {
     setShowPitchbackModal(true);
   };
 
-  const handleSendPitchback = () => {
+  const [isSubmittingPitchback, setIsSubmittingPitchback] = useState(false);
+
+  const handleSendPitchback = async () => {
     if (selectedPitchback && pitchbackMessage.trim()) {
-      const pitchbackData = {
-        id: Date.now(),
-        pitchId: selectedPitchback.id,
-        title: selectedPitchback.title,
-        description: selectedPitchback.shortDescription || selectedPitchback.description,
-        author: selectedPitchback.author.name,
-        status: 'pending',
-        sentAt: new Date().toISOString(),
-        message: pitchbackMessage,
-        response: null,
-        compatibility: selectedPitchback.compatibility,
-        pitchDetails: {
-          id: selectedPitchback.id,
-          title: selectedPitchback.title,
-          description: selectedPitchback.description,
-          industry: selectedPitchback.industry,
-          stage: selectedPitchback.stage,
-          lookingFor: selectedPitchback.lookingFor,
-          author: selectedPitchback.author
-        }
-      };
-
-      const existingPitches = JSON.parse(localStorage.getItem('sentPitches') || '[]');
-      existingPitches.push(pitchbackData);
-      localStorage.setItem('sentPitches', JSON.stringify(existingPitches));
-
-      setShowPitchbackModal(false);
-      setPitchbackMessage('');
-      setSelectedPitchback(null);
+      setIsSubmittingPitchback(true);
+      
+      try {
+        // Send pitchback to API
+        const pitchbackData = {
+          pitch: selectedPitchback.id,
+          message: pitchbackMessage,
+          role: 'cofounder', // Default role, could be made selectable
+          // Optional fields
+          skills: [],
+          experience: '',
+          motivation: pitchbackMessage
+        };
+        
+        await pitchbacksAPI.createPitchback(pitchbackData);
+        
+        setShowPitchbackModal(false);
+        setPitchbackMessage('');
+        setSelectedPitchback(null);
+        
+        // Show success message
+        setSuccessMessage('Pitchback sent successfully! Check "My Pitches" to track it.');
+        setShowSuccessMessage(true);
+        setTimeout(() => setShowSuccessMessage(false), 4000);
+        
+      } catch (error) {
+        console.error('Error sending pitchback:', error);
+        const errorMessage = error.response?.data?.detail || 
+                           error.response?.data?.message ||
+                           Object.values(error.response?.data || {}).flat().join(', ') ||
+                           'Failed to send pitchback. Please try again.';
+        alert(errorMessage);
+      } finally {
+        setIsSubmittingPitchback(false);
+      }
     }
   };
 
@@ -1562,17 +1570,27 @@ const Home = () => {
                   setSelectedPitchback(null);
                   setPitchbackMessage('');
                 }}
-                className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+                disabled={isSubmittingPitchback}
+                className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSendPitchback}
-                disabled={!pitchbackMessage.trim()}
+                disabled={!pitchbackMessage.trim() || isSubmittingPitchback}
                 className="flex-1 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2"
               >
-                <Send className="w-4 h-4" />
-                Send Pitchback
+                {isSubmittingPitchback ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    Send Pitchback
+                  </>
+                )}
               </button>
             </div>
           </div>

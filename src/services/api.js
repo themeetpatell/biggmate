@@ -144,11 +144,16 @@ export const pitchesAPI = {
 
 // Pitchbacks API
 export const pitchbacksAPI = {
-  getPitchbacks: (params) => api.get('/pitchbacks/', { params }),
-  createPitchback: (data) => api.post('/pitchbacks/', data),
-  updatePitchback: (id, data) => api.patch(`/pitchbacks/${id}/`, data),
-  deletePitchback: (id) => api.delete(`/pitchbacks/${id}/`),
-  sendPitchback: (id) => api.post(`/pitchbacks/${id}/send/`),
+  getPitchbacks: (params) => api.get('/pitchbacks/pitchbacks/', { params }),
+  getSentPitchbacks: () => api.get('/pitchbacks/pitchbacks/sent/'),
+  getReceivedPitchbacks: () => api.get('/pitchbacks/pitchbacks/received/'),
+  getMatchedPitchbacks: () => api.get('/pitchbacks/pitchbacks/', { params: { status: 'accepted' } }),
+  createPitchback: (data) => api.post('/pitchbacks/pitchbacks/', data),
+  updatePitchback: (id, data) => api.patch(`/pitchbacks/pitchbacks/${id}/`, data),
+  deletePitchback: (id) => api.delete(`/pitchbacks/pitchbacks/${id}/`),
+  acceptPitchback: (id) => api.post(`/pitchbacks/pitchbacks/${id}/accept/`),
+  declinePitchback: (id) => api.post(`/pitchbacks/pitchbacks/${id}/decline/`),
+  withdrawPitchback: (id) => api.post(`/pitchbacks/pitchbacks/${id}/withdraw/`),
 };
 
 // Matching API
