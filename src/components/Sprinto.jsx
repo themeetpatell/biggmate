@@ -162,19 +162,23 @@ const Sprinto = () => {
       setLoadingData(true);
       setError(null);
       
+      // Find the selected pitch to get its data
+      const pitch = userPitches.find(p => p.id === pitchId) || selectedPitch;
+      
       // Try to get existing Sprinto data
       const response = await sprintoAPI.getByPitch(pitchId);
       const data = response.data;
       
-      // Populate all state from loaded data
-      populateStateFromData(data);
+      // Populate all state from loaded data, using pitch data as fallback for empty fields
+      populateStateFromData(data, pitch);
       setLastSaved(new Date(data.updated_at));
     } catch (err) {
       if (err.response?.status === 404) {
-        // No Sprinto data exists, create it
+        // No Sprinto data exists, create it with pitch data as initial values
+        const pitch = userPitches.find(p => p.id === pitchId) || selectedPitch;
         try {
           const createResponse = await sprintoAPI.createForPitch(pitchId);
-          populateStateFromData(createResponse.data);
+          populateStateFromData(createResponse.data, pitch);
           setLastSaved(new Date());
         } catch (createErr) {
           console.error('Error creating Sprinto data:', createErr);
@@ -189,17 +193,73 @@ const Sprinto = () => {
     }
   };
 
-  const populateStateFromData = (data) => {
-    // Idea Framing
-    setIdeaNarrative(data.idea_narrative || '');
-    setProblemSolution(data.problem_solution || defaultIdeaFraming.problemSolution);
+  const populateStateFromData = (data, pitch = null) => {
+    // Helper to check if value is empty
+    const isEmpty = (val) => {
+      if (val === null || val === undefined || val === '') return true;
+      if (typeof val === 'object' && Object.keys(val).length === 0) return true;
+      if (Array.isArray(val) && val.length === 0) return true;
+      return false;
+    };
+    
+    // Idea Framing - Use pitch description as narrative if empty
+    const ideaNarrativeValue = data.idea_narrative || '';
+    setIdeaNarrative(ideaNarrativeValue || (pitch?.description || ''));
+    
+    // Problem-Solution - Use pitch's problem, solution, and target_market if empty
+    const problemSolutionData = data.problem_solution || {};
+    setProblemSolution({
+      problem: problemSolutionData.problem || (pitch?.problem || ''),
+      solution: problemSolutionData.solution || (pitch?.solution || ''),
+      target: problemSolutionData.target || (pitch?.target_market || '')
+    });
+    
     setValuePropositionCanvas(data.value_proposition_canvas || defaultIdeaFraming.valuePropositionCanvas);
     setAssumptionsLog(data.assumptions_log || []);
     
-    // Idea Validation
-    setMarketAnalysis(data.market_analysis || defaultIdeaValidation.marketAnalysis);
-    setIcpProfile(data.icp_profile || defaultIdeaValidation.icpProfile);
-    setCompetitors(data.competitors || []);
+    // Idea Validation - Use pitch's market_size and competitive_advantage
+    const marketAnalysisData = data.market_analysis || {};
+    // Try to parse market_size if it's a string like "$50B" or "50000000"
+    const parseMarketSize = (sizeStr) => {
+      if (!sizeStr) return 0;
+      // Remove $ and convert B/M/K suffixes
+      const cleaned = sizeStr.toString().replace(/[$,]/g, '').toUpperCase();
+      if (cleaned.endsWith('B')) return parseFloat(cleaned) * 1000000000;
+      if (cleaned.endsWith('M')) return parseFloat(cleaned) * 1000000;
+      if (cleaned.endsWith('K')) return parseFloat(cleaned) * 1000;
+      return parseFloat(cleaned) || 0;
+    };
+    
+    setMarketAnalysis({
+      tam: marketAnalysisData.tam || (pitch?.market_size ? parseMarketSize(pitch.market_size) : 0),
+      sam: marketAnalysisData.sam || 0,
+      som: marketAnalysisData.som || 0
+    });
+    
+    // ICP Profile - Use pitch's target_market for demographics/needs if empty
+    const icpData = data.icp_profile || {};
+    setIcpProfile({
+      demographics: icpData.demographics || '',
+      psychographics: icpData.psychographics || '',
+      behaviors: icpData.behaviors || '',
+      needs: icpData.needs || (pitch?.target_market || '')
+    });
+    
+    // Competitors - Pre-populate with competitive advantage if empty
+    const competitorsList = data.competitors || [];
+    if (competitorsList.length === 0 && pitch?.competitive_advantage) {
+      // Create a placeholder for the user to expand on their competitive advantage
+      setCompetitors([{
+        id: Date.now(),
+        name: '',
+        strengths: '',
+        weaknesses: '',
+        differentiation: pitch.competitive_advantage
+      }]);
+    } else {
+      setCompetitors(competitorsList);
+    }
+    
     setUserSurveys(data.user_surveys || []);
     setValidationScore(data.validation_score || defaultIdeaValidation.validationScore);
     setKeyInsights(data.key_insights || []);
@@ -210,15 +270,71 @@ const Sprinto = () => {
     setUserStories(data.user_stories || []);
     setMvpFeatureSet(data.mvp_feature_set || []);
     
-    // MVP Development
-    setPrd(data.prd || defaultMVPDevelopment.prd);
+    // MVP Development - Use pitch data for PRD sections if empty
+    const prdData = data.prd || {};
+    const prdSections = prdData.sections || [];
+    if (prdSections.length === 0 && pitch) {
+      // Pre-populate PRD with pitch data
+      setPrd({
+        sections: [
+          { 
+            id: 1, 
+            title: 'Overview', 
+            content: `${pitch.title || 'Product'}: ${pitch.tagline || pitch.description || ''}`
+          },
+          { 
+            id: 2, 
+            title: 'Problem Statement', 
+            content: pitch.problem || '' 
+          },
+          { 
+            id: 3, 
+            title: 'Solution', 
+            content: pitch.solution || '' 
+          },
+          { 
+            id: 4, 
+            title: 'Target Market', 
+            content: pitch.target_market || '' 
+          },
+          { 
+            id: 5, 
+            title: 'Business Model', 
+            content: pitch.business_model || '' 
+          }
+        ]
+      });
+    } else {
+      setPrd(data.prd || defaultMVPDevelopment.prd);
+    }
+    
     setTechnicalArchitecture(data.technical_architecture || defaultMVPDevelopment.technicalArchitecture);
     setUserFlows(data.user_flows || defaultMVPDevelopment.userFlows);
     setWireframes(data.wireframes || []);
-    setPrototype(data.prototype || defaultMVPDevelopment.prototype);
+    
+    // Prototype - Use pitch's video/deck URLs if empty
+    const prototypeData = data.prototype || {};
+    setPrototype({
+      url: prototypeData.url || (pitch?.video_url || pitch?.deck_url || ''),
+      notes: prototypeData.notes || ''
+    });
+    
     setSprintPlans(data.sprint_plans || []);
     setTaskBoard(data.task_board || defaultMVPDevelopment.taskBoard);
-    setDevMilestones(data.dev_milestones || []);
+    
+    // Dev Milestones - Use pitch timeline if empty
+    const milestonesData = data.dev_milestones || [];
+    if (milestonesData.length === 0 && pitch?.timeline) {
+      setDevMilestones([{
+        id: Date.now(),
+        milestone: 'Target Launch',
+        date: '',
+        status: 'planned',
+        description: pitch.timeline
+      }]);
+    } else {
+      setDevMilestones(milestonesData);
+    }
     
     // MVP Testing
     setTestPlan(data.test_plan || defaultMVPTesting.testPlan);
@@ -232,10 +348,35 @@ const Sprinto = () => {
     setFeatureRequests(data.feature_requests || []);
     setIterationRoadmap(data.iteration_roadmap || []);
     
-    // Demo Kit
-    setDemoVideos(data.demo_videos || []);
+    // Demo Kit - Use pitch's video/deck URLs if empty
+    const demoVideosData = data.demo_videos || [];
+    if (demoVideosData.length === 0 && pitch?.video_url) {
+      setDemoVideos([{
+        id: Date.now(),
+        title: `${pitch.title || 'Product'} Demo`,
+        url: pitch.video_url,
+        description: 'Main pitch video',
+        duration: ''
+      }]);
+    } else {
+      setDemoVideos(demoVideosData);
+    }
+    
     setScreenshots(data.screenshots || []);
-    setPresentations(data.presentations || []);
+    
+    // Presentations - Use pitch's deck URL if empty
+    const presentationsData = data.presentations || [];
+    if (presentationsData.length === 0 && pitch?.deck_url) {
+      setPresentations([{
+        id: Date.now(),
+        title: `${pitch.title || 'Product'} Pitch Deck`,
+        url: pitch.deck_url,
+        description: 'Main pitch deck',
+        type: 'pitch-deck'
+      }]);
+    } else {
+      setPresentations(presentationsData);
+    }
   };
 
   const saveCurrentTab = async () => {
@@ -540,6 +681,20 @@ const Sprinto = () => {
   // Render Idea Framing Tab
   const renderIdeaFraming = () => (
     <div className="space-y-6">
+      {/* Pre-populated Data Notice */}
+      {selectedPitch && (selectedPitch.problem || selectedPitch.solution || selectedPitch.target_market) && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start gap-3">
+          <FileText className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="text-blue-800 font-medium">Data pre-populated from your pitch</p>
+            <p className="text-blue-600 text-sm mt-1">
+              Some fields have been automatically filled with information from your "{selectedPitch.title}" pitch. 
+              Feel free to edit and expand on this content.
+            </p>
+          </div>
+        </div>
+      )}
+      
       {/* Idea Narrative */}
       <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Idea Narrative</h2>
@@ -559,7 +714,14 @@ const Sprinto = () => {
 
       {/* Problem-Solution Framework */}
       <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Problem-Solution Framework</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold text-gray-900">Problem-Solution Framework</h2>
+          {selectedPitch?.problem && (
+            <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+              Pre-filled from pitch
+            </span>
+          )}
+        </div>
         <p className="text-gray-600 mb-6">Clearly define the problem you're solving and your proposed solution.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-red-50 rounded-xl p-6 border border-red-200">
@@ -604,17 +766,27 @@ const Sprinto = () => {
             <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
               <h3 className="font-semibold text-gray-900 mb-3">Customer Gains</h3>
               <textarea
-                className="w-full p-3 border border-gray-300 rounded-lg resize-none"
+                value={valuePropositionCanvas.gains?.join('\n') || ''}
+                onChange={(e) => setValuePropositionCanvas({ 
+                  ...valuePropositionCanvas, 
+                  gains: e.target.value.split('\n').filter(g => g.trim()) 
+                })}
+                className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 rows="4"
-                placeholder="What benefits do customers want? What would make their lives better?"
+                placeholder="What benefits do customers want? What would make their lives better? (one per line)"
               />
             </div>
             <div className="bg-red-50 rounded-xl p-6 border border-red-200">
               <h3 className="font-semibold text-gray-900 mb-3">Customer Pains</h3>
               <textarea
-                className="w-full p-3 border border-gray-300 rounded-lg resize-none"
+                value={valuePropositionCanvas.pains?.join('\n') || ''}
+                onChange={(e) => setValuePropositionCanvas({ 
+                  ...valuePropositionCanvas, 
+                  pains: e.target.value.split('\n').filter(p => p.trim()) 
+                })}
+                className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 rows="4"
-                placeholder="What frustrates customers? What risks do they fear?"
+                placeholder="What frustrates customers? What risks do they fear? (one per line)"
               />
             </div>
           </div>
@@ -622,17 +794,27 @@ const Sprinto = () => {
             <div className="bg-green-50 rounded-xl p-6 border border-green-200">
               <h3 className="font-semibold text-gray-900 mb-3">Gain Creators</h3>
               <textarea
-                className="w-full p-3 border border-gray-300 rounded-lg resize-none"
+                value={valuePropositionCanvas.gainCreators?.join('\n') || ''}
+                onChange={(e) => setValuePropositionCanvas({ 
+                  ...valuePropositionCanvas, 
+                  gainCreators: e.target.value.split('\n').filter(g => g.trim()) 
+                })}
+                className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 rows="4"
-                placeholder="How does your product create gains for customers?"
+                placeholder="How does your product create gains for customers? (one per line)"
               />
             </div>
             <div className="bg-purple-50 rounded-xl p-6 border border-purple-200">
               <h3 className="font-semibold text-gray-900 mb-3">Pain Relievers</h3>
               <textarea
-                className="w-full p-3 border border-gray-300 rounded-lg resize-none"
+                value={valuePropositionCanvas.painRelievers?.join('\n') || ''}
+                onChange={(e) => setValuePropositionCanvas({ 
+                  ...valuePropositionCanvas, 
+                  painRelievers: e.target.value.split('\n').filter(p => p.trim()) 
+                })}
+                className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 rows="4"
-                placeholder="How does your product relieve customer pains?"
+                placeholder="How does your product relieve customer pains? (one per line)"
               />
             </div>
           </div>
