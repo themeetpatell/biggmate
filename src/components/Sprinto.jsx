@@ -47,7 +47,7 @@ const Sprinto = () => {
   };
   
   const defaultMVPDevelopment = {
-    prd: { sections: [] },
+    prd: { productOverview: '', targetUsers: '', keyFeatures: '', successMetrics: '' },
     technicalArchitecture: { frontend: '', backend: '', infrastructure: '', thirdParty: '' },
     userFlows: { primary: '', secondary: '' },
     wireframes: [],
@@ -270,43 +270,14 @@ const Sprinto = () => {
     setUserStories(data.user_stories || []);
     setMvpFeatureSet(data.mvp_feature_set || []);
     
-    // MVP Development - Use pitch data for PRD sections if empty
+    // MVP Development - Use pitch data for PRD fields if empty
     const prdData = data.prd || {};
-    const prdSections = prdData.sections || [];
-    if (prdSections.length === 0 && pitch) {
-      // Pre-populate PRD with pitch data
-      setPrd({
-        sections: [
-          { 
-            id: 1, 
-            title: 'Overview', 
-            content: `${pitch.title || 'Product'}: ${pitch.tagline || pitch.description || ''}`
-          },
-          { 
-            id: 2, 
-            title: 'Problem Statement', 
-            content: pitch.problem || '' 
-          },
-          { 
-            id: 3, 
-            title: 'Solution', 
-            content: pitch.solution || '' 
-          },
-          { 
-            id: 4, 
-            title: 'Target Market', 
-            content: pitch.target_market || '' 
-          },
-          { 
-            id: 5, 
-            title: 'Business Model', 
-            content: pitch.business_model || '' 
-          }
-        ]
-      });
-    } else {
-      setPrd(data.prd || defaultMVPDevelopment.prd);
-    }
+    setPrd({
+      productOverview: prdData.productOverview || (pitch ? `${pitch.title || 'Product'}: ${pitch.tagline || pitch.description || ''}` : ''),
+      targetUsers: prdData.targetUsers || (pitch?.target_market || ''),
+      keyFeatures: prdData.keyFeatures || (pitch?.solution || ''),
+      successMetrics: prdData.successMetrics || ''
+    });
     
     setTechnicalArchitecture(data.technical_architecture || defaultMVPDevelopment.technicalArchitecture);
     setUserFlows(data.user_flows || defaultMVPDevelopment.userFlows);
@@ -320,7 +291,15 @@ const Sprinto = () => {
     });
     
     setSprintPlans(data.sprint_plans || []);
-    setTaskBoard(data.task_board || defaultMVPDevelopment.taskBoard);
+    
+    // Ensure taskBoard has all required columns
+    const taskBoardData = data.task_board || {};
+    setTaskBoard({
+      todo: taskBoardData.todo || [],
+      inProgress: taskBoardData.inProgress || [],
+      review: taskBoardData.review || [],
+      done: taskBoardData.done || []
+    });
     
     // Dev Milestones - Use pitch timeline if empty
     const milestonesData = data.dev_milestones || [];
@@ -1515,6 +1494,8 @@ const Sprinto = () => {
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">Product Overview</label>
             <textarea
+              value={prd.productOverview || ''}
+              onChange={(e) => setPrd({ ...prd, productOverview: e.target.value })}
               className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
               rows="4"
               placeholder="Describe your product, its purpose, and key objectives..."
@@ -1523,6 +1504,8 @@ const Sprinto = () => {
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">Target Users</label>
             <textarea
+              value={prd.targetUsers || ''}
+              onChange={(e) => setPrd({ ...prd, targetUsers: e.target.value })}
               className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
               rows="3"
               placeholder="Who are your target users? What are their needs?"
@@ -1531,6 +1514,8 @@ const Sprinto = () => {
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">Key Features</label>
             <textarea
+              value={prd.keyFeatures || ''}
+              onChange={(e) => setPrd({ ...prd, keyFeatures: e.target.value })}
               className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
               rows="5"
               placeholder="List the key features and their requirements..."
@@ -1539,6 +1524,8 @@ const Sprinto = () => {
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">Success Metrics</label>
             <textarea
+              value={prd.successMetrics || ''}
+              onChange={(e) => setPrd({ ...prd, successMetrics: e.target.value })}
               className="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
               rows="3"
               placeholder="How will you measure success? What are the KPIs?"
@@ -1684,7 +1671,7 @@ const Sprinto = () => {
             <div key={column} className="bg-gray-50 rounded-xl p-4 border border-gray-200">
               <h3 className="font-semibold text-gray-900 mb-4 capitalize">{column === 'inProgress' ? 'In Progress' : column === 'todo' ? 'To Do' : column}</h3>
               <div className="space-y-3 min-h-[200px]">
-                {taskBoard[column].map((task) => (
+                {(taskBoard[column] || []).map((task) => (
                   <div key={task.id} className="p-3 bg-white rounded-lg border border-gray-300 shadow-sm">
                     <p className="text-sm font-medium text-gray-900">{task.title}</p>
                     <p className="text-xs text-gray-500 mt-1">{task.assignee || 'Unassigned'}</p>
@@ -1693,7 +1680,7 @@ const Sprinto = () => {
                 <button
                   onClick={() => {
                     const newTask = { id: Date.now(), title: 'New Task', assignee: '' };
-                    setTaskBoard({ ...taskBoard, [column]: [...taskBoard[column], newTask] });
+                    setTaskBoard({ ...taskBoard, [column]: [...(taskBoard[column] || []), newTask] });
                   }}
                   className="w-full p-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center gap-2"
                 >
