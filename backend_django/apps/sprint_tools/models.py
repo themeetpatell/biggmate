@@ -1,6 +1,211 @@
 from django.db import models
 from django.conf import settings
 from apps.projects.models import Project
+from apps.pitches.models import Pitch
+
+
+class SprintoData(models.Model):
+    """
+    Stores all Sprinto tab data for a specific pitch.
+    Each pitch can have its own Sprinto workspace with all 7 tabs of data.
+    """
+    pitch = models.OneToOneField(
+        Pitch,
+        on_delete=models.CASCADE,
+        related_name='sprinto_data'
+    )
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='sprinto_data'
+    )
+    
+    # ===== Idea Framing Tab Data =====
+    idea_narrative = models.TextField(blank=True, default='')
+    problem_solution = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Problem, Solution, and Target fields"
+    )
+    value_proposition_canvas = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Gains, Pains, Gain Creators, Pain Relievers"
+    )
+    assumptions_log = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="List of assumptions with validation status"
+    )
+    
+    # ===== Idea Validation Tab Data =====
+    market_analysis = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="TAM, SAM, SOM values"
+    )
+    icp_profile = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Ideal Customer Profile data"
+    )
+    competitors = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="List of competitors with strengths/weaknesses"
+    )
+    user_surveys = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="List of user surveys conducted"
+    )
+    validation_score = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Problem, Solution, Market validation scores"
+    )
+    key_insights = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Key insights gathered during validation"
+    )
+    
+    # ===== Feature Matrix Tab Data =====
+    pain_points = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Mapped customer pain points"
+    )
+    feature_priorities = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Features with impact/effort scores"
+    )
+    user_stories = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="User story mapping data"
+    )
+    mvp_feature_set = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Core MVP features"
+    )
+    
+    # ===== MVP Development Tab Data =====
+    prd = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Product Requirements Document sections"
+    )
+    technical_architecture = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Frontend, Backend, Infrastructure, Third Party"
+    )
+    user_flows = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Primary and Secondary user flows"
+    )
+    wireframes = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="List of wireframe objects"
+    )
+    prototype = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Prototype URL and notes"
+    )
+    sprint_plans = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="List of sprint plans"
+    )
+    task_board = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Kanban board with todo, inProgress, review, done"
+    )
+    dev_milestones = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Development milestones"
+    )
+    
+    # ===== MVP Testing Tab Data =====
+    test_plan = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Test scenarios and plans"
+    )
+    beta_users = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="List of beta testers"
+    )
+    bugs = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Bug tracker list"
+    )
+    usability_results = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Usability testing results"
+    )
+    performance_metrics = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="Load time, API time, error rate"
+    )
+    
+    # ===== Feedback Board Tab Data =====
+    feedback_items = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="User feedback items"
+    )
+    feature_requests = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Feature request tracker"
+    )
+    iteration_roadmap = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Product iteration roadmap"
+    )
+    
+    # ===== Demo Kit Tab Data =====
+    demo_videos = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Demo video links"
+    )
+    screenshots = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Product screenshots"
+    )
+    presentations = models.JSONField(
+        default=list,
+        blank=True,
+        help_text="Pitch decks and presentations"
+    )
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-updated_at']
+        verbose_name = 'Sprinto Data'
+        verbose_name_plural = 'Sprinto Data'
+    
+    def __str__(self):
+        return f"Sprinto Data for {self.pitch.title}"
 
 
 class IdeaValidation(models.Model):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import IdeaValidation, MarketResearch, MVPPlan, RevenueModel
+from .models import IdeaValidation, MarketResearch, MVPPlan, RevenueModel, SprintoData
 
 User = get_user_model()
 
@@ -9,6 +9,51 @@ class UserBriefSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
+
+
+class SprintoDataSerializer(serializers.ModelSerializer):
+    created_by_details = UserBriefSerializer(source='created_by', read_only=True)
+    pitch_title = serializers.CharField(source='pitch.title', read_only=True)
+    
+    class Meta:
+        model = SprintoData
+        fields = [
+            'id', 'pitch', 'pitch_title', 'created_by', 'created_by_details',
+            # Idea Framing
+            'idea_narrative', 'problem_solution', 'value_proposition_canvas', 'assumptions_log',
+            # Idea Validation
+            'market_analysis', 'icp_profile', 'competitors', 'user_surveys',
+            'validation_score', 'key_insights',
+            # Feature Matrix
+            'pain_points', 'feature_priorities', 'user_stories', 'mvp_feature_set',
+            # MVP Development
+            'prd', 'technical_architecture', 'user_flows', 'wireframes',
+            'prototype', 'sprint_plans', 'task_board', 'dev_milestones',
+            # MVP Testing
+            'test_plan', 'beta_users', 'bugs', 'usability_results', 'performance_metrics',
+            # Feedback Board
+            'feedback_items', 'feature_requests', 'iteration_roadmap',
+            # Demo Kit
+            'demo_videos', 'screenshots', 'presentations',
+            # Timestamps
+            'created_at', 'updated_at'
+        ]
+        read_only_fields = ['created_by', 'created_at', 'updated_at']
+    
+    def create(self, validated_data):
+        request = self.context.get('request')
+        validated_data['created_by'] = request.user
+        return super().create(validated_data)
+
+
+class SprintoDataListSerializer(serializers.ModelSerializer):
+    """Lightweight serializer for listing user's pitches with Sprinto data"""
+    pitch_title = serializers.CharField(source='pitch.title', read_only=True)
+    pitch_stage = serializers.CharField(source='pitch.stage', read_only=True)
+    
+    class Meta:
+        model = SprintoData
+        fields = ['id', 'pitch', 'pitch_title', 'pitch_stage', 'created_at', 'updated_at']
 
 
 class IdeaValidationSerializer(serializers.ModelSerializer):

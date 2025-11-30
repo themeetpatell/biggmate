@@ -1,189 +1,368 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   Target, CheckCircle, MessageCircle, Video, Plus, 
   Save, Sparkles, Layout, Code, Trash2, FileText,
   Users, Bug, BarChart3, Calendar, Upload, Download,
-  Play, Image, Presentation, Edit, Clock, Flag
+  Play, Image, Presentation, Edit, Clock, Flag,
+  ChevronDown, Rocket, Loader2, RefreshCw
 } from 'lucide-react';
+import { sprintoAPI, pitchesAPI } from '../services/api';
 
 const Sprinto = () => {
   const [activeTab, setActiveTab] = useState('ideaframing');
   
+  // Pitch Selection State
+  const [userPitches, setUserPitches] = useState([]);
+  const [selectedPitchId, setSelectedPitchId] = useState(null);
+  const [selectedPitch, setSelectedPitch] = useState(null);
+  const [loadingPitches, setLoadingPitches] = useState(true);
+  const [loadingData, setLoadingData] = useState(false);
+  const [savingData, setSavingData] = useState(false);
+  const [showPitchDropdown, setShowPitchDropdown] = useState(false);
+  const [error, setError] = useState(null);
+  const [lastSaved, setLastSaved] = useState(null);
+  
+  // Default empty states
+  const defaultIdeaFraming = {
+    ideaNarrative: '',
+    problemSolution: { problem: '', solution: '', target: '' },
+    valuePropositionCanvas: { gains: [], pains: [], gainCreators: [], painRelievers: [] },
+    assumptionsLog: []
+  };
+  
+  const defaultIdeaValidation = {
+    marketAnalysis: { tam: 0, sam: 0, som: 0 },
+    icpProfile: { demographics: '', psychographics: '', behaviors: '', needs: '' },
+    competitors: [],
+    userSurveys: [],
+    validationScore: { overall: 0, problem: 0, solution: 0, market: 0 },
+    keyInsights: []
+  };
+  
+  const defaultFeatureMatrix = {
+    painPoints: [],
+    featurePriorities: [],
+    userStories: [],
+    mvpFeatureSet: []
+  };
+  
+  const defaultMVPDevelopment = {
+    prd: { sections: [] },
+    technicalArchitecture: { frontend: '', backend: '', infrastructure: '', thirdParty: '' },
+    userFlows: { primary: '', secondary: '' },
+    wireframes: [],
+    prototype: { url: '', notes: '' },
+    sprintPlans: [],
+    taskBoard: { todo: [], inProgress: [], review: [], done: [] },
+    devMilestones: []
+  };
+  
+  const defaultMVPTesting = {
+    testPlan: { scenarios: [] },
+    betaUsers: [],
+    bugs: [],
+    usabilityResults: [],
+    performanceMetrics: { loadTime: 0, apiTime: 0, errorRate: 0 }
+  };
+  
+  const defaultFeedbackBoard = {
+    feedbackItems: [],
+    featureRequests: [],
+    iterationRoadmap: []
+  };
+  
+  const defaultDemoKit = {
+    demoVideos: [],
+    screenshots: [],
+    presentations: []
+  };
+  
   // Idea Framing State
-  const [ideaNarrative, setIdeaNarrative] = useState('We are building a comprehensive platform that helps entrepreneurs and startups navigate their journey from idea to launch. Our platform provides structured workflows, tools, and resources to validate ideas, build MVPs, and prepare for fundraising. We believe that every great startup deserves the right tools and guidance to succeed.');
-  const [problemSolution, setProblemSolution] = useState({ 
-    problem: 'Entrepreneurs struggle with fragmented tools and lack of structured guidance when building their startups. They waste time switching between different platforms, lose track of progress, and miss critical steps in their journey.', 
-    solution: 'A unified platform that provides end-to-end support from idea validation to launch preparation, with integrated tools, templates, and workflows that guide entrepreneurs through each stage systematically.', 
-    target: 'Early-stage entrepreneurs, solo founders, and startup teams looking to build and launch their products efficiently' 
-  });
-  const [valuePropositionCanvas, setValuePropositionCanvas] = useState({ 
-    gains: ['Save time with structured workflows', 'Access to best practices and templates', 'Track progress across all stages', 'Community support and networking'], 
-    pains: ['Time wasted on fragmented tools', 'Lack of guidance leads to mistakes', 'Difficulty tracking progress', 'Isolation as solo founder'], 
-    gainCreators: ['Pre-built templates and workflows', 'Progress tracking dashboards', 'Community forums and networking', 'AI-powered suggestions'], 
-    painRelievers: ['Unified platform eliminates tool switching', 'Step-by-step guidance prevents mistakes', 'Visual progress tracking', 'Built-in community features'] 
-  });
-  const [assumptionsLog, setAssumptionsLog] = useState([
-    { id: 1, assumption: 'Entrepreneurs need structured guidance throughout their startup journey', validation: 'validated', notes: 'Validated through 20+ interviews with early-stage founders' },
-    { id: 2, assumption: 'Users are willing to pay for a comprehensive platform', validation: 'unvalidated', notes: 'Need to test pricing with beta users' },
-    { id: 3, assumption: 'Platform should integrate with existing tools (Slack, Notion, etc.)', validation: 'validated', notes: 'Top requested feature in user surveys' }
-  ]);
+  const [ideaNarrative, setIdeaNarrative] = useState(defaultIdeaFraming.ideaNarrative);
+  const [problemSolution, setProblemSolution] = useState(defaultIdeaFraming.problemSolution);
+  const [valuePropositionCanvas, setValuePropositionCanvas] = useState(defaultIdeaFraming.valuePropositionCanvas);
+  const [assumptionsLog, setAssumptionsLog] = useState(defaultIdeaFraming.assumptionsLog);
   
   // Idea Validation State
-  const [marketAnalysis, setMarketAnalysis] = useState({ tam: 50000000000, sam: 5000000000, som: 50000000 });
-  const [icpProfile, setIcpProfile] = useState({ 
-    demographics: 'Age 25-40, located in tech hubs (SF, NYC, Austin), annual income $75K-$150K, working at startups or as solo founders', 
-    psychographics: 'Value efficiency, growth mindset, data-driven decision making, community support, and learning from peers', 
-    behaviors: 'Active on LinkedIn/Twitter, attend startup events, use productivity tools (Notion, Slack), read startup blogs and books', 
-    needs: 'Need structured processes, time-saving tools, access to templates and best practices, community of like-minded entrepreneurs' 
-  });
-  const [competitors, setCompetitors] = useState([
-    { id: 1, name: 'ProductHunt Launch', strengths: 'Strong community, good for final launch', weaknesses: 'Limited to launch stage, no structured workflows', differentiation: 'We provide end-to-end support from idea to launch, not just launch day' },
-    { id: 2, name: 'Notion Templates', strengths: 'Flexible, customizable', weaknesses: 'No guidance, requires setup time', differentiation: 'Pre-built workflows with integrated tools and AI assistance' }
-  ]);
-  const [userSurveys, setUserSurveys] = useState([
-    { id: 1, title: 'Early Adopter Survey', responses: 45, date: '2024-02-15', keyFindings: '85% of users want structured workflows, 70% struggle with tool fragmentation' },
-    { id: 2, title: 'Feature Prioritization Survey', responses: 32, date: '2024-03-01', keyFindings: 'MVP Development tracker is highest priority, followed by Idea Validation tools' }
-  ]);
-  const [validationScore, setValidationScore] = useState({ overall: 0, problem: 75, solution: 70, market: 80 });
-  const [keyInsights, setKeyInsights] = useState([
-    { id: 1, insight: 'Users value structure over flexibility in early stages', source: 'User Interviews', impact: 'high', category: 'product-strategy' },
-    { id: 2, insight: 'Tool fragmentation is a major pain point for 70% of users', source: 'Survey Data', impact: 'high', category: 'user-pain' },
-    { id: 3, insight: 'Community features are highly requested but not critical for MVP', source: 'Feature Requests', impact: 'medium', category: 'feature-priority' }
-  ]);
+  const [marketAnalysis, setMarketAnalysis] = useState(defaultIdeaValidation.marketAnalysis);
+  const [icpProfile, setIcpProfile] = useState(defaultIdeaValidation.icpProfile);
+  const [competitors, setCompetitors] = useState(defaultIdeaValidation.competitors);
+  const [userSurveys, setUserSurveys] = useState(defaultIdeaValidation.userSurveys);
+  const [validationScore, setValidationScore] = useState(defaultIdeaValidation.validationScore);
+  const [keyInsights, setKeyInsights] = useState(defaultIdeaValidation.keyInsights);
   
   // Feature Matrix State
-  const [painPoints, setPainPoints] = useState([
-    { id: 1, pain: 'Lack of structured guidance through startup journey', severity: 'high', frequency: 'constant', impact: 'Entrepreneurs waste time and miss critical steps, leading to delayed launches and missed opportunities' },
-    { id: 2, pain: 'Fragmented tools across multiple platforms', severity: 'high', frequency: 'frequent', impact: 'Context switching reduces productivity and increases cognitive load' }
-  ]);
-  const [featurePriorities, setFeaturePriorities] = useState([
-    { id: 1, feature: 'Idea Validation Workflow', impact: 9, effort: 3, priority: 'high' },
-    { id: 2, feature: 'MVP Development Tracker', impact: 8, effort: 5, priority: 'high' },
-    { id: 3, feature: 'Investor Pitch Builder', impact: 7, effort: 6, priority: 'medium' },
-    { id: 4, feature: 'Team Collaboration Tools', impact: 6, effort: 4, priority: 'medium' }
-  ]);
-  const [userStories, setUserStories] = useState([
-    { id: 1, story: 'As an entrepreneur, I want to validate my idea systematically so that I can avoid building something nobody wants', persona: 'Solo Founder', acceptance: 'Given I have an idea, When I complete the validation workflow, Then I have a validated problem-solution fit', status: 'done' },
-    { id: 2, story: 'As a startup team, I want to track our MVP development progress so that we can stay on schedule', persona: 'Startup Team', acceptance: 'Given we have a sprint plan, When we update task status, Then progress is visible to all team members', status: 'inprogress' }
-  ]);
-  const [mvpFeatureSet, setMvpFeatureSet] = useState([
-    { id: 1, feature: 'User Authentication', description: 'Email/password and social login (Google, GitHub)', priority: 'must', status: 'completed' },
-    { id: 2, feature: 'Idea Validation Workflow', description: 'Step-by-step guide through validation process', priority: 'must', status: 'inprogress' },
-    { id: 3, feature: 'MVP Development Tracker', description: 'Kanban board for tracking development tasks', priority: 'must', status: 'planned' },
-    { id: 4, feature: 'Pitch Deck Builder', description: 'Template-based pitch deck creation tool', priority: 'should', status: 'planned' }
-  ]);
+  const [painPoints, setPainPoints] = useState(defaultFeatureMatrix.painPoints);
+  const [featurePriorities, setFeaturePriorities] = useState(defaultFeatureMatrix.featurePriorities);
+  const [userStories, setUserStories] = useState(defaultFeatureMatrix.userStories);
+  const [mvpFeatureSet, setMvpFeatureSet] = useState(defaultFeatureMatrix.mvpFeatureSet);
   
   // MVP Development State
-  const [prd, setPrd] = useState({ 
-    sections: [
-      { id: 1, title: 'Overview', content: 'Platform for entrepreneurs to navigate their journey from idea to launch with structured workflows and integrated tools.' },
-      { id: 2, title: 'User Stories', content: 'As an entrepreneur, I want to validate my idea systematically so I can avoid building something nobody wants. As a startup team, I want to track MVP development progress so we can stay on schedule.' },
-      { id: 3, title: 'Technical Requirements', content: 'React frontend, Node.js backend, PostgreSQL database, RESTful API, authentication via JWT, file storage for documents and media.' },
-      { id: 4, title: 'Success Metrics', content: 'User engagement: 80% of users complete at least one workflow. Time saved: Users report 30% reduction in time spent on startup tasks. User satisfaction: NPS score above 50.' }
-    ] 
-  });
-  const [technicalArchitecture, setTechnicalArchitecture] = useState({
-    frontend: 'React 18, TypeScript, Tailwind CSS, React Router, Zustand for state management, React Query for data fetching',
-    backend: 'Node.js with Express, PostgreSQL database, RESTful API architecture, JWT authentication, Redis for caching',
-    infrastructure: 'AWS EC2 for hosting, Docker for containerization, GitHub Actions for CI/CD, CloudFront for CDN, S3 for file storage',
-    thirdParty: 'Stripe for payments, SendGrid for emails, Auth0 for authentication, Mixpanel for analytics, Sentry for error tracking'
-  });
-  const [userFlows, setUserFlows] = useState({
-    primary: 'Step 1: User lands on homepage and sees value proposition\nStep 2: User clicks "Get Started" and is prompted to sign up\nStep 3: User completes registration and onboarding flow\nStep 4: User selects their startup stage (Idea, Validation, MVP, etc.)\nStep 5: User is guided through relevant workflows and tools\nStep 6: User tracks progress and completes milestones',
-    secondary: 'Flow 1: User wants to export their data - clicks export button, selects format, downloads file\nFlow 2: User invites team members - goes to settings, adds email, sends invitation\nFlow 3: User needs help - clicks help icon, accesses documentation or support chat'
-  });
-  const [wireframes, setWireframes] = useState([
-    { id: 1, page: 'Homepage', url: 'https://figma.com/file/example1' },
-    { id: 2, page: 'Dashboard', url: 'https://figma.com/file/example2' },
-    { id: 3, page: 'Settings', url: 'https://figma.com/file/example3' }
-  ]);
-  const [prototype, setPrototype] = useState({
-    url: 'https://www.figma.com/prototype/example',
-    notes: 'Initial prototype focuses on core workflows. User testing revealed need for clearer navigation. Updated version includes breadcrumbs and progress indicators.'
-  });
-  const [sprintPlans, setSprintPlans] = useState([
-    { id: 1, name: 'Sprint 1: Foundation', duration: 2, goals: 'Set up core infrastructure, user authentication, basic navigation', status: 'completed' },
-    { id: 2, name: 'Sprint 2: Idea Framing', duration: 2, goals: 'Build Idea Framing tab with all sub-features, implement state management', status: 'completed' },
-    { id: 3, name: 'Sprint 3: Validation Tools', duration: 2, goals: 'Complete Idea Validation tab, add market analysis tools', status: 'inprogress' },
-    { id: 4, name: 'Sprint 4: MVP Development', duration: 3, goals: 'Build MVP Development tab, implement task board and sprint planning', status: 'planned' }
-  ]);
-  const [taskBoard, setTaskBoard] = useState({ 
-    todo: [
-      { id: 1, title: 'Implement user authentication', assignee: 'Dev Team' },
-      { id: 2, title: 'Design database schema', assignee: 'Backend Dev' }
-    ], 
-    inProgress: [
-      { id: 3, title: 'Build Feature Matrix tab', assignee: 'Frontend Dev' },
-      { id: 4, title: 'Set up API endpoints', assignee: 'Backend Dev' }
-    ], 
-    review: [
-      { id: 5, title: 'Code review for Idea Validation', assignee: 'Tech Lead' }
-    ], 
-    done: [
-      { id: 6, title: 'Setup project structure', assignee: 'Dev Team' },
-      { id: 7, title: 'Design system implementation', assignee: 'Frontend Dev' }
-    ] 
-  });
-  const [devMilestones, setDevMilestones] = useState([
-    { id: 1, milestone: 'MVP Alpha Release', date: '2024-03-15', status: 'completed', description: 'Core features: Idea Framing, Idea Validation, basic navigation' },
-    { id: 2, milestone: 'Beta Launch', date: '2024-04-30', status: 'inprogress', description: 'All 7 tabs complete, user testing, bug fixes' },
-    { id: 3, milestone: 'Public Launch', date: '2024-06-15', status: 'planned', description: 'Full feature set, marketing campaign, onboarding flow' }
-  ]);
+  const [prd, setPrd] = useState(defaultMVPDevelopment.prd);
+  const [technicalArchitecture, setTechnicalArchitecture] = useState(defaultMVPDevelopment.technicalArchitecture);
+  const [userFlows, setUserFlows] = useState(defaultMVPDevelopment.userFlows);
+  const [wireframes, setWireframes] = useState(defaultMVPDevelopment.wireframes);
+  const [prototype, setPrototype] = useState(defaultMVPDevelopment.prototype);
+  const [sprintPlans, setSprintPlans] = useState(defaultMVPDevelopment.sprintPlans);
+  const [taskBoard, setTaskBoard] = useState(defaultMVPDevelopment.taskBoard);
+  const [devMilestones, setDevMilestones] = useState(defaultMVPDevelopment.devMilestones);
   
   // MVP Testing State
-  const [testPlan, setTestPlan] = useState({ 
-    scenarios: [
-      { id: 1, scenario: 'User Registration Flow', steps: '1. Click Sign Up\n2. Enter email and password\n3. Verify email\n4. Complete onboarding', expected: 'User successfully registers and lands on dashboard', status: 'passed' },
-      { id: 2, scenario: 'Idea Validation Workflow', steps: '1. Navigate to Idea Validation tab\n2. Fill market analysis\n3. Add competitors\n4. Update validation scores', expected: 'All data saves correctly and validation dashboard updates', status: 'inprogress' },
-      { id: 3, scenario: 'Task Board Drag and Drop', steps: '1. Open MVP Development tab\n2. Try to move task between columns\n3. Verify task updates', expected: 'Task moves smoothly and status updates in real-time', status: 'pending' }
-    ] 
-  });
-  const [betaUsers, setBetaUsers] = useState([
-    { id: 1, name: 'Sarah Chen', email: 'sarah@startup.io', role: 'tester', status: 'active', feedback: 'Love the structured approach! The Idea Framing tab is very helpful.' },
-    { id: 2, name: 'Mike Rodriguez', email: 'mike@techventures.com', role: 'tester', status: 'active', feedback: 'Feature prioritization matrix is great. Would love to see more templates.' },
-    { id: 3, name: 'Emily Johnson', email: 'emily@founderslab.com', role: 'tester', status: 'completed', feedback: 'Overall great tool. Some UI improvements needed in the task board.' }
-  ]);
-  const [bugs, setBugs] = useState([
-    { id: 1, title: 'Validation score slider not updating in real-time', severity: 'medium', status: 'open', description: 'When dragging the slider, the percentage display doesn\'t update until mouse is released', steps: '1. Go to Idea Validation tab\n2. Open Validation Score Dashboard\n3. Drag any slider\n4. Notice percentage doesn\'t update while dragging' },
-    { id: 2, title: 'Task board cards not draggable', severity: 'high', status: 'inprogress', description: 'Users cannot drag tasks between columns in the task board', steps: '1. Navigate to MVP Development tab\n2. Try to drag a task\n3. Task doesn\'t move' }
-  ]);
-  const [usabilityResults, setUsabilityResults] = useState([
-    { task: 'Complete Idea Framing workflow', rate: 85, findings: 'Users found the workflow intuitive. Some confusion around Value Proposition Canvas - needs better explanation.' },
-    { task: 'Add a new competitor in Competitive Analysis', rate: 95, findings: 'Very straightforward. Users appreciated the clear form fields and easy removal option.' }
-  ]);
-  const [performanceMetrics, setPerformanceMetrics] = useState({ loadTime: 1200, apiTime: 350, errorRate: 0.5 });
+  const [testPlan, setTestPlan] = useState(defaultMVPTesting.testPlan);
+  const [betaUsers, setBetaUsers] = useState(defaultMVPTesting.betaUsers);
+  const [bugs, setBugs] = useState(defaultMVPTesting.bugs);
+  const [usabilityResults, setUsabilityResults] = useState(defaultMVPTesting.usabilityResults);
+  const [performanceMetrics, setPerformanceMetrics] = useState(defaultMVPTesting.performanceMetrics);
   
   // Feedback Board State
-  const [feedbackItems, setFeedbackItems] = useState([
-    { id: 1, feedback: 'The platform is great but I wish there was a way to export my data', source: 'Beta User Survey', category: 'feature', status: 'reviewing', priority: 'medium' },
-    { id: 2, feedback: 'Love the structured approach! Would be helpful to have more templates', source: 'User Interview - Sarah', category: 'feature', status: 'addressed', priority: 'high' },
-    { id: 3, feedback: 'Sometimes the page loads slowly when switching tabs', source: 'Support Ticket #1234', category: 'performance', status: 'new', priority: 'medium' }
-  ]);
-  const [featureRequests, setFeatureRequests] = useState([
-    { id: 1, request: 'Add integration with Slack for team notifications', requester: 'Mike Rodriguez', votes: 12, status: 'planned', priority: 'high' },
-    { id: 2, request: 'Export data to PDF/Excel functionality', requester: 'Sarah Chen', votes: 8, status: 'under-review', priority: 'medium' },
-    { id: 3, request: 'Mobile app version', requester: 'Emily Johnson', votes: 15, status: 'under-review', priority: 'high' }
-  ]);
-  const [iterationRoadmap, setIterationRoadmap] = useState([
-    { id: 1, version: 'v1.0', features: 'Core features: All 7 tabs, basic CRUD operations, user authentication', date: '2024-04-30', status: 'in-progress' },
-    { id: 2, version: 'v1.1', features: 'Data export, advanced filtering, team collaboration features', date: '2024-05-31', status: 'planned' },
-    { id: 3, version: 'v2.0', features: 'AI-powered suggestions, integrations (Slack, Notion), mobile app', date: '2024-07-31', status: 'planned' }
-  ]);
+  const [feedbackItems, setFeedbackItems] = useState(defaultFeedbackBoard.feedbackItems);
+  const [featureRequests, setFeatureRequests] = useState(defaultFeedbackBoard.featureRequests);
+  const [iterationRoadmap, setIterationRoadmap] = useState(defaultFeedbackBoard.iterationRoadmap);
   
   // Demo Kit State
-  const [demoVideos, setDemoVideos] = useState([
-    { id: 1, title: 'Product Overview Demo', url: 'https://www.youtube.com/watch?v=example1', description: '5-minute overview of all platform features', duration: '5:23' },
-    { id: 2, title: 'Idea Validation Workflow', url: 'https://www.youtube.com/watch?v=example2', description: 'Step-by-step walkthrough of the validation process', duration: '3:45' }
-  ]);
-  const [screenshots, setScreenshots] = useState([
-    { id: 1, title: 'Dashboard Overview', url: 'https://via.placeholder.com/800x600?text=Dashboard', description: 'Main dashboard showing all tabs and navigation' },
-    { id: 2, title: 'Idea Framing Tab', url: 'https://via.placeholder.com/800x600?text=Idea+Framing', description: 'Idea Framing interface with all sub-features' },
-    { id: 3, title: 'Feature Prioritization', url: 'https://via.placeholder.com/800x600?text=Feature+Matrix', description: 'Impact vs Effort matrix visualization' }
-  ]);
-  const [presentations, setPresentations] = useState([
-    { id: 1, title: 'Product Pitch Deck', url: 'https://docs.google.com/presentation/d/example', description: 'Main pitch deck for investors and stakeholders', type: 'pitch-deck' },
-    { id: 2, title: 'Beta Launch Presentation', url: 'https://docs.google.com/presentation/d/example2', description: 'Presentation for beta launch announcement', type: 'product-demo' }
-  ]);
+  const [demoVideos, setDemoVideos] = useState(defaultDemoKit.demoVideos);
+  const [screenshots, setScreenshots] = useState(defaultDemoKit.screenshots);
+  const [presentations, setPresentations] = useState(defaultDemoKit.presentations);
+
+  // Load user's pitches on mount
+  useEffect(() => {
+    loadUserPitches();
+  }, []);
+
+  // Load Sprinto data when pitch is selected
+  useEffect(() => {
+    if (selectedPitchId) {
+      loadSprintoData(selectedPitchId);
+    }
+  }, [selectedPitchId]);
+
+  const loadUserPitches = async () => {
+    try {
+      setLoadingPitches(true);
+      setError(null);
+      const response = await pitchesAPI.getMyPitches();
+      const pitches = response.data?.results || response.data || [];
+      setUserPitches(pitches);
+      
+      // Auto-select first pitch if available
+      if (pitches.length > 0 && !selectedPitchId) {
+        setSelectedPitchId(pitches[0].id);
+        setSelectedPitch(pitches[0]);
+      }
+    } catch (err) {
+      console.error('Error loading pitches:', err);
+      setError('Failed to load your pitches. Please try again.');
+    } finally {
+      setLoadingPitches(false);
+    }
+  };
+
+  const loadSprintoData = async (pitchId) => {
+    try {
+      setLoadingData(true);
+      setError(null);
+      
+      // Try to get existing Sprinto data
+      const response = await sprintoAPI.getByPitch(pitchId);
+      const data = response.data;
+      
+      // Populate all state from loaded data
+      populateStateFromData(data);
+      setLastSaved(new Date(data.updated_at));
+    } catch (err) {
+      if (err.response?.status === 404) {
+        // No Sprinto data exists, create it
+        try {
+          const createResponse = await sprintoAPI.createForPitch(pitchId);
+          populateStateFromData(createResponse.data);
+          setLastSaved(new Date());
+        } catch (createErr) {
+          console.error('Error creating Sprinto data:', createErr);
+          setError('Failed to initialize Sprinto workspace for this pitch.');
+        }
+      } else {
+        console.error('Error loading Sprinto data:', err);
+        setError('Failed to load Sprinto data. Please try again.');
+      }
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  const populateStateFromData = (data) => {
+    // Idea Framing
+    setIdeaNarrative(data.idea_narrative || '');
+    setProblemSolution(data.problem_solution || defaultIdeaFraming.problemSolution);
+    setValuePropositionCanvas(data.value_proposition_canvas || defaultIdeaFraming.valuePropositionCanvas);
+    setAssumptionsLog(data.assumptions_log || []);
+    
+    // Idea Validation
+    setMarketAnalysis(data.market_analysis || defaultIdeaValidation.marketAnalysis);
+    setIcpProfile(data.icp_profile || defaultIdeaValidation.icpProfile);
+    setCompetitors(data.competitors || []);
+    setUserSurveys(data.user_surveys || []);
+    setValidationScore(data.validation_score || defaultIdeaValidation.validationScore);
+    setKeyInsights(data.key_insights || []);
+    
+    // Feature Matrix
+    setPainPoints(data.pain_points || []);
+    setFeaturePriorities(data.feature_priorities || []);
+    setUserStories(data.user_stories || []);
+    setMvpFeatureSet(data.mvp_feature_set || []);
+    
+    // MVP Development
+    setPrd(data.prd || defaultMVPDevelopment.prd);
+    setTechnicalArchitecture(data.technical_architecture || defaultMVPDevelopment.technicalArchitecture);
+    setUserFlows(data.user_flows || defaultMVPDevelopment.userFlows);
+    setWireframes(data.wireframes || []);
+    setPrototype(data.prototype || defaultMVPDevelopment.prototype);
+    setSprintPlans(data.sprint_plans || []);
+    setTaskBoard(data.task_board || defaultMVPDevelopment.taskBoard);
+    setDevMilestones(data.dev_milestones || []);
+    
+    // MVP Testing
+    setTestPlan(data.test_plan || defaultMVPTesting.testPlan);
+    setBetaUsers(data.beta_users || []);
+    setBugs(data.bugs || []);
+    setUsabilityResults(data.usability_results || []);
+    setPerformanceMetrics(data.performance_metrics || defaultMVPTesting.performanceMetrics);
+    
+    // Feedback Board
+    setFeedbackItems(data.feedback_items || []);
+    setFeatureRequests(data.feature_requests || []);
+    setIterationRoadmap(data.iteration_roadmap || []);
+    
+    // Demo Kit
+    setDemoVideos(data.demo_videos || []);
+    setScreenshots(data.screenshots || []);
+    setPresentations(data.presentations || []);
+  };
+
+  const saveCurrentTab = async () => {
+    if (!selectedPitchId) return;
+    
+    setSavingData(true);
+    setError(null);
+    
+    try {
+      let tabData = {};
+      
+      switch (activeTab) {
+        case 'ideaframing':
+          tabData = {
+            idea_narrative: ideaNarrative,
+            problem_solution: problemSolution,
+            value_proposition_canvas: valuePropositionCanvas,
+            assumptions_log: assumptionsLog
+          };
+          break;
+        case 'ideavalidation':
+          tabData = {
+            market_analysis: marketAnalysis,
+            icp_profile: icpProfile,
+            competitors: competitors,
+            user_surveys: userSurveys,
+            validation_score: validationScore,
+            key_insights: keyInsights
+          };
+          break;
+        case 'featurematrix':
+          tabData = {
+            pain_points: painPoints,
+            feature_priorities: featurePriorities,
+            user_stories: userStories,
+            mvp_feature_set: mvpFeatureSet
+          };
+          break;
+        case 'mvpdevelopment':
+          tabData = {
+            prd: prd,
+            technical_architecture: technicalArchitecture,
+            user_flows: userFlows,
+            wireframes: wireframes,
+            prototype: prototype,
+            sprint_plans: sprintPlans,
+            task_board: taskBoard,
+            dev_milestones: devMilestones
+          };
+          break;
+        case 'mvptesting':
+          tabData = {
+            test_plan: testPlan,
+            beta_users: betaUsers,
+            bugs: bugs,
+            usability_results: usabilityResults,
+            performance_metrics: performanceMetrics
+          };
+          break;
+        case 'feedbackboard':
+          tabData = {
+            feedback_items: feedbackItems,
+            feature_requests: featureRequests,
+            iteration_roadmap: iterationRoadmap
+          };
+          break;
+        case 'demokit':
+          tabData = {
+            demo_videos: demoVideos,
+            screenshots: screenshots,
+            presentations: presentations
+          };
+          break;
+      }
+      
+      await sprintoAPI.updateTab(selectedPitchId, activeTab, tabData);
+      setLastSaved(new Date());
+    } catch (err) {
+      console.error('Error saving data:', err);
+      setError('Failed to save changes. Please try again.');
+    } finally {
+      setSavingData(false);
+    }
+  };
+
+  const handlePitchSelect = (pitch) => {
+    setSelectedPitchId(pitch.id);
+    setSelectedPitch(pitch);
+    setShowPitchDropdown(false);
+  };
+
+  const resetToDefaults = () => {
+    // Reset all states to defaults
+    setIdeaNarrative(defaultIdeaFraming.ideaNarrative);
+    setProblemSolution(defaultIdeaFraming.problemSolution);
+    setValuePropositionCanvas(defaultIdeaFraming.valuePropositionCanvas);
+    setAssumptionsLog(defaultIdeaFraming.assumptionsLog);
+    setMarketAnalysis(defaultIdeaValidation.marketAnalysis);
+    setIcpProfile(defaultIdeaValidation.icpProfile);
+    setCompetitors(defaultIdeaValidation.competitors);
+    setUserSurveys(defaultIdeaValidation.userSurveys);
+    setValidationScore(defaultIdeaValidation.validationScore);
+    setKeyInsights(defaultIdeaValidation.keyInsights);
+    setPainPoints(defaultFeatureMatrix.painPoints);
+    setFeaturePriorities(defaultFeatureMatrix.featurePriorities);
+    setUserStories(defaultFeatureMatrix.userStories);
+    setMvpFeatureSet(defaultFeatureMatrix.mvpFeatureSet);
+    setPrd(defaultMVPDevelopment.prd);
+    setTechnicalArchitecture(defaultMVPDevelopment.technicalArchitecture);
+    setUserFlows(defaultMVPDevelopment.userFlows);
+    setWireframes(defaultMVPDevelopment.wireframes);
+    setPrototype(defaultMVPDevelopment.prototype);
+    setSprintPlans(defaultMVPDevelopment.sprintPlans);
+    setTaskBoard(defaultMVPDevelopment.taskBoard);
+    setDevMilestones(defaultMVPDevelopment.devMilestones);
+    setTestPlan(defaultMVPTesting.testPlan);
+    setBetaUsers(defaultMVPTesting.betaUsers);
+    setBugs(defaultMVPTesting.bugs);
+    setUsabilityResults(defaultMVPTesting.usabilityResults);
+    setPerformanceMetrics(defaultMVPTesting.performanceMetrics);
+    setFeedbackItems(defaultFeedbackBoard.feedbackItems);
+    setFeatureRequests(defaultFeedbackBoard.featureRequests);
+    setIterationRoadmap(defaultFeedbackBoard.iterationRoadmap);
+    setDemoVideos(defaultDemoKit.demoVideos);
+    setScreenshots(defaultDemoKit.screenshots);
+    setPresentations(defaultDemoKit.presentations);
+  };
 
   const tabs = [
     { id: 'ideaframing', label: 'Idea Framing', icon: Sparkles },
@@ -194,6 +373,169 @@ const Sprinto = () => {
     { id: 'feedbackboard', label: 'Feedback Board', icon: MessageCircle },
     { id: 'demokit', label: 'Demo Kit', icon: Video }
   ];
+
+  // Render Pitch Selector
+  const renderPitchSelector = () => (
+    <div className="bg-white rounded-2xl p-4 shadow-lg border border-gray-100 mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        {/* Pitch Dropdown */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Rocket className="w-5 h-5 text-gray-700" />
+            <span className="font-semibold text-gray-700">Pitch:</span>
+          </div>
+          <div className="relative">
+            <button
+              onClick={() => setShowPitchDropdown(!showPitchDropdown)}
+              disabled={loadingPitches}
+              className="flex items-center gap-3 px-4 py-2.5 bg-gray-50 hover:bg-gray-100 rounded-xl border border-gray-200 transition-colors min-w-[200px]"
+            >
+              {loadingPitches ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span className="text-gray-500">Loading pitches...</span>
+                </>
+              ) : selectedPitch ? (
+                <>
+                  <span className="font-semibold text-gray-900 truncate max-w-[200px]">
+                    {selectedPitch.title}
+                  </span>
+                  <span className={`px-2 py-0.5 text-xs rounded-full ${
+                    selectedPitch.stage === 'idea' ? 'bg-blue-100 text-blue-700' :
+                    selectedPitch.stage === 'validation' ? 'bg-yellow-100 text-yellow-700' :
+                    selectedPitch.stage === 'mvp' ? 'bg-green-100 text-green-700' :
+                    'bg-gray-100 text-gray-700'
+                  }`}>
+                    {selectedPitch.stage}
+                  </span>
+                </>
+              ) : (
+                <span className="text-gray-500">Select a pitch</span>
+              )}
+              <ChevronDown className={`w-4 h-4 text-gray-400 ml-auto transition-transform ${showPitchDropdown ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {/* Dropdown Menu */}
+            {showPitchDropdown && (
+              <div className="absolute top-full left-0 mt-2 w-full min-w-[300px] bg-white rounded-xl shadow-xl border border-gray-200 z-50 max-h-[300px] overflow-y-auto">
+                {userPitches.length === 0 ? (
+                  <div className="p-4 text-center text-gray-500">
+                    <p className="mb-2">No pitches found</p>
+                    <a href="/create-pitch" className="text-black hover:underline font-semibold">
+                      Create your first pitch →
+                    </a>
+                  </div>
+                ) : (
+                  userPitches.map((pitch) => (
+                    <button
+                      key={pitch.id}
+                      onClick={() => handlePitchSelect(pitch)}
+                      className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center justify-between gap-3 ${
+                        selectedPitchId === pitch.id ? 'bg-gray-100' : ''
+                      }`}
+                    >
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-gray-900 truncate">{pitch.title}</p>
+                        <p className="text-sm text-gray-500 truncate">{pitch.tagline || 'No tagline'}</p>
+                      </div>
+                      <span className={`px-2 py-0.5 text-xs rounded-full flex-shrink-0 ${
+                        pitch.stage === 'idea' ? 'bg-blue-100 text-blue-700' :
+                        pitch.stage === 'validation' ? 'bg-yellow-100 text-yellow-700' :
+                        pitch.stage === 'mvp' ? 'bg-green-100 text-green-700' :
+                        'bg-gray-100 text-gray-700'
+                      }`}>
+                        {pitch.stage}
+                      </span>
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
+          
+          <button
+            onClick={loadUserPitches}
+            disabled={loadingPitches}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            title="Refresh pitches"
+          >
+            <RefreshCw className={`w-4 h-4 text-gray-500 ${loadingPitches ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
+        
+        {/* Save Button & Status */}
+        <div className="flex items-center gap-4">
+          {lastSaved && (
+            <span className="text-sm text-gray-500">
+              Last saved: {lastSaved.toLocaleTimeString()}
+            </span>
+          )}
+          <button
+            onClick={saveCurrentTab}
+            disabled={!selectedPitchId || savingData}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold transition-all ${
+              !selectedPitchId || savingData
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-black text-white hover:bg-gray-800'
+            }`}
+          >
+            {savingData ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4" />
+                Save Changes
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+      
+      {/* Error Message */}
+      {error && (
+        <div className="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          {error}
+        </div>
+      )}
+      
+      {/* No Pitch Selected Warning */}
+      {!loadingPitches && !selectedPitchId && userPitches.length > 0 && (
+        <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-700 text-sm">
+          Please select a pitch to start working on your Sprinto workspace.
+        </div>
+      )}
+    </div>
+  );
+
+  // Loading state for Sprinto data
+  const renderLoadingState = () => (
+    <div className="flex flex-col items-center justify-center py-20">
+      <Loader2 className="w-12 h-12 text-gray-400 animate-spin mb-4" />
+      <p className="text-gray-500 font-medium">Loading Sprinto workspace...</p>
+    </div>
+  );
+
+  // No pitch state
+  const renderNoPitchState = () => (
+    <div className="bg-white rounded-2xl p-12 shadow-lg border border-gray-100 text-center">
+      <Rocket className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+      <h2 className="text-2xl font-bold text-gray-900 mb-2">No Pitch Selected</h2>
+      <p className="text-gray-600 mb-6 max-w-md mx-auto">
+        Select a pitch from the dropdown above to start working on your Sprinto workspace, 
+        or create a new pitch if you haven't created one yet.
+      </p>
+      <a
+        href="/create-pitch"
+        className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-colors"
+      >
+        <Plus className="w-5 h-5" />
+        Create New Pitch
+      </a>
+    </div>
+  );
 
   // Render Idea Framing Tab
   const renderIdeaFraming = () => (
@@ -2266,6 +2608,9 @@ const Sprinto = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6">
+        {/* Pitch Selector */}
+        {renderPitchSelector()}
+        
         {/* Tabs */}
         <div className="mb-6">
           <div className="bg-white rounded-2xl p-2 shadow-lg border border-gray-100">
@@ -2278,9 +2623,12 @@ const Sprinto = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
+                    disabled={!selectedPitchId}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
                       isActive
                         ? 'bg-gray-900 text-white shadow-lg'
+                        : !selectedPitchId
+                        ? 'text-gray-300 cursor-not-allowed'
                         : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                     }`}
                   >
@@ -2294,13 +2642,21 @@ const Sprinto = () => {
         </div>
 
         {/* Tab Content */}
-        {activeTab === 'ideaframing' && renderIdeaFraming()}
-        {activeTab === 'ideavalidation' && renderIdeaValidation()}
-        {activeTab === 'featurematrix' && renderFeatureMatrix()}
-        {activeTab === 'mvpdevelopment' && renderMVPDevelopment()}
-        {activeTab === 'mvptesting' && renderMVPTesting()}
-        {activeTab === 'feedbackboard' && renderFeedbackBoard()}
-        {activeTab === 'demokit' && renderDemoKit()}
+        {loadingData ? (
+          renderLoadingState()
+        ) : !selectedPitchId ? (
+          renderNoPitchState()
+        ) : (
+          <>
+            {activeTab === 'ideaframing' && renderIdeaFraming()}
+            {activeTab === 'ideavalidation' && renderIdeaValidation()}
+            {activeTab === 'featurematrix' && renderFeatureMatrix()}
+            {activeTab === 'mvpdevelopment' && renderMVPDevelopment()}
+            {activeTab === 'mvptesting' && renderMVPTesting()}
+            {activeTab === 'feedbackboard' && renderFeedbackBoard()}
+            {activeTab === 'demokit' && renderDemoKit()}
+          </>
+        )}
       </div>
     </div>
   );

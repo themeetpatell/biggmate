@@ -271,16 +271,34 @@ export const stakeholdersAPI = {
 
 // Sprint Tools API
 export const sprintToolsAPI = {
-  getSprints: () => api.get('/sprint-tools/sprints/'),
-  getSprintById: (id) => api.get(`/sprint-tools/sprints/${id}/`),
-  createSprint: (data) => api.post('/sprint-tools/sprints/', data),
-  updateSprint: (id, data) => api.patch(`/sprint-tools/sprints/${id}/`, data),
-  deleteSprint: (id) => api.delete(`/sprint-tools/sprints/${id}/`),
-  getTasks: (sprintId) => api.get(`/sprint-tools/sprints/${sprintId}/tasks/`),
-  createTask: (sprintId, data) => api.post(`/sprint-tools/sprints/${sprintId}/tasks/`, data),
-  updateTask: (sprintId, taskId, data) => api.patch(`/sprint-tools/sprints/${sprintId}/tasks/${taskId}/`, data),
-  getMVPBuilder: () => api.get('/sprint-tools/mvp-builder/'),
-  saveMVPBuilder: (data) => api.post('/sprint-tools/mvp-builder/', data),
+  getSprints: () => api.get('/sprint/sprints/'),
+  getSprintById: (id) => api.get(`/sprint/sprints/${id}/`),
+  createSprint: (data) => api.post('/sprint/sprints/', data),
+  updateSprint: (id, data) => api.patch(`/sprint/sprints/${id}/`, data),
+  deleteSprint: (id) => api.delete(`/sprint/sprints/${id}/`),
+  getTasks: (sprintId) => api.get(`/sprint/sprints/${sprintId}/tasks/`),
+  createTask: (sprintId, data) => api.post(`/sprint/sprints/${sprintId}/tasks/`, data),
+  updateTask: (sprintId, taskId, data) => api.patch(`/sprint/sprints/${sprintId}/tasks/${taskId}/`, data),
+  getMVPBuilder: () => api.get('/sprint/mvp-builder/'),
+  saveMVPBuilder: (data) => api.post('/sprint/mvp-builder/', data),
+};
+
+// Sprinto API - Per-pitch Sprinto workspace data
+export const sprintoAPI = {
+  // Get list of Sprinto data for current user
+  getList: () => api.get('/sprint/sprinto/'),
+  // Get all user's pitches with their Sprinto data status
+  getMyPitchesWithSprinto: () => api.get('/sprint/sprinto/my_pitches_with_sprinto/'),
+  // Get Sprinto data for a specific pitch
+  getByPitch: (pitchId) => api.get(`/sprint/sprinto/by-pitch/${pitchId}/`),
+  // Create Sprinto data for a specific pitch
+  createForPitch: (pitchId) => api.post(`/sprint/sprinto/create-for-pitch/${pitchId}/`),
+  // Update Sprinto data for a specific pitch
+  updateForPitch: (pitchId, data) => api.patch(`/sprint/sprinto/update-for-pitch/${pitchId}/`, data),
+  // Update specific tab data for a pitch
+  updateTab: (pitchId, tabName, data) => api.patch(`/sprint/sprinto/update-tab/${pitchId}/${tabName}/`, data),
+  // Delete Sprinto data
+  delete: (id) => api.delete(`/sprint/sprinto/${id}/`),
 };
 
 export default api;

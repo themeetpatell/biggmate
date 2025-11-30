@@ -1,5 +1,14 @@
 from django.contrib import admin
-from .models import IdeaValidation, MarketResearch, MVPPlan, RevenueModel
+from .models import IdeaValidation, MarketResearch, MVPPlan, RevenueModel, SprintoData
+
+
+@admin.register(SprintoData)
+class SprintoDataAdmin(admin.ModelAdmin):
+    list_display = ['pitch', 'created_by', 'created_at', 'updated_at']
+    list_filter = ['created_at', 'updated_at']
+    search_fields = ['pitch__title', 'created_by__username']
+    readonly_fields = ['created_by', 'created_at', 'updated_at']
+    raw_id_fields = ['pitch', 'created_by']
 
 
 @admin.register(IdeaValidation)
