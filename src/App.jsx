@@ -35,6 +35,7 @@ const LaunchPreparation = lazy(() => import('./components/LaunchPreparation.jsx'
 const EntrepreneurProfile = lazy(() => import('./components/EntrepreneurProfile.jsx'));
 const Sprinto = lazy(() => import('./components/Sprinto.jsx'));
 const MyPitches = lazy(() => import('./components/MyPitches.jsx'));
+const MyCreatedPitches = lazy(() => import('./components/MyCreatedPitches.jsx'));
 
 // Sprint Tools
 const IdeaFurnishing = lazy(() => import('./components/sprint-tools/IdeaFurnishing.jsx'));
@@ -353,6 +354,14 @@ const AppContent = () => {
                 <ProtectedRoute>
                   <MainLayout>
                     <MyPitches />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/my-created-pitches" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <MyCreatedPitches />
                   </MainLayout>
                 </ProtectedRoute>
               } />

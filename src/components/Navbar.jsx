@@ -80,10 +80,16 @@ const Navbar = () => {
       description: 'Find Cofounders for Your Sprint'
     }, 
     { 
+      path: '/my-created-pitches', 
+      label: 'My Pitches', 
+      icon: Rocket, 
+      description: 'Manage Your Created Pitches'
+    },
+    { 
       path: '/my-pitches', 
-      label: 'My Idea', 
+      label: 'Pitchbacks', 
       icon: Target, 
-      description: 'Manage Your Startup Idea'
+      description: 'Manage Received Pitchbacks'
     },
     { 
       path: '/launch', 
@@ -110,10 +116,16 @@ const Navbar = () => {
       isHighlighted: true
     },
     { 
-      path: '/my-pitches', 
+      path: '/my-created-pitches', 
       label: 'My Pitches', 
+      icon: Rocket, 
+      description: 'Manage Your Created Pitches'
+    },
+    { 
+      path: '/my-pitches', 
+      label: 'Pitchbacks', 
       icon: MessageCircle, 
-      description: 'Manage Your Pitches'
+      description: 'Manage Pitchback Responses'
     }, 
     { 
       path: '/cofounders', 
