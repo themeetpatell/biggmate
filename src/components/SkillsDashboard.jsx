@@ -63,7 +63,7 @@ const SkillsDashboard = () => {
       title: 'Find Startups',
       description: 'Browse opportunities',
       icon: Target,
-      link: '/cofounders',
+      link: '/marketplace',
       color: 'bg-gray-900'
     }
   ];
@@ -340,4 +340,3 @@ const SkillsDashboard = () => {
 };
 
 export default SkillsDashboard;
-

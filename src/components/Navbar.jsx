@@ -44,19 +44,12 @@ const Navbar = () => {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [userIntent, setUserIntent] = useState(null);
   const userMenuRef = useRef(null);
   const notificationRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-
-  // Check user intent from localStorage
-  useEffect(() => {
-    const intent = localStorage.getItem('selectedIntent');
-    setUserIntent(intent);
-  }, []);
 
   // Sprint user navigation
   const sprintNavItems = [
@@ -73,12 +66,6 @@ const Navbar = () => {
       icon: Rocket, 
       description: 'Build Your Product'
     },
-    { 
-      path: '/cofounders', 
-      label: 'Find Sprint Partner', 
-      icon: Sparkles, 
-      description: 'Find Cofounders for Your Sprint'
-    }, 
     { 
       path: '/my-pitches', 
       label: 'My Idea', 
@@ -115,12 +102,6 @@ const Navbar = () => {
       icon: MessageCircle, 
       description: 'Manage Your Pitches'
     }, 
-    { 
-      path: '/cofounders', 
-      label: 'VisionMatching', 
-      icon: Sparkles, 
-      description: 'Match with Co-Founders'
-    },
     { 
       path: '/sprinto', 
       label: 'Sprinting', 
@@ -170,12 +151,6 @@ const Navbar = () => {
       description: 'Manage Clients'
     },
     { 
-      path: '/cofounders', 
-      label: 'Find Startups', 
-      icon: Target, 
-      description: 'Browse Opportunities'
-    },
-    { 
       path: '/ai-cofounder', 
       label: 'AI Co-Founder', 
       icon: Brain, 
@@ -185,7 +160,7 @@ const Navbar = () => {
   ];
 
   // Select nav items based on user type
-  const navItems = userIntent === 'idea-sprint' ? sprintNavItems : userIntent === 'offer-skills' ? skillsNavItems : defaultNavItems;
+  const navItems = defaultNavItems;
 
   // Handle scroll effect
   useEffect(() => {
@@ -456,22 +431,6 @@ const Navbar = () => {
                       </div>
                       <ChevronRight className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </Link>
-                    
-                    <Link 
-                      to="/marketplace" 
-                      className="flex items-center gap-4 px-4 py-3.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 rounded-xl transition-all duration-200 group mt-1"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      <div className="p-2.5 bg-gray-100 rounded-xl group-hover:bg-gray-200 transition-all duration-200 group-hover:scale-105 shadow-sm">
-                        <Briefcase className="w-4 h-4 text-gray-700" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-semibold text-gray-900">Marketplace</div>
-                        <div className="text-xs text-gray-500 mt-0.5">Find MVP builders & services</div>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </Link>
-                    
                     <Link 
                       to="/crm" 
                       className="flex items-center gap-4 px-4 py-3.5 text-sm font-semibold text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-xl transition-all duration-200 group mt-1"
@@ -483,21 +442,6 @@ const Navbar = () => {
                       <div className="flex-1">
                         <div className="font-semibold text-gray-900">Founders' CRM</div>
                         <div className="text-xs text-gray-500 mt-0.5">Track advisors, investors & stakeholders</div>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </Link>
-                    
-                    <Link 
-                      to="/sprint/revenue-model" 
-                      className="flex items-center gap-4 px-4 py-3.5 text-sm font-semibold text-gray-700 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 rounded-xl transition-all duration-200 group mt-1"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      <div className="p-2.5 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl group-hover:from-indigo-200 group-hover:to-purple-200 transition-all duration-200 group-hover:scale-105 shadow-sm">
-                        <DollarSign className="w-4 h-4 text-indigo-700" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-semibold text-gray-900">Revenue Model Builder</div>
-                        <div className="text-xs text-gray-500 mt-0.5">Pricing lab & monetization</div>
                       </div>
                       <ChevronRight className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </Link>
@@ -581,16 +525,6 @@ const Navbar = () => {
                     <Settings className="w-4 h-4 text-gray-700" />
                   </div>
                   <span>Settings</span>
-                </Link>
-                <Link 
-                  to="/marketplace" 
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gradient-to-r hover:from-gray-50/90 hover:via-gray-50/50 hover:to-transparent rounded-xl transition-all duration-200"
-                >
-                  <div className="p-2 bg-gray-100/80 rounded-lg">
-                    <Briefcase className="w-4 h-4 text-gray-700" />
-                  </div>
-                  <span>Marketplace</span>
                 </Link>
                 <Link 
                   to="/crm" 

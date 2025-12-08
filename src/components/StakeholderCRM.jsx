@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Users,
   Plus,
   Search,
   Filter,
   Star,
+  Copy,
   Mail,
   Phone,
   Building,
@@ -32,7 +33,9 @@ import {
   BarChart3,
   ChevronRight,
   Download,
-  Upload
+  Upload,
+  QrCode,
+  Share2
 } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -237,6 +240,11 @@ const StakeholderCRM = () => {
   const [viewMode, setViewMode] = useState('grid');
   const [selectedStakeholder, setSelectedStakeholder] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [qrCopied, setQrCopied] = useState(false);
+  const [prefillData, setPrefillData] = useState(null);
+  const [showCardModal, setShowCardModal] = useState(false);
+  const [scanError, setScanError] = useState('');
+  const scanInputRef = useRef(null);
 
   useEffect(() => {
     fetchStakeholders();
@@ -307,6 +315,113 @@ const StakeholderCRM = () => {
       setStakeholders(dummyData);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const myCard = {
+    name: localStorage.getItem('founderName') || 'Your Name',
+    role: localStorage.getItem('founderRole') || 'Founder & CEO',
+    company: localStorage.getItem('founderCompany') || 'Your Startup',
+    email: localStorage.getItem('founderEmail') || 'you@example.com',
+    phone: localStorage.getItem('founderPhone') || '+1 (555) 000-0000',
+    linkedin: localStorage.getItem('founderLinkedIn') || 'https://linkedin.com/in/yourprofile',
+    type: 'advisor',
+    source: 'biggmate-card-v1'
+  };
+
+  const qrPayload = JSON.stringify(myCard);
+  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${encodeURIComponent(qrPayload)}`;
+
+  const handleCopyPayload = async () => {
+    try {
+      await navigator.clipboard.writeText(qrPayload);
+      setQrCopied(true);
+      setTimeout(() => setQrCopied(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy QR payload', error);
+    }
+  };
+
+  const handleDownloadQr = () => {
+    const link = document.createElement('a');
+    link.href = qrImageUrl;
+    link.download = 'biggmate-business-card.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleImportQr = (payload) => {
+    try {
+      const parsed = JSON.parse(payload);
+      if (!parsed.name) {
+        setScanError('Card data must include a name.');
+        return;
+      }
+      const newStakeholder = {
+        name: parsed.name || '',
+        email: parsed.email || '',
+        phone: parsed.phone || '',
+        company: parsed.company || '',
+        title: parsed.role || parsed.title || '',
+        linkedin_url: parsed.linkedin || '',
+        twitter_handle: parsed.twitter || '',
+        type: parsed.type || 'advisor',
+        notes: parsed.notes || '',
+        tags: parsed.tags || [],
+        last_contact_date: '',
+        next_followup_date: '',
+        relationship_strength: 5,
+        is_favorite: !!parsed.is_favorite
+      };
+      setPrefillData(newStakeholder);
+      setEditingStakeholder(null);
+      setShowForm(true);
+    } catch (error) {
+      console.error('Invalid QR payload', error);
+      setScanError('Invalid card data. Try scanning again.');
+    }
+  };
+
+  const triggerScan = () => {
+    setScanError('');
+    if (scanInputRef.current) {
+      scanInputRef.current.value = '';
+      scanInputRef.current.click();
+    }
+  };
+
+  const handleScanFile = async (event) => {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    setScanError('');
+    try {
+      if (!('BarcodeDetector' in window)) {
+        setScanError('Scanning not supported in this browser. Paste the payload instead.');
+        return;
+      }
+
+      // Create detector
+      const formats = ['qr_code'];
+      const detector = new window.BarcodeDetector({ formats });
+
+      // Decode image
+      const img = await createImageBitmap(file);
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const codes = await detector.detect(canvas);
+      if (!codes.length) {
+        setScanError('No QR code found in the image. Try again or paste the payload manually.');
+        return;
+      }
+      const value = codes[0].rawValue;
+      handleImportQr(value);
+    } catch (error) {
+      console.error('Scan failed', error);
+      setScanError('Unable to scan this image. Try another or paste the payload manually.');
     }
   };
 
@@ -399,18 +514,45 @@ const StakeholderCRM = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto p-6">
         <div className="mb-8">
-          <div className="flex items-center justify-end mb-4">
-            <button
-              onClick={() => {
-                setEditingStakeholder(null);
-                setShowForm(true);
-              }}
-              className="flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl"
-            >
-              <Plus className="w-5 h-5" />
-              Add Stakeholder
-            </button>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+            <div />
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => setShowCardModal(true)}
+                className="flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 text-gray-800 rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 font-semibold"
+              >
+                <QrCode className="w-5 h-5" />
+                View My Card
+              </button>
+              <button
+                onClick={triggerScan}
+                className="flex items-center gap-2 px-4 py-2.5 bg-white border-2 border-gray-200 text-gray-800 rounded-xl hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 font-semibold"
+              >
+                <QrCode className="w-5 h-5" />
+                Scan Card
+              </button>
+              <button
+                onClick={() => {
+                  setEditingStakeholder(null);
+                  setPrefillData(null);
+                  setShowForm(true);
+                }}
+                className="flex items-center gap-2 px-6 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl"
+              >
+                <Plus className="w-5 h-5" />
+                Add Stakeholder
+              </button>
+            </div>
           </div>
+
+          <input
+            ref={scanInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={handleScanFile}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
@@ -460,6 +602,8 @@ const StakeholderCRM = () => {
             </div>
           </div>
         </div>
+
+        {/* QR paste panel removed per request */}
 
         <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm mb-6">
           <div className="flex flex-col md:flex-row gap-4 items-stretch">
@@ -534,6 +678,7 @@ const StakeholderCRM = () => {
             <button
               onClick={() => {
                 setEditingStakeholder(null);
+                setPrefillData(null);
                 setShowForm(true);
               }}
               className="px-8 py-4 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all font-semibold shadow-lg hover:shadow-xl flex items-center gap-2 mx-auto"
@@ -632,6 +777,7 @@ const StakeholderCRM = () => {
                             onClick={(e) => {
                               e.stopPropagation();
                               setEditingStakeholder(stakeholder);
+                              setPrefillData(null);
                               setShowForm(true);
                             }}
                             className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium flex items-center justify-center gap-2"
@@ -663,6 +809,7 @@ const StakeholderCRM = () => {
                   onClose={() => setSelectedStakeholder(null)}
                   onEdit={() => {
                     setEditingStakeholder(selectedStakeholder);
+                    setPrefillData(null);
                     setShowForm(true);
                   }}
                   onDelete={() => handleDelete(selectedStakeholder.id)}
@@ -676,17 +823,99 @@ const StakeholderCRM = () => {
         {showForm && (
           <StakeholderForm
             stakeholder={editingStakeholder}
+            prefillData={prefillData}
             onClose={() => {
               setShowForm(false);
               setEditingStakeholder(null);
+              setPrefillData(null);
             }}
             onSave={() => {
               setShowForm(false);
               setEditingStakeholder(null);
+              setPrefillData(null);
               fetchStakeholders();
               fetchStats();
             }}
           />
+        )}
+
+        {showCardModal && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl max-w-4xl w-full shadow-2xl overflow-hidden">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                <div>
+                  <p className="text-xl font-bold text-gray-900">My Business Card</p>
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">Share via QR to add to CRM</h3>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleDownloadQr}
+                    className="px-4 py-2 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    Share QR
+                  </button>
+                  <button
+                    onClick={() => setShowCardModal(false)}
+                    className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <X className="w-5 h-5 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                <div className="bg-gray-50 rounded-2xl p-4 flex items-center justify-center border border-gray-200">
+                  <img
+                    src={qrImageUrl}
+                    alt="Business card QR"
+                    className="w-full max-w-[240px] h-auto"
+                  />
+                </div>
+                <div className="md:col-span-2 space-y-3">
+                  <div className="flex items-center gap-3">
+                    <QrCode className="w-5 h-5 text-gray-500" />
+                    <div>
+                      <h4 className="text-xl font-semibold text-gray-900">{myCard.name}</h4>
+                      <p className="text-sm text-gray-600">{myCard.role} · {myCard.company}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="px-4 py-3 bg-gray-50 rounded-2xl border border-gray-200 flex items-start gap-3">
+                      <Mail className="w-4 h-4 text-gray-500 mt-1" />
+                      <div>
+                        <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Email</p>
+                        <p className="text-sm text-gray-800 break-all">{myCard.email}</p>
+                      </div>
+                    </div>
+                    <div className="px-4 py-3 bg-gray-50 rounded-2xl border border-gray-200 flex items-start gap-3">
+                      <Phone className="w-4 h-4 text-gray-500 mt-1" />
+                      <div>
+                        <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Phone</p>
+                        <p className="text-sm text-gray-800 break-words">{myCard.phone}</p>
+                      </div>
+                    </div>
+                    <div className="px-4 py-3 bg-gray-50 rounded-2xl border border-gray-200 flex items-start gap-3">
+                      <Linkedin className="w-4 h-4 text-gray-500 mt-1" />
+                      <div>
+                        <p className="text-xs font-semibold text-gray-500 uppercase mb-1">LinkedIn</p>
+                        <p className="text-sm text-gray-800 break-all">{myCard.linkedin}</p>
+                      </div>
+                    </div>
+                    <div className="px-4 py-3 bg-gray-50 rounded-2xl border border-gray-200 flex items-start gap-3">
+                      <Building className="w-4 h-4 text-gray-500 mt-1" />
+                      <div>
+                        <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Address</p>
+                        <p className="text-sm text-gray-800 break-words">
+                          {localStorage.getItem('founderAddress') || 'Update your address to show here'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
@@ -884,7 +1113,7 @@ const StakeholderDetail = ({ stakeholder, onClose, onEdit, onDelete, onToggleFav
   );
 };
 
-const StakeholderForm = ({ stakeholder, onClose, onSave }) => {
+const StakeholderForm = ({ stakeholder, prefillData, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -922,8 +1151,13 @@ const StakeholderForm = ({ stakeholder, onClose, onSave }) => {
         relationship_strength: stakeholder.relationship_strength || 5,
         is_favorite: stakeholder.is_favorite || false
       });
+    } else if (prefillData) {
+      setFormData(prev => ({
+        ...prev,
+        ...prefillData
+      }));
     }
-  }, [stakeholder]);
+  }, [stakeholder, prefillData]);
 
   const handleAddTag = () => {
     if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {

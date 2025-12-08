@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy, memo } from 'react';
+import React, { useEffect, Suspense, lazy, memo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { initializeAuth } from './store/slices/authSlice.js';
@@ -25,7 +25,6 @@ const AboutUs = lazy(() => import('./components/AboutUs.jsx'));
 const Onboarding = lazy(() => import('./components/onboarding/Onboarding.jsx'));
 const StartupPitchCreator = lazy(() => import('./components/StartupPitchCreator.jsx'));
 const PitchBackSystem = lazy(() => import('./components/PitchBackSystem.jsx'));
-const CofounderMatching = lazy(() => import('./components/CofounderMatching.jsx'));
 const ProjectBoard = lazy(() => import('./components/ProjectBoard.jsx'));
 const TeamWorkspace = lazy(() => import('./components/TeamWorkspace.jsx'));
 const MVPTracker = lazy(() => import('./components/MVPTracker.jsx'));
@@ -33,7 +32,7 @@ const EquityFramework = lazy(() => import('./components/EquityFramework.jsx'));
 const CollaborationTools = lazy(() => import('./components/CollaborationTools.jsx'));
 const LaunchPreparation = lazy(() => import('./components/LaunchPreparation.jsx'));
 const EntrepreneurProfile = lazy(() => import('./components/EntrepreneurProfile.jsx'));
-const Sprinto = lazy(() => import('./components/Sprinto.jsx'));
+const Sprinto = lazy(() => import('./components/SprintingModule.jsx'));
 const MyPitches = lazy(() => import('./components/MyPitches.jsx'));
 
 // Sprint Tools
@@ -89,117 +88,16 @@ const MainLayout = ({ children }) => (
 
 // Home Router - Routes to correct dashboard based on user type
 const HomeRouter = () => {
-  const [userIntent, setUserIntent] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const intent = localStorage.getItem('selectedIntent');
-    setUserIntent(intent);
-    setIsLoading(false);
-  }, []);
-
-  if (isLoading) {
-    return <LoadingFallback />;
-  }
-
-  if (userIntent === 'idea-sprint') {
-    return <SprintDashboard />;
-  }
-
-  if (userIntent === 'offer-skills') {
-    return <SkillsDashboard />;
-  }
-
   return <Home />;
 };
 
 const AppContent = () => {
   const dispatch = useDispatch();
   const { isAuthenticated, isLoading } = useSelector((state) => state.auth);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [matches, setMatches] = useState([]);
 
   useEffect(() => {
     dispatch(initializeAuth());
   }, [dispatch]);
-
-  // Load user data when authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      // Load current user data
-      setCurrentUser({
-        id: '1',
-        name: 'Alex Chen',
-        role: 'Technical Co-founder',
-        bio: 'Full-stack developer with 8 years experience building scalable web applications. Passionate about AI and fintech.',
-        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-        coverImage: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&h=400&fit=crop',
-        skills: ['React', 'Node.js', 'Python', 'AWS', 'Machine Learning'],
-        experience: '8 years',
-        previousStartups: ['TechCorp (Acquired)', 'DataFlow (Series A)'],
-        location: 'San Francisco, CA',
-        lookingFor: ['Business Co-founder', 'Marketing Expert', 'Designer'],
-        industries: ['Fintech', 'AI/ML', 'SaaS']
-      });
-
-      // Load potential cofounders
-      setMatches([
-        {
-          id: '1',
-          name: 'Sarah Martinez',
-          role: 'Business Co-founder',
-          bio: 'Former McKinsey consultant with 6 years in strategy and operations. Led 3 successful product launches.',
-          avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face',
-          coverImage: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=400&fit=crop',
-          skills: ['Business Strategy', 'Operations', 'Fundraising', 'Product Management'],
-          experience: '6 years',
-          previousStartups: ['GrowthCo (Series B)', 'ScaleUp (Acquired)'],
-          location: 'San Francisco, CA',
-          lookingFor: ['Technical Co-founder', 'CTO'],
-          industries: ['Fintech', 'SaaS', 'E-commerce'],
-          compatibility: 92
-        },
-        {
-          id: '2',
-          name: 'David Kim',
-          role: 'Product Designer',
-          bio: 'Award-winning designer with expertise in UX/UI and brand design. Worked at Apple and Google.',
-          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
-          coverImage: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=400&fit=crop',
-          skills: ['UI/UX Design', 'Brand Design', 'Figma', 'User Research', 'Prototyping'],
-          experience: '7 years',
-          previousStartups: ['DesignStudio (Acquired)', 'CreativeLab (Series A)'],
-          location: 'San Francisco, CA',
-          lookingFor: ['Technical Co-founder', 'Business Co-founder'],
-          industries: ['AI/ML', 'SaaS', 'Mobile Apps'],
-          compatibility: 88
-        }
-      ]);
-
-    }
-  }, [isAuthenticated]);
-
-  // Handle cofounder matching actions
-  const handleConnect = (matchId) => {
-    console.log('Connecting with cofounder:', matchId);
-  };
-
-  const handlePass = (matchId) => {
-    console.log('Passed on cofounder:', matchId);
-    setMatches(prev => prev.filter(match => match.id !== matchId));
-  };
-
-  const handlePitch = (matchId, message) => {
-    console.log('Sending pitch to:', matchId, 'Message:', message);
-  };
-
-  const handleViewProfile = (matchId) => {
-    console.log('Viewing cofounder profile:', matchId);
-  };
-
-  const handleRefresh = () => {
-    console.log('Refreshing cofounder matches...');
-  };
 
   // Show loading screen
   if (isLoading) {
@@ -256,26 +154,6 @@ const AppContent = () => {
                 <ProtectedRoute>
                   <MainLayout>
                     <StartupPitchCreator />
-                  </MainLayout>
-                </ProtectedRoute>
-              } />
-              
-              <Route path="/cofounders" element={
-                <ProtectedRoute>
-                  <MainLayout>
-                    {currentUser ? (
-                      <CofounderMatching
-                        currentUser={currentUser}
-                        matches={matches}
-                        onConnect={handleConnect}
-                        onPass={handlePass}
-                        onPitch={handlePitch}
-                        onViewProfile={handleViewProfile}
-                        onRefresh={handleRefresh}
-                      />
-                    ) : (
-                      <LoadingFallback />
-                    )}
                   </MainLayout>
                 </ProtectedRoute>
               } />

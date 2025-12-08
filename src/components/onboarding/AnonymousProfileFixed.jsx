@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  ArrowRight, 
-  ArrowLeft, 
-  Mic, 
-  Play, 
-  Pause, 
+import {
+  ArrowRight,
+  ArrowLeft,
+  Mic,
+  Play,
+  Pause,
   RotateCcw,
   Type,
   CheckCircle,
@@ -18,7 +18,8 @@ import {
   Users,
   TrendingUp,
   DollarSign,
-  Clock
+  Clock,
+  X
 } from 'lucide-react';
 
 const AnonymousProfileFixed = () => {
@@ -65,6 +66,28 @@ const AnonymousProfileFixed = () => {
         ? prev.industry.filter(i => i !== industry)
         : [...prev.industry, industry]
     }));
+  };
+
+  const handleIndustrySelect = (e) => {
+    const value = e.target.value;
+    if (value && !cofounderPreferences.industry.includes(value)) {
+      setCofounderPreferences(prev => ({
+        ...prev,
+        industry: [...prev.industry, value]
+      }));
+    }
+    e.target.value = '';
+  };
+
+  const handleSkillSelect = (e) => {
+    const value = e.target.value;
+    if (value && !cofounderPreferences.skills.includes(value)) {
+      setCofounderPreferences(prev => ({
+        ...prev,
+        skills: [...prev.skills, value]
+      }));
+    }
+    e.target.value = '';
   };
 
   const skillsOptions = [
@@ -132,62 +155,91 @@ const AnonymousProfileFixed = () => {
                   <option value="">Select experience level</option>
                   <option value="entry">Entry Level (0-2 years)</option>
                   <option value="mid">Mid Level (3-5 years)</option>
-                  <option value="senior">Senior Level (6-10 years)</option>
-                  <option value="executive">Executive Level (10+ years)</option>
+              <option value="senior">Senior Level (6-10 years)</option>
+              <option value="executive">Executive Level (10+ years)</option>
+            </select>
+          </div>
+
+        </div>
+
+            {/* Industry & Skills - Two Columns */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
+                <label className="block text-gray-900 font-semibold mb-4 flex items-center gap-3">
+                  <div className="w-8 h-8 bg-gray-200 rounded-xl flex items-center justify-center">
+                    <Briefcase className="w-5 h-5 text-gray-700" />
+                  </div>
+                  Industry Focus
+                </label>
+                <p className="text-gray-600 text-sm mb-4">Choose the industries your cofounder should have experience in</p>
+                <select
+                  onChange={handleIndustrySelect}
+                  className="w-full mb-4 p-4 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                >
+                  <option value="">Select industries</option>
+                  {industryOptions
+                    .filter(industry => !cofounderPreferences.industry.includes(industry))
+                    .map(industry => (
+                      <option key={industry} value={industry}>{industry}</option>
+                  ))}
                 </select>
+                {cofounderPreferences.industry.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {cofounderPreferences.industry.map(industry => (
+                      <span
+                        key={industry}
+                        className="inline-flex items-center gap-2 px-3 py-2 bg-gray-900 text-white rounded-xl text-sm font-medium"
+                      >
+                        {industry}
+                        <button
+                          onClick={() => handleIndustryToggle(industry)}
+                          className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
 
-            </div>
-
-            {/* Industry Focus - Full Width */}
-            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
-              <label className="block text-gray-900 font-semibold mb-4 flex items-center gap-3">
-                <div className="w-8 h-8 bg-gray-200 rounded-xl flex items-center justify-center">
-                  <Briefcase className="w-5 h-5 text-gray-700" />
-                </div>
-                Industry Focus
-              </label>
-              <p className="text-gray-600 text-sm mb-4">Choose the industries your cofounder should have experience in</p>
-              <div className="flex flex-wrap gap-3">
-                {industryOptions.map(industry => (
-                  <button
-                    key={industry}
-                    onClick={() => handleIndustryToggle(industry)}
-                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                      cofounderPreferences.industry.includes(industry)
-                        ? 'bg-gray-900 text-white'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:border-gray-400 hover:bg-gray-50'
-                    }`}
-                  >
-                    {industry}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Required Skills - Full Width */}
-            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
-              <label className="block text-gray-900 font-semibold mb-4 flex items-center gap-3">
-                <div className="w-8 h-8 bg-gray-200 rounded-xl flex items-center justify-center">
-                  <Star className="w-5 h-5 text-gray-700" />
-                </div>
-                Required Skills
-              </label>
-              <p className="text-gray-600 text-sm mb-4">Select the skills your ideal cofounder should have</p>
-              <div className="flex flex-wrap gap-3">
-                {skillsOptions.map(skill => (
-                  <button
-                    key={skill}
-                    onClick={() => handleSkillToggle(skill)}
-                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                      cofounderPreferences.skills.includes(skill)
-                        ? 'bg-gray-900 text-white'
-                        : 'bg-white text-gray-700 border border-gray-300 hover:border-gray-400 hover:bg-gray-50'
-                    }`}
-                  >
-                    {skill}
-                  </button>
-                ))}
+              <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
+                <label className="block text-gray-900 font-semibold mb-4 flex items-center gap-3">
+                  <div className="w-8 h-8 bg-gray-200 rounded-xl flex items-center justify-center">
+                    <Star className="w-5 h-5 text-gray-700" />
+                  </div>
+                  Required Skills
+                </label>
+                <p className="text-gray-600 text-sm mb-4">Select the skills your ideal cofounder should have</p>
+                <select
+                  onChange={handleSkillSelect}
+                  className="w-full mb-4 p-4 bg-white border border-gray-300 rounded-xl text-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all"
+                >
+                  <option value="">Select skills</option>
+                  {skillsOptions
+                    .filter(skill => !cofounderPreferences.skills.includes(skill))
+                    .map(skill => (
+                      <option key={skill} value={skill}>{skill}</option>
+                  ))}
+                </select>
+                {cofounderPreferences.skills.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {cofounderPreferences.skills.map(skill => (
+                      <span
+                        key={skill}
+                        className="inline-flex items-center gap-2 px-3 py-2 bg-gray-900 text-white rounded-xl text-sm font-medium"
+                      >
+                        {skill}
+                        <button
+                          onClick={() => handleSkillToggle(skill)}
+                          className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 

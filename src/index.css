@@ -941,6 +941,15 @@ p {
 }
 }
 
+/* Horizontal scroll helper for tab list */
+.tab-scroll {
+  scrollbar-width: none;
+}
+
+.tab-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 /* Print Styles */
 @media print {
   .no-print {

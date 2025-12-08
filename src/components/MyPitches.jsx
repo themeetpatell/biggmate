@@ -154,11 +154,17 @@ const MyPitches = () => {
         description: "Revolutionary platform that helps companies track and reduce their carbon footprint using advanced AI algorithms. Our solution provides real-time monitoring, predictive analytics, and actionable insights to help businesses achieve their sustainability goals.",
         industry: "Sustainability",
         stage: "MVP Stage",
+        founderRole: "Business Co-founder",
+        founderLocation: "San Francisco, CA",
+        founderSkills: ["Operations", "Strategy", "Fundraising"],
         timeline: "6-12 months to market",
         market: "Carbon management software market ($12B)",
         funding: "Pre-seed, seeking $500K",
+        equityOffer: "10-15% for technical cofounder",
         lookingFor: ["Technical Co-founder", "UI/UX Designer"],
-        tags: ["AI", "Sustainability", "B2B"]
+        tags: ["AI", "Sustainability", "B2B"],
+        cofounderSkills: ["AI/ML", "Scaling", "Product", "Design Systems"],
+        cofounderLocation: "SF Bay Area or Remote"
       },
       // My pitchback proposal
       myPitchback: {
@@ -178,11 +184,17 @@ const MyPitches = () => {
         description: "Revolutionary telemedicine platform that connects patients with specialized healthcare providers through AI-powered matching and video consultations. Our solution addresses the growing need for accessible healthcare and specialist consultations.",
         industry: "Healthcare",
         stage: "Early Stage",
+        founderRole: "Medical Co-founder",
+        founderLocation: "Boston, MA",
+        founderSkills: ["Clinical", "Product", "Growth"],
         timeline: "12-18 months to market",
         market: "Telemedicine market ($185B)",
         funding: "Seed stage, seeking $1M",
+        equityOffer: "8-12% for technical cofounder",
         lookingFor: ["Technical Co-founder", "Healthcare Expert"],
-        tags: ["Healthcare", "AI", "Telemedicine"]
+        tags: ["Healthcare", "AI", "Telemedicine"],
+        cofounderSkills: ["Platform Architecture", "Security", "Compliance"],
+        cofounderLocation: "East Coast preferred, remote possible"
       },
       myPitchback: {
         message: "Your HealthConnect idea is exactly what the healthcare industry needs. I have experience in healthcare tech and would love to discuss this further.",
@@ -201,11 +213,17 @@ const MyPitches = () => {
         description: "Revolutionary EdTech platform that uses AI to create personalized learning experiences for students. Our solution adapts to each student's learning style and pace, providing customized content and assessments.",
         industry: "Education",
         stage: "Growth Stage",
+        founderRole: "Product Lead",
+        founderLocation: "Remote",
+        founderSkills: ["Curriculum Design", "Growth", "Community"],
         timeline: "9-15 months to market",
         market: "EdTech market ($254B)",
         funding: "Series A, seeking $5M",
+        equityOffer: "5-10% for founding engineer",
         lookingFor: ["Technical Co-founder", "Education Expert"],
-        tags: ["AI", "Education", "Personalization"]
+        tags: ["AI", "Education", "Personalization"],
+        cofounderSkills: ["Full-stack", "Data Science", "Learning Science"],
+        cofounderLocation: "Remote, overlap 4+ hours with PST"
       },
       myPitchback: {
         message: "I'm passionate about EdTech and your EduFlow concept is innovative. I have experience in educational technology and would be excited to collaborate.",
@@ -225,18 +243,24 @@ const MyPitches = () => {
         pitchId: 101,
         status: "pending",
         sentAt: "2 hours ago",
-        compatibility: 92,
-        anonymousPitch: {
-          title: "EcoTrack AI",
-          description: "Revolutionary platform that helps companies track and reduce their carbon footprint using advanced AI algorithms. Our solution provides real-time monitoring, predictive analytics, and actionable insights to help businesses achieve their sustainability goals.",
-          industry: "Sustainability",
-          stage: "MVP Stage",
-          timeline: "6-12 months to market",
-          market: "Carbon management software market ($12B)",
-          funding: "Pre-seed, seeking $500K",
-          lookingFor: ["Technical Co-founder", "UI/UX Designer"],
-          tags: ["AI", "Sustainability", "B2B"]
-        },
+      compatibility: 92,
+      anonymousPitch: {
+        title: "EcoTrack AI",
+        description: "Revolutionary platform that helps companies track and reduce their carbon footprint using advanced AI algorithms. Our solution provides real-time monitoring, predictive analytics, and actionable insights to help businesses achieve their sustainability goals.",
+        industry: "Sustainability",
+        stage: "MVP Stage",
+        founderRole: "Business Co-founder",
+        founderLocation: "San Francisco, CA",
+        founderSkills: ["Operations", "Strategy", "Fundraising"],
+        timeline: "6-12 months to market",
+        market: "Carbon management software market ($12B)",
+        funding: "Pre-seed, seeking $500K",
+        equityOffer: "10-15% for technical cofounder",
+        lookingFor: ["Technical Co-founder", "UI/UX Designer"],
+        tags: ["AI", "Sustainability", "B2B"],
+        cofounderSkills: ["AI/ML", "Scaling", "Product", "Design Systems"],
+        cofounderLocation: "SF Bay Area or Remote"
+      },
         myPitchback: {
           message: "Hi! I'm interested in your EcoTrack AI idea. I have 5+ years in AI/ML and think we'd make great cofounders. I can help with the technical implementation and scaling.",
           sentAt: "2 hours ago"
@@ -249,17 +273,23 @@ const MyPitches = () => {
         status: "accepted",
         sentAt: "1 day ago",
         compatibility: 88,
-        anonymousPitch: {
-          title: "HealthConnect",
-          description: "Revolutionary telemedicine platform that connects patients with specialized healthcare providers through AI-powered matching and video consultations. Our solution addresses the growing need for accessible healthcare and specialist consultations.",
-          industry: "Healthcare",
-          stage: "Early Stage",
-          timeline: "12-18 months to market",
-          market: "Telemedicine market ($185B)",
-          funding: "Seed stage, seeking $1M",
-          lookingFor: ["Technical Co-founder", "Healthcare Expert"],
-          tags: ["Healthcare", "AI", "Telemedicine"]
-        },
+      anonymousPitch: {
+        title: "HealthConnect",
+        description: "Revolutionary telemedicine platform that connects patients with specialized healthcare providers through AI-powered matching and video consultations. Our solution addresses the growing need for accessible healthcare and specialist consultations.",
+        industry: "Healthcare",
+        stage: "Early Stage",
+        founderRole: "Medical Co-founder",
+        founderLocation: "Boston, MA",
+        founderSkills: ["Clinical", "Product", "Growth"],
+        timeline: "12-18 months to market",
+        market: "Telemedicine market ($185B)",
+        funding: "Seed stage, seeking $1M",
+        equityOffer: "8-12% for technical cofounder",
+        lookingFor: ["Technical Co-founder", "Healthcare Expert"],
+        tags: ["Healthcare", "AI", "Telemedicine"],
+        cofounderSkills: ["Platform Architecture", "Security", "Compliance"],
+        cofounderLocation: "East Coast preferred, remote possible"
+      },
         myPitchback: {
           message: "Your HealthConnect idea is exactly what the healthcare industry needs. I have experience in healthcare tech and would love to discuss this further.",
           sentAt: "1 day ago"
@@ -272,17 +302,23 @@ const MyPitches = () => {
         status: "rejected",
         sentAt: "2 days ago",
         compatibility: 85,
-        anonymousPitch: {
-          title: "EduFlow",
-          description: "Revolutionary EdTech platform that uses AI to create personalized learning experiences for students. Our solution adapts to each student's learning style and pace, providing customized content and assessments.",
-          industry: "Education",
-          stage: "Growth Stage",
-          timeline: "9-15 months to market",
-          market: "EdTech market ($254B)",
-          funding: "Series A, seeking $5M",
-          lookingFor: ["Technical Co-founder", "Education Expert"],
-          tags: ["AI", "Education", "Personalization"]
-        },
+      anonymousPitch: {
+        title: "EduFlow",
+        description: "Revolutionary EdTech platform that uses AI to create personalized learning experiences for students. Our solution adapts to each student's learning style and pace, providing customized content and assessments.",
+        industry: "Education",
+        stage: "Growth Stage",
+        founderRole: "Product Lead",
+        founderLocation: "Remote",
+        founderSkills: ["Curriculum Design", "Growth", "Community"],
+        timeline: "9-15 months to market",
+        market: "EdTech market ($254B)",
+        funding: "Series A, seeking $5M",
+        equityOffer: "5-10% for founding engineer",
+        lookingFor: ["Technical Co-founder", "Education Expert"],
+        tags: ["AI", "Education", "Personalization"],
+        cofounderSkills: ["Full-stack", "Data Science", "Learning Science"],
+        cofounderLocation: "Remote, overlap 4+ hours with PST"
+      },
         myPitchback: {
           message: "I'm passionate about EdTech and your EduFlow concept is innovative. I have experience in educational technology and would be excited to collaborate.",
           sentAt: "2 days ago"
@@ -306,9 +342,12 @@ const MyPitches = () => {
         description: "Revolutionary platform that helps companies track and reduce their carbon footprint using advanced AI algorithms. Our solution provides real-time monitoring, predictive analytics, and actionable insights to help businesses achieve their sustainability goals.",
         industry: "Sustainability",
         stage: "MVP Stage",
+        founderRole: "Business Co-founder",
+        founderSkills: ["Operations", "Strategy", "Fundraising"],
         timeline: "6-12 months to market",
         market: "Carbon management software market ($12B)",
         funding: "Pre-seed, seeking $500K",
+        equityOffer: "10-15% for technical cofounder",
         lookingFor: ["Technical Co-founder", "UI/UX Designer"]
       },
       message: "I'm really impressed with your EcoTrack AI idea! I have 7+ years in sustainability tech and think our platforms could complement each other perfectly. I'd love to discuss how we could collaborate or potentially merge our visions.",
@@ -334,9 +373,12 @@ const MyPitches = () => {
         description: "Revolutionary platform that helps companies track and reduce their carbon footprint using advanced AI algorithms. Our solution provides real-time monitoring, predictive analytics, and actionable insights to help businesses achieve their sustainability goals.",
         industry: "Sustainability",
         stage: "MVP Stage",
+        founderRole: "Business Co-founder",
+        founderSkills: ["Operations", "Strategy", "Fundraising"],
         timeline: "6-12 months to market",
         market: "Carbon management software market ($12B)",
         funding: "Pre-seed, seeking $500K",
+        equityOffer: "10-15% for technical cofounder",
         lookingFor: ["Technical Co-founder", "UI/UX Designer"]
       },
       message: "Your EcoTrack AI platform sounds amazing! I'm a full-stack developer with 5+ years of experience building AI/ML products. I'd love to help you build the technical foundation and scale this platform.",
@@ -362,9 +404,12 @@ const MyPitches = () => {
         description: "Revolutionary platform that helps companies track and reduce their carbon footprint using advanced AI algorithms. Our solution provides real-time monitoring, predictive analytics, and actionable insights to help businesses achieve their sustainability goals.",
         industry: "Sustainability",
         stage: "MVP Stage",
+        founderRole: "Business Co-founder",
+        founderSkills: ["Operations", "Strategy", "Fundraising"],
         timeline: "6-12 months to market",
         market: "Carbon management software market ($12B)",
         funding: "Pre-seed, seeking $500K",
+        equityOffer: "10-15% for technical cofounder",
         lookingFor: ["Technical Co-founder", "UI/UX Designer"]
       },
       message: "EcoTrack AI is exactly the kind of solution the market needs right now! I'm a UI/UX designer with expertise in B2B SaaS platforms and sustainability-focused products. I can help create an intuitive, engaging user experience that drives adoption.",
@@ -390,6 +435,8 @@ const MyPitches = () => {
         description: "Revolutionary telemedicine platform that connects patients with specialized healthcare providers through AI-powered matching and video consultations.",
         industry: "Healthcare",
         stage: "Early Stage",
+        founderRole: "Medical Co-founder",
+        founderSkills: ["Clinical", "Product", "Growth"],
         timeline: "12-18 months to market",
         market: "Telemedicine market ($185B)",
         funding: "Seed stage, seeking $1M",
@@ -428,6 +475,8 @@ const MyPitches = () => {
         description: "Revolutionary EdTech platform that uses AI to create personalized learning experiences for students. Our solution adapts to each student's learning style and pace.",
         industry: "Education",
         stage: "Growth Stage",
+        founderRole: "Product Lead",
+        founderSkills: ["Curriculum Design", "Growth", "Community"],
         timeline: "9-15 months to market",
         market: "EdTech market ($254B)",
         funding: "Series A, seeking $5M",
@@ -489,6 +538,7 @@ const MyPitches = () => {
         market: "Carbon management software market ($12B)",
         funding: "Pre-seed, seeking $500K",
         tags: ["AI", "Sustainability", "B2B"],
+        equityOffer: "10-15% for technical cofounder",
         lookingFor: ["Technical Co-founder", "UI/UX Designer"]
       },
       theirPitchback: {
@@ -526,6 +576,7 @@ const MyPitches = () => {
         market: "Telemedicine market ($185B)",
         funding: "Seed stage, seeking $1M",
         tags: ["Healthcare", "AI", "Telemedicine"],
+        equityOffer: "8-12% for technical cofounder",
         lookingFor: ["Technical Co-founder", "Healthcare Expert"]
       },
       theirPitchback: {
@@ -534,6 +585,20 @@ const MyPitches = () => {
       }
     }
   ];
+
+  const [matchRooms, setMatchRooms] = useState(() => {
+    const defaults = {};
+    acceptedMatches.forEach((match) => {
+      defaults[match.id] = {
+        status: 'not-created',
+        doubleOptIn: false,
+        scheduling: 'none',
+        selectedSlots: [],
+        promptsSent: []
+      };
+    });
+    return defaults;
+  });
 
   const tabs = useMemo(() => [
     { id: 'received', label: 'Received', icon: MessageCircle, count: receivedPitches.length },
@@ -558,6 +623,67 @@ const MyPitches = () => {
 
   const handlePitchback = (pitch) => {
     navigate('/home', { state: { pitchbackPitch: pitch } });
+  };
+
+  const handleCreateMatchRoom = (matchId) => {
+    setMatchRooms((prev) => ({
+      ...prev,
+      [matchId]: {
+        ...prev[matchId],
+        status: 'live',
+        doubleOptIn: true,
+        createdAt: new Date().toISOString()
+      }
+    }));
+  };
+
+  const handleSendDoubleOptIn = (matchId) => {
+    setMatchRooms((prev) => ({
+      ...prev,
+      [matchId]: {
+        ...prev[matchId],
+        status: 'awaiting-opt-in',
+        doubleOptIn: false
+      }
+    }));
+  };
+
+  const handleConfirmDoubleOptIn = (matchId) => {
+    setMatchRooms((prev) => ({
+      ...prev,
+      [matchId]: {
+        ...prev[matchId],
+        status: 'live',
+        doubleOptIn: true
+      }
+    }));
+  };
+
+  const handleSetSchedulingType = (matchId, type) => {
+    setMatchRooms((prev) => ({
+      ...prev,
+      [matchId]: { ...prev[matchId], scheduling: type }
+    }));
+  };
+
+  const handleToggleSlot = (matchId, slot) => {
+    setMatchRooms((prev) => {
+      const existing = prev[matchId]?.selectedSlots || [];
+      const updatedSlots = existing.includes(slot)
+        ? existing.filter((s) => s !== slot)
+        : [...existing, slot];
+      return { ...prev, [matchId]: { ...prev[matchId], selectedSlots: updatedSlots } };
+    });
+  };
+
+  const handleTogglePrompt = (matchId, prompt) => {
+    setMatchRooms((prev) => {
+      const existing = prev[matchId]?.promptsSent || [];
+      const updatedPrompts = existing.includes(prompt)
+        ? existing.filter((p) => p !== prompt)
+        : [...existing, prompt];
+      return { ...prev, [matchId]: { ...prev[matchId], promptsSent: updatedPrompts } };
+    });
   };
 
   const handleSendResponse = () => {
@@ -586,100 +712,120 @@ const MyPitches = () => {
       ) : (
         sentPitches.map((pitch) => (
           <div key={pitch.id} className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
-            {/* Header Section */}
-            <div className="flex items-start gap-4 mb-6">
-              <div className="w-16 h-16 bg-black rounded-xl flex items-center justify-center">
-                <Rocket className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-2xl font-bold text-gray-900">Pitchback Sent</h3>
-                  <span className={`px-3 py-1 text-sm font-semibold rounded-full ${
-                    pitch.status === 'accepted' ? 'bg-green-100 text-green-700' :
-                    pitch.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                    'bg-gray-100 text-gray-700'
-                  }`}>
-                    {pitch.status}
-                  </span>
-                </div>
-                <div className="flex items-center gap-4 text-sm text-gray-500">
-                  <span>{pitch.sentAt || 'Recently'}</span>
-                  <span>•</span>
-                  <span className="text-gray-600 font-semibold bg-gray-50 px-2 py-1 rounded-full">
-                    {pitch.compatibility}% match
-                  </span>
-                </div>
-              </div>
-            </div>
-
             {/* Anonymous Pitch Details */}
-            <div className="mb-6">
-              <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <div className="mb-6 space-y-4">
+              <div className="flex items-center gap-2">
                 <Target className="w-5 h-5" />
-                Anonymous Pitch: {pitch.anonymousPitch?.title}
-              </h4>
-              <div className="bg-gray-50 p-6 rounded-2xl border-2 border-gray-200">
-                <div className="space-y-4">
-                  <div>
-                    <h6 className="text-sm font-medium text-gray-600 mb-1">Description</h6>
-                    <p className="text-gray-700 text-sm">{pitch.anonymousPitch?.description}</p>
+                <h4 className="text-lg font-bold text-gray-900">
+                  {`About ${pitch.anonymousPitch?.title || 'Startup'}`}
+                </h4>
+              </div>
+              <div className="bg-gray-50 p-6 rounded-2xl border-2 border-gray-200 space-y-3">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xl font-semibold text-gray-900">About Startup</span>
+                  {pitch.anonymousPitch?.stage && (
+                    <span className="px-2.5 py-1 bg-gray-900 text-white rounded-full text-xs font-semibold">
+                      {pitch.anonymousPitch.stage}
+                    </span>
+                  )}
+                  {pitch.anonymousPitch?.industry && (
+                    <span className="px-2.5 py-1 bg-gray-200 text-gray-800 rounded-full text-xs font-semibold">
+                      {pitch.anonymousPitch.industry}
+                    </span>
+                  )}
+                </div>
+                <p className="text-gray-700 text-sm leading-relaxed">{pitch.anonymousPitch?.description}</p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-white rounded-2xl p-6 border border-gray-200 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <User className="w-5 h-5 text-gray-800" />
+                    <h4 className="text-xl font-semibold text-gray-900">Founder</h4>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {pitch.anonymousPitch?.industry && (
-                      <div>
-                        <h6 className="text-sm font-medium text-gray-600 mb-1">Industry</h6>
-                        <p className="text-gray-900 font-semibold">{pitch.anonymousPitch.industry}</p>
-                      </div>
-                    )}
-                    {pitch.anonymousPitch?.stage && (
-                      <div>
-                        <h6 className="text-sm font-medium text-gray-600 mb-1">Stage</h6>
-                        <p className="text-gray-900 font-semibold">{pitch.anonymousPitch.stage}</p>
-                      </div>
-                    )}
-                    {pitch.anonymousPitch?.timeline && (
-                      <div>
-                        <h6 className="text-sm font-medium text-gray-600 mb-1">Timeline</h6>
-                        <p className="text-gray-900 font-semibold text-sm">{pitch.anonymousPitch.timeline}</p>
-                      </div>
-                    )}
-                    {pitch.anonymousPitch?.market && (
-                      <div>
-                        <h6 className="text-sm font-medium text-gray-600 mb-1">Market Size</h6>
-                        <p className="text-gray-900 font-semibold text-sm">{pitch.anonymousPitch.market}</p>
-                      </div>
-                    )}
-                    {pitch.anonymousPitch?.funding && (
-                      <div>
-                        <h6 className="text-sm font-medium text-gray-600 mb-1">Funding Stage</h6>
-                        <p className="text-gray-900 font-semibold text-sm">{pitch.anonymousPitch.funding}</p>
-                      </div>
-                    )}
-                  </div>
-                  {pitch.anonymousPitch?.lookingFor && pitch.anonymousPitch.lookingFor.length > 0 && (
+                  <div className="space-y-4 text-sm text-gray-800">
                     <div>
-                      <h6 className="text-sm font-medium text-gray-600 mb-2">Looking For</h6>
-                      <div className="flex flex-wrap gap-2">
-                        {pitch.anonymousPitch.lookingFor.map((role, index) => (
-                          <span key={index} className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">
+                      <p className="text-xs uppercase tracking-wide text-gray-500">Role</p>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {pitch.anonymousPitch?.founderRole ? (
+                          <span className="px-4 py-1.5 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
+                            {pitch.anonymousPitch.founderRole}
+                          </span>
+                        ) : (
+                          <span className="text-gray-500">Not provided</span>
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase tracking-wide text-gray-500">Founder Skills</p>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {pitch.anonymousPitch?.founderSkills?.length ? pitch.anonymousPitch.founderSkills.map((skill, idx) => (
+                          <span key={idx} className="px-4 py-1.5 bg-gray-100 text-gray-800 rounded-full text-sm">
+                            {skill}
+                          </span>
+                        )) : <span className="text-gray-500">Not provided</span>}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-xs uppercase tracking-wide text-gray-500">Location</p>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {pitch.anonymousPitch?.founderLocation ? (
+                          <span className="px-4 py-1.5 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
+                            {pitch.anonymousPitch.founderLocation}
+                          </span>
+                        ) : (
+                          <span className="text-gray-500">Not provided</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 border border-gray-200 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Users className="w-5 h-5 text-gray-800" />
+                    <h4 className="text-xl font-semibold text-gray-900">Looking For</h4>
+                  </div>
+                  <div className="space-y-4 text-sm text-gray-800">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">Cofounder Role</p>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {pitch.anonymousPitch?.lookingFor?.length ? pitch.anonymousPitch.lookingFor.map((role, idx) => (
+                          <span key={idx} className="px-4 py-1.5 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
                             {role}
                           </span>
-                        ))}
+                        )) : <span className="text-gray-500">Not specified</span>}
                       </div>
                     </div>
-                  )}
-                  {pitch.anonymousPitch?.tags && pitch.anonymousPitch.tags.length > 0 && (
                     <div>
-                      <h6 className="text-sm font-medium text-gray-600 mb-2">Tags</h6>
-                      <div className="flex flex-wrap gap-2">
-                        {pitch.anonymousPitch.tags.map((tag, index) => (
-                          <span key={index} className="px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full">
-                            {tag}
+                      <p className="text-sm font-semibold text-gray-900">Cofounder Skills</p>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {pitch.anonymousPitch?.cofounderSkills?.length ? pitch.anonymousPitch.cofounderSkills.map((skill, idx) => (
+                          <span key={idx} className="px-4 py-1.5 bg-gray-100 text-gray-800 rounded-full text-sm">
+                            {skill}
                           </span>
-                        ))}
+                        )) : <span className="text-gray-500">Not specified</span>}
                       </div>
                     </div>
-                  )}
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">Cofounder Location</p>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {pitch.anonymousPitch?.cofounderLocation ? (
+                          <span className="px-4 py-1.5 bg-gray-100 text-gray-800 rounded-full text-sm">
+                            {pitch.anonymousPitch.cofounderLocation}
+                          </span>
+                        ) : (
+                          <span className="text-gray-500">Not specified</span>
+                        )}
+                      </div>
+                    </div>
+                    {pitch.anonymousPitch?.equityOffer && (
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">Equity Offer</p>
+                        <p className="text-lg font-medium text-gray-900 mt-1">{pitch.anonymousPitch.equityOffer}</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -713,7 +859,7 @@ const MyPitches = () => {
 
             {/* Action Buttons */}
             <div className="flex items-center justify-between">
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors text-sm flex items-center gap-2">
                   <X className="w-4 h-4" />
                   Withdraw
@@ -721,6 +867,10 @@ const MyPitches = () => {
                 <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors text-sm flex items-center gap-2">
                   <Edit3 className="w-4 h-4" />
                   Modify
+                </button>
+                <button className="px-4 py-2 bg-gray-900 text-white rounded-xl hover:bg-black transition-colors text-sm flex items-center gap-2">
+                  <Rocket className="w-4 h-4" />
+                  Boost
                 </button>
               </div>
             </div>
@@ -734,151 +884,153 @@ const MyPitches = () => {
     <div className="space-y-6">
       {receivedPitches.map((pitchback) => (
         <div key={pitchback.id} className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
-          {/* Header Section */}
-          <div className="flex items-start gap-4 mb-6">
-            <div className="w-16 h-16 bg-black rounded-xl flex items-center justify-center">
-              <Rocket className="w-6 h-6 text-white" />
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3 text-sm text-gray-600">
+              <User className="w-4 h-4" />
+              <span>{pitchback.author || 'Anonymous'}</span>
+              <span>•</span>
+              <span>{pitchback.receivedAt || 'Recently'}</span>
             </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-3">
-                <h3 className="text-2xl font-bold text-gray-900">Pitchback Received</h3>
-                <span className={`px-3 py-1 text-sm font-semibold rounded-full ${
-                  pitchback.status === 'accepted' ? 'bg-green-100 text-green-700' :
-                  pitchback.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                  'bg-gray-100 text-gray-700'
-                }`}>
-                  {pitchback.status}
-                </span>
-              </div>
-              <div className="flex items-center gap-4 text-sm text-gray-500">
-                <span className="flex items-center gap-2">
-                  <User className="w-4 h-4" />
-                  {pitchback.author || 'Anonymous'}
-                </span>
-                <span>•</span>
-                <span>{pitchback.receivedAt || 'Recently'}</span>
-                <span>•</span>
-                <span className="text-gray-600 font-semibold bg-gray-50 px-2 py-1 rounded-full">
-                  {pitchback.compatibility}% match
-                </span>
-              </div>
+            <div className="flex items-center gap-2">
+              <span className={`px-3 py-1 text-sm font-semibold rounded-full ${
+                pitchback.status === 'accepted' ? 'bg-green-100 text-green-700' :
+                pitchback.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                'bg-gray-100 text-gray-700'
+              }`}>
+                {pitchback.status}
+              </span>
+              <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-semibold rounded-full">{pitchback.compatibility}% match</span>
             </div>
           </div>
 
           {/* Your Pitch Section */}
           <div className="mb-6">
-            <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <Target className="w-5 h-5" />
-              Your Pitch: {pitchback.yourPitch?.title}
-            </h4>
-            <div className="bg-gray-50 p-6 rounded-2xl border-2 border-gray-200">
-              <div className="space-y-4">
-                <div>
-                  <h6 className="text-sm font-medium text-gray-600 mb-1">Description</h6>
-                  <p className="text-gray-700 text-sm">{pitchback.yourPitch?.description}</p>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Target className="w-5 h-5" />
+                  <h4 className="text-lg font-bold text-gray-900">
+                    {`About ${pitchback.yourPitch?.title || 'Startup'}`}
+                  </h4>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {pitchback.yourPitch?.industry && (
-                    <div>
-                      <h6 className="text-sm font-medium text-gray-600 mb-1">Industry</h6>
-                      <p className="text-gray-900 font-semibold">{pitchback.yourPitch.industry}</p>
-                    </div>
-                  )}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xl font-semibold text-gray-900">{pitchback.yourPitch?.title || 'Untitled Startup'}</span>
                   {pitchback.yourPitch?.stage && (
-                    <div>
-                      <h6 className="text-sm font-medium text-gray-600 mb-1">Stage</h6>
-                      <p className="text-gray-900 font-semibold">{pitchback.yourPitch.stage}</p>
-                    </div>
+                    <span className="px-2.5 py-1 bg-gray-900 text-white rounded-full text-xs font-semibold">
+                      {pitchback.yourPitch.stage}
+                    </span>
                   )}
-                  {pitchback.yourPitch?.timeline && (
-                    <div>
-                      <h6 className="text-sm font-medium text-gray-600 mb-1">Timeline</h6>
-                      <p className="text-gray-900 font-semibold text-sm">{pitchback.yourPitch.timeline}</p>
-                    </div>
-                  )}
-                  {pitchback.yourPitch?.market && (
-                    <div>
-                      <h6 className="text-sm font-medium text-gray-600 mb-1">Market Size</h6>
-                      <p className="text-gray-900 font-semibold text-sm">{pitchback.yourPitch.market}</p>
-                    </div>
-                  )}
-                  {pitchback.yourPitch?.funding && (
-                    <div>
-                      <h6 className="text-sm font-medium text-gray-600 mb-1">Funding Stage</h6>
-                      <p className="text-gray-900 font-semibold text-sm">{pitchback.yourPitch.funding}</p>
-                    </div>
+                  {pitchback.yourPitch?.industry && (
+                    <span className="px-2.5 py-1 bg-gray-200 text-gray-800 rounded-full text-xs font-semibold">
+                      {pitchback.yourPitch.industry}
+                    </span>
                   )}
                 </div>
-                {pitchback.yourPitch?.lookingFor && pitchback.yourPitch.lookingFor.length > 0 && (
+                <p className="text-gray-700 text-sm leading-relaxed">{pitchback.yourPitch?.description}</p>
+              </div>
+
+              <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Users className="w-5 h-5 text-gray-800" />
+                  <h4 className="text-lg font-bold text-gray-900">About Looking For</h4>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-700">
                   <div>
-                    <h6 className="text-sm font-medium text-gray-600 mb-2">Looking For</h6>
+                    <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">Cofounder Role</p>
                     <div className="flex flex-wrap gap-2">
-                      {pitchback.yourPitch.lookingFor.map((role, index) => (
-                        <span key={index} className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">
+                      {pitchback.yourPitch?.lookingFor?.length ? pitchback.yourPitch.lookingFor.map((role, idx) => (
+                        <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm">
                           {role}
                         </span>
+                      )) : <span className="text-gray-500">Not specified</span>}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">Cofounder Skills</p>
+                    <div className="flex flex-wrap gap-2">
+                      {pitchback.authorDetails?.skills?.length ? pitchback.authorDetails.skills.map((skill, idx) => (
+                        <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm">
+                          {skill}
+                        </span>
+                      )) : <span className="text-gray-500">Not specified</span>}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">Cofounder Availability</p>
+                    <p className="text-gray-900 font-semibold">
+                      {pitchback.authorDetails?.availability || 'Not specified'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">Cofounder Location</p>
+                    <p className="text-gray-900 font-semibold">
+                      {pitchback.authorDetails?.location || pitchback.yourPitch?.location || 'Not specified'}
+                    </p>
+                  </div>
+                  {pitchback.yourPitch?.equityOffer && (
+                    <div className="sm:col-span-2">
+                      <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">Equity Offer</p>
+                      <p className="text-gray-900 font-semibold">{pitchback.yourPitch.equityOffer}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Pitchback Message & Founder */}
+          <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white p-4 rounded-xl border border-gray-200 space-y-3">
+              <div className="flex items-center gap-2">
+                <MessageCircle className="w-4 h-4 text-black" />
+                <h4 className="text-lg font-semibold text-gray-900">Pitchback Message</h4>
+              </div>
+              <p className="text-gray-700 text-sm leading-relaxed">{pitchback.message || 'No message provided'}</p>
+            </div>
+
+            {pitchback.authorDetails && (
+              <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200 space-y-3">
+                <div className="flex items-center gap-2">
+                  <User className="w-4 h-4" />
+                  <h4 className="text-lg font-semibold text-gray-900">About Founder</h4>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500">Experience</p>
+                    <p className="font-semibold text-gray-900">{pitchback.authorDetails.experience}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-gray-500">Availability</p>
+                    <p className="font-semibold text-gray-900">{pitchback.authorDetails.availability}</p>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">Skills</p>
+                    <div className="flex flex-wrap gap-2">
+                      {pitchback.authorDetails.skills.map((skill, idx) => (
+                        <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm">{skill}</span>
                       ))}
                     </div>
                   </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Pitchback Message */}
-          <div className="mb-4">
-            <h4 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-              <MessageCircle className="w-4 h-4 text-black" />
-              Pitchback Message
-            </h4>
-            <div className="bg-gray-50 p-4 rounded-xl">
-              <p className="text-gray-700 text-sm leading-relaxed">{pitchback.message || 'No message provided'}</p>
-            </div>
-          </div>
-
-          {/* Anonymous Profile - Enhanced */}
-          {pitchback.authorDetails && (
-            <div className="mb-6">
-              <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <User className="w-5 h-5" />
-                Anonymous Profile
-              </h4>
-              <div className="bg-gray-50 p-6 rounded-2xl">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-gray-600">Experience</p>
-                    <p className="text-gray-900 font-semibold">{pitchback.authorDetails?.experience || 'Not specified'}</p>
+                  <div className="sm:col-span-2">
+                    <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">Previous Startups</p>
+                    <div className="flex flex-wrap gap-2">
+                      {pitchback.authorDetails.previousStartups.map((startup, idx) => (
+                        <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm">{startup}</span>
+                      ))}
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-gray-600">Education</p>
-                    <p className="text-gray-900 font-semibold">{pitchback.authorDetails?.education || 'Not specified'}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-gray-600">Work Style</p>
-                    <p className="text-gray-900 font-semibold">{pitchback.authorDetails?.workStyle || 'Not specified'}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-gray-600">Availability</p>
-                    <p className="text-gray-900 font-semibold">{pitchback.authorDetails?.availability || 'Not specified'}</p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium text-gray-600">Previous Startups</p>
-                    <p className="text-gray-900 font-semibold">{(pitchback.authorDetails?.previousStartups || []).join(', ')}</p>
-                  </div>
-                </div>
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <p className="text-sm font-medium text-gray-600 mb-2">Skills</p>
-                  <div className="flex flex-wrap gap-2">
-                    {(pitchback.authorDetails?.skills || []).map((skill, index) => (
-                      <span key={index} className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">
-                        {skill}
-                      </span>
-                    ))}
+                  <div className="sm:col-span-2">
+                    <p className="text-xs uppercase tracking-wide text-gray-500 mb-1">Achievements</p>
+                    <div className="flex flex-wrap gap-2">
+                      {pitchback.authorDetails.achievements.map((achievement, idx) => (
+                        <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm">{achievement}</span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Action Buttons */}
           {pitchback.status === 'pending' && (
@@ -915,226 +1067,239 @@ const MyPitches = () => {
 
   const renderAcceptedMatches = () => (
     <div className="space-y-6">
-      {acceptedMatches.map((match) => (
-        <div key={match.id} className="bg-white rounded-3xl p-8 shadow-lg border-2 border-gray-200 hover:shadow-xl transition-all duration-300">
-          {/* Header Section */}
-          <div className="flex items-start gap-6 mb-6">
-            <div className="w-20 h-20 bg-black rounded-2xl flex items-center justify-center">
-              <img
-                src={match.authorDetails.avatar}
-                alt={match.authorDetails.name}
-                className="w-full h-full rounded-2xl object-cover"
-              />
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-3">
-                <h3 className="text-2xl font-bold text-gray-900">{match.title}</h3>
-                <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-semibold rounded-full">
-                  ✓ Matched
-                </span>
-              </div>
-              <p className="text-gray-600 text-lg mb-3">{match.description}</p>
-              <div className="flex items-center gap-4 text-sm text-gray-500">
-                <span className="flex items-center gap-2">
-                  <User className="w-4 h-4" />
-                  {match.authorDetails.name}
-                </span>
-                <span>•</span>
-                <span>{match.acceptedAt}</span>
-                <span>•</span>
-                <span className="text-gray-600 font-semibold bg-gray-50 px-2 py-1 rounded-full">
-                  {match.compatibility}% match
-                </span>
-              </div>
-            </div>
-          </div>
+      {acceptedMatches.map((match) => {
+        const roomState = matchRooms[match.id] || {};
+        const canvasSections = [
+          { title: "Vision & Mission", desc: "Shared 1-year and 3-year picture of where this startup is going." },
+          { title: "Roles & Responsibilities", desc: "Clear owner for product, GTM, eng, ops, hiring, and founder rituals." },
+          { title: "Equity Expectations", desc: "Target split, vesting guardrails, cliffs, and decision-making rights." },
+          { title: "Time Commitment", desc: "Weekly hours, travel cadence, response SLAs, and availability windows." },
+          { title: "Money Runway & Funding Status", desc: "Burn, runway, capital plan, and what you need to raise next." },
+          { title: "Deal-breakers", desc: "Non-negotiables for culture, values, and must-haves/never-do items." }
+        ];
 
-          {/* Your Pitch */}
-          <div className="mb-6">
-            <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <Target className="w-5 h-5" />
-              Your Pitch
-            </h4>
-            <div className="bg-gray-50 p-6 rounded-2xl border-2 border-gray-200">
-              <div className="space-y-4">
+        const introPrompts = [
+          "Share your 1-year vision",
+          "What are your non-negotiables?",
+          "What would make you walk away?",
+          "How do you want to work together week-to-week?"
+        ];
+
+        return (
+          <div key={match.id} className="bg-white rounded-3xl p-8 shadow-lg border-2 border-gray-200 hover:shadow-xl transition-all duration-300">
+            {/* Header */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+              <div>
+                <p className="text-xs uppercase tracking-wide text-gray-500">Match Room plan</p>
+                <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2 flex-wrap">
+                  {match.yourPitch?.title || match.title}
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${roomState.status === 'live' ? 'bg-emerald-100 text-emerald-800' : roomState.status === 'awaiting-opt-in' ? 'bg-amber-100 text-amber-800' : 'bg-gray-200 text-gray-700'}`}>
+                    {roomState.status === 'live' ? 'Match Room live' : roomState.status === 'awaiting-opt-in' ? 'Awaiting double opt-in' : 'Not created'}
+                  </span>
+                  {roomState.doubleOptIn ? (
+                    <span className="px-3 py-1 bg-black text-white rounded-full text-xs font-semibold">Double opt-in confirmed</span>
+                  ) : (
+                    <span className="px-3 py-1 bg-gray-900 text-white rounded-full text-xs font-semibold">Double opt-in ready</span>
+                  )}
+                </h3>
+                <p className="text-gray-600 mt-1">Create the Match Room as soon as either side accepts (or after double opt-in if required).</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 bg-gray-900 text-white rounded-full text-sm font-semibold">{match.compatibility}% match</span>
+                <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-semibold">Accepted {match.acceptedAt}</span>
+                {roomState.createdAt && (
+                  <span className="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-sm font-semibold">
+                    Room created {formatTimeAgo(roomState.createdAt)}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-3 mb-5">
+              <button
+                onClick={() => handleCreateMatchRoom(match.id)}
+                className="flex items-center justify-center gap-2 py-3 px-4 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                Create Match Room now
+              </button>
+              <button
+                onClick={() => handleSendDoubleOptIn(match.id)}
+                className="flex items-center justify-center gap-2 py-3 px-4 bg-white text-gray-900 border border-gray-200 rounded-xl font-semibold hover:border-gray-300 transition-all duration-300"
+              >
+                <Send className="w-4 h-4" />
+                Send double opt-in invite
+              </button>
+              {roomState.status === 'awaiting-opt-in' && (
+                <button
+                  onClick={() => handleConfirmDoubleOptIn(match.id)}
+                  className="flex items-center justify-center gap-2 py-3 px-4 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-all duration-300"
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  Mark opt-in confirmed
+                </button>
+              )}
+            </div>
+
+            {/* Context block */}
+            <div className="grid md:grid-cols-3 gap-4 mb-6">
+              <div className="md:col-span-2 bg-gray-50 border border-gray-200 rounded-2xl p-6 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Rocket className="w-5 h-5 text-gray-800" />
+                  <h4 className="text-lg font-semibold text-gray-900">Startup card</h4>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-xl font-bold text-gray-900">{match.yourPitch?.title || match.title}</span>
+                  {match.yourPitch?.stage && <span className="px-2.5 py-1 bg-gray-900 text-white rounded-full text-xs font-semibold">{match.yourPitch.stage}</span>}
+                  {match.yourPitch?.industry && <span className="px-2.5 py-1 bg-gray-200 text-gray-800 rounded-full text-xs font-semibold">{match.yourPitch.industry}</span>}
+                </div>
+                <p className="text-gray-700 leading-relaxed text-sm">{match.yourPitch?.description || match.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {(match.yourPitch?.tags || []).map((tag, idx) => (
+                    <span key={idx} className="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs font-semibold text-gray-700">{tag}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 space-y-4">
                 <div>
-                  <h6 className="text-sm font-medium text-gray-600 mb-1">Title</h6>
-                  <p className="text-gray-900 font-semibold text-lg">{match.yourPitch?.title || match.title}</p>
+                  <p className="text-xs uppercase tracking-wide text-gray-500 mb-2">Founders</p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100">
+                        <img src={match.authorDetails.avatar} alt={match.authorDetails.name} className="w-full h-full object-cover" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900">{match.authorDetails.name}</p>
+                        <p className="text-xs text-gray-600">{match.authorDetails.role}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center font-semibold">You</div>
+                      <div>
+                        <p className="font-semibold text-gray-900">Your founder profile</p>
+                        <p className="text-xs text-gray-600">Attach your role + availability</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h6 className="text-sm font-medium text-gray-600 mb-1">Description</h6>
-                  <p className="text-gray-700 text-sm">{match.yourPitch?.description || match.description}</p>
+                <div className="bg-gray-900 text-white rounded-xl p-4 space-y-2">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Star className="w-4 h-4" />
+                    <span>Match score summary</span>
+                  </div>
+                  <p className="text-sm text-gray-100">Shared tags, preferred roles, and time commitment will seed your Match Room.</p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {match.yourPitch?.industry && (
-                    <div>
-                      <h6 className="text-sm font-medium text-gray-600 mb-1">Industry</h6>
-                      <p className="text-gray-900 font-semibold">{match.yourPitch.industry}</p>
-                    </div>
-                  )}
-                  {match.yourPitch?.stage && (
-                    <div>
-                      <h6 className="text-sm font-medium text-gray-600 mb-1">Stage</h6>
-                      <p className="text-gray-900 font-semibold">{match.yourPitch.stage}</p>
-                    </div>
-                  )}
-                  {match.yourPitch?.timeline && (
-                    <div>
-                      <h6 className="text-sm font-medium text-gray-600 mb-1">Timeline</h6>
-                      <p className="text-gray-900 font-semibold text-sm">{match.yourPitch.timeline}</p>
-                    </div>
-                  )}
-                  {match.yourPitch?.market && (
-                    <div>
-                      <h6 className="text-sm font-medium text-gray-600 mb-1">Market Size</h6>
-                      <p className="text-gray-900 font-semibold text-sm">{match.yourPitch.market}</p>
-                    </div>
-                  )}
-                  {match.yourPitch?.funding && (
-                    <div>
-                      <h6 className="text-sm font-medium text-gray-600 mb-1">Funding Stage</h6>
-                      <p className="text-gray-900 font-semibold text-sm">{match.yourPitch.funding}</p>
-                    </div>
-                  )}
+              </div>
+            </div>
+
+            {/* Chat + Scheduling */}
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <MessageCircle className="w-5 h-5 text-gray-800" />
+                    <h4 className="text-lg font-semibold text-gray-900">Match Room chat</h4>
+                  </div>
+                  <span className="px-2.5 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-semibold">Real-time or async</span>
                 </div>
-                {match.yourPitch?.lookingFor && match.yourPitch.lookingFor.length > 0 && (
-                  <div>
-                    <h6 className="text-sm font-medium text-gray-600 mb-2">Looking For</h6>
-                    <div className="flex flex-wrap gap-2">
-                      {match.yourPitch.lookingFor.map((role, index) => (
-                        <span key={index} className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">
-                          {role}
-                        </span>
+                <p className="text-sm text-gray-700">Pre-load these prompts so both sides can respond immediately.</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {introPrompts.map((prompt, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleTogglePrompt(match.id, prompt)}
+                      className={`px-3 py-3 rounded-xl text-sm text-left transition-colors border ${
+                        roomState.promptsSent?.includes(prompt)
+                          ? 'bg-black text-white border-black'
+                          : 'bg-gray-50 text-gray-800 border-gray-200 hover:border-gray-300'
+                      }`}
+                    >
+                      {prompt}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <Sparkles className="w-4 h-4" />
+                  <span>Keep pitchback message pinned in the chat header.</span>
+                  {roomState.promptsSent?.length ? (
+                    <span className="px-2 py-1 bg-emerald-50 text-emerald-700 rounded-full font-semibold">
+                      {roomState.promptsSent.length} prompt{roomState.promptsSent.length > 1 ? 's' : ''} queued
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 space-y-4">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-5 h-5 text-gray-800" />
+                  <h4 className="text-lg font-semibold text-gray-900">Fast scheduling</h4>
+                </div>
+                <div className="space-y-3 text-sm text-gray-800">
+                  <button
+                    onClick={() => handleSetSchedulingType(match.id, 'calendar')}
+                    className={`w-full text-left p-3 rounded-xl border transition-colors ${
+                      roomState.scheduling === 'calendar'
+                        ? 'bg-black text-white border-black'
+                        : 'bg-gray-50 border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <p className="font-semibold mb-1">Calendar widget</p>
+                    <p className="text-sm">Parse Calendly/Cal.com links and show embedded availability.</p>
+                  </button>
+                  <div className={`p-3 rounded-xl border transition-colors ${roomState.scheduling === 'slots' ? 'bg-black text-white border-black' : 'bg-gray-50 border-gray-200 hover:border-gray-300'}`}>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="font-semibold">Pick 3 slots flow</p>
+                      <button
+                        onClick={() => handleSetSchedulingType(match.id, 'slots')}
+                        className="text-xs px-2 py-1 rounded-full bg-white text-gray-800 border border-gray-200 hover:border-gray-300"
+                      >
+                        Use this flow
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {['Tue 10a PT', 'Wed 1p PT', 'Thu 4p PT'].map((slot) => (
+                        <button
+                          key={slot}
+                          onClick={() => handleToggleSlot(match.id, slot)}
+                          className={`px-3 py-1 rounded-full text-xs font-semibold border ${
+                            roomState.selectedSlots?.includes(slot)
+                              ? 'bg-white text-gray-900 border-black'
+                              : 'bg-white text-gray-800 border-gray-200 hover:border-gray-300'
+                          }`}
+                        >
+                          {slot}
+                        </button>
                       ))}
                     </div>
+                    {roomState.selectedSlots?.length ? (
+                      <p className="text-xs mt-2 opacity-90">
+                        Selected {roomState.selectedSlots.length} slot{roomState.selectedSlots.length > 1 ? 's' : ''} to send inside BiggMate.
+                      </p>
+                    ) : null}
                   </div>
-                )}
-                {match.yourPitch?.tags && match.yourPitch.tags.length > 0 && (
-                  <div>
-                    <h6 className="text-sm font-medium text-gray-600 mb-2">Tags</h6>
-                    <div className="flex flex-wrap gap-2">
-                      {match.yourPitch.tags.map((tag, index) => (
-                        <span key={index} className="px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Their Pitchback Proposal */}
-          <div className="mb-6">
-            <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <MessageCircle className="w-5 h-5" />
-              Their Pitchback Proposal
-            </h4>
-            <div className="bg-gray-50 p-6 rounded-2xl border-2 border-gray-200">
-              <div className="space-y-4">
-                {match.theirPitchback?.message && (
-                  <div>
-                    <h6 className="text-sm font-medium text-gray-600 mb-2">Message</h6>
-                    <p className="text-gray-700 text-sm bg-white p-4 rounded-xl leading-relaxed">{match.theirPitchback.message}</p>
-                  </div>
-                )}
-                {match.theirPitchback?.sentAt && (
-                  <div>
-                    <h6 className="text-sm font-medium text-gray-600 mb-1">Sent At</h6>
-                    <p className="text-gray-900 font-semibold text-sm">{match.theirPitchback.sentAt}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Cofounder Details - Enhanced */}
-          <div className="mb-6">
-            <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <User className="w-5 h-5" />
-              Cofounder Details
-            </h4>
-            <div className="bg-gray-50 p-6 rounded-2xl">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-600">Name</p>
-                  <p className="text-gray-900 font-semibold">{match.authorDetails.name}</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-600">Role</p>
-                  <p className="text-gray-900 font-semibold">{match.authorDetails.role}</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-600">Location</p>
-                  <p className="text-gray-900 font-semibold flex items-center gap-1">
-                    <MapPin className="w-4 h-4" />
-                    {match.authorDetails.location}
-                  </p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-600">Experience</p>
-                  <p className="text-gray-900 font-semibold">{match.authorDetails.experience}</p>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-600">Email</p>
-                  <a href={`mailto:${match.authorDetails.email}`} className="text-gray-600 hover:text-gray-800 font-semibold flex items-center gap-1">
-                    <Mail className="w-4 h-4" />
-                    {match.authorDetails.email}
-                  </a>
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-600">Phone</p>
-                  <a href={`tel:${match.authorDetails.phone}`} className="text-gray-900 font-semibold flex items-center gap-1">
-                    <Phone className="w-4 h-4" />
-                    {match.authorDetails.phone}
-                  </a>
-                </div>
-              </div>
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-gray-600">LinkedIn</p>
-                  <a href={match.authorDetails.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-800 font-semibold flex items-center gap-1">
-                    <ExternalLink className="w-4 h-4" />
-                    {match.authorDetails.linkedin}
-                  </a>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Next Steps - Enhanced */}
-          <div className="mb-8">
-            <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <Target className="w-5 h-5" />
-              Next Steps
-            </h4>
-            <div className="bg-gray-50 p-6 rounded-2xl">
-              <p className="text-gray-700 text-lg mb-4">{match.nextSteps}</p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">✓ Partnership Agreement</span>
-                <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">✓ Equity Discussion</span>
-                <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full">✓ Workflow Planning</span>
+            {/* Co-founder Canvas */}
+            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Target className="w-5 h-5 text-gray-800" />
+                <h4 className="text-lg font-semibold text-gray-900">Co-founder Canvas</h4>
+              </div>
+              <p className="text-sm text-gray-700 mb-4">Capture these structured answers before moving to a sprint or partnership agreement.</p>
+              <div className="grid md:grid-cols-2 gap-3">
+                {canvasSections.map((section, idx) => (
+                  <div key={idx} className="bg-white rounded-xl border border-gray-200 p-4">
+                    <p className="font-semibold text-gray-900">{section.title}</p>
+                    <p className="text-sm text-gray-700 mt-1">{section.desc}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-
-          {/* Action Buttons - Enhanced */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button 
-              onClick={() => navigate('/sprinto')}
-              className="flex-1 py-4 bg-black text-white rounded-2xl font-semibold hover:bg-gray-800 transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
-            >
-              <Rocket className="w-5 h-5" />
-              Start Sprint
-            </button>
-            <button className="flex-1 py-4 bg-gray-600 text-white rounded-2xl font-semibold hover:bg-gray-800 transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl">
-              <Calendar className="w-5 h-5" />
-              Schedule Call
-            </button>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 

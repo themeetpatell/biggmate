@@ -606,7 +606,7 @@ const Sprinto = () => {
           </div>
           <button
             onClick={() => setPainPoints([...painPoints, { id: Date.now(), pain: '', severity: 'medium', frequency: 'medium', impact: '' }])}
-            className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2"
+            className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2 whitespace-nowrap"
           >
             <Plus className="w-4 h-4" />
             Add Pain Point
@@ -2269,26 +2269,28 @@ const Sprinto = () => {
         {/* Tabs */}
         <div className="mb-6">
           <div className="bg-white rounded-2xl p-2 shadow-lg border border-gray-100">
-            <div className="flex flex-wrap gap-2">
-              {tabs.map((tab) => {
-                const Icon = tab.icon;
-                const isActive = activeTab === tab.id;
-                
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                      isActive
-                        ? 'bg-gray-900 text-white shadow-lg'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                    }`}
-                  >
-                    <Icon className="w-5 h-5" />
-                    {tab.label}
-                  </button>
-                );
-              })}
+            <div className="overflow-x-auto tab-scroll pb-1">
+              <div className="flex flex-nowrap gap-2 min-w-max">
+                {tabs.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = activeTab === tab.id;
+                  
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                        isActive
+                          ? 'bg-gray-900 text-white shadow-lg'
+                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      }`}
+                    >
+                      <Icon className="w-5 h-5" />
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

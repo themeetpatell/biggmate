@@ -3,8 +3,6 @@ import { Navigate, useLocation } from 'react-router-dom';
 import RoleSelection from './RoleSelection';
 import QuickSetup from './QuickSetup';
 import AnonymousProfileFixed from './AnonymousProfileFixed';
-import OfferSkills from './OfferSkills';
-import IdeaSprint from './IdeaSprint';
 
 const Onboarding = () => {
   const location = useLocation();
@@ -26,10 +24,6 @@ const Onboarding = () => {
         return <QuickSetup />;
       case 'pitch':
         return <AnonymousProfileFixed />;
-      case 'offer-skills':
-        return <OfferSkills />;
-      case 'idea-sprint':
-        return <IdeaSprint />;
       default:
         return <Navigate to="/onboarding/mission" replace />;
     }

@@ -70,7 +70,7 @@ const EntrepreneurProfile = () => {
         yourSelf: localStorage.getItem('yourSelf') || '',
         whyHere: localStorage.getItem('whyHere') || '',
         selectedValues: JSON.parse(localStorage.getItem('selectedValues') || '[]'),
-        selectedIntent: localStorage.getItem('selectedIntent') || '',
+        selectedIntent: localStorage.getItem('selectedIntent') || 'find-cofounder',
         offerSkillsPreferences: JSON.parse(localStorage.getItem('offerSkillsPreferences') || '{}')
       };
 
@@ -172,9 +172,7 @@ const EntrepreneurProfile = () => {
         ],
         founderJourney: {
           vision: onboardingData.whyHere || 'To democratize access to AI technology and empower entrepreneurs to build world-changing startups.',
-          purpose: onboardingData.selectedIntent === 'find-cofounder' ? 'Find A Co-founder' : 
-                   onboardingData.selectedIntent === 'offer-skills' ? 'Offer Skills' : 
-                   onboardingData.selectedIntent === 'idea-sprint' ? 'Idea Sprint' : 'Find A Co-founder',
+          purpose: 'Find A Co-founder',
           values: uniqueValues.length > 0 ? uniqueValues : ['Vision & Creation', 'Grit & Growth', 'Heart & Connections']
         },
         marketplace: {

@@ -51,14 +51,6 @@ const SprintDashboard = () => {
       progress: 0,
       tasks: ['Beta Testing', 'User Feedback', 'Iterations'],
       icon: CheckCircle
-    },
-    {
-      id: 4,
-      name: 'Find Cofounder',
-      status: 'pending',
-      progress: 0,
-      tasks: ['Profile Matching', 'Pitch Meetings', 'Team Formation'],
-      icon: Users
     }
   ];
 
@@ -113,10 +105,10 @@ const SprintDashboard = () => {
       color: 'bg-gray-400'
     },
     {
-      title: 'Find Sprint Partner',
-      description: 'Find your cofounder',
+      title: 'Team Workspace',
+      description: 'Collaborate with your team',
       icon: Users,
-      link: '/cofounders',
+      link: '/workspace',
       color: 'bg-gray-900'
     },
     {
@@ -125,13 +117,6 @@ const SprintDashboard = () => {
       icon: Zap,
       link: '/sprint/zero-to-mvp',
       color: 'bg-black'
-    },
-    {
-      title: 'Revenue Model Builder',
-      description: 'Pricing lab & monetization',
-      icon: DollarSign,
-      link: '/sprint/revenue-model',
-      color: 'bg-gradient-to-r from-indigo-600 to-purple-600'
     }
   ];
 
@@ -171,7 +156,7 @@ const SprintDashboard = () => {
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Your Idea Sprint</h1>
               <p className="text-gray-600">
-                {ideaSprintDetails?.ideaDescription || 'Build, validate, and find your cofounder'}
+                {ideaSprintDetails?.ideaDescription || 'Build, validate, and launch your startup'}
               </p>
             </div>
             <div className="flex items-center gap-4">
@@ -228,8 +213,8 @@ const SprintDashboard = () => {
               </div>
               <span className="text-2xl font-bold text-gray-900">0</span>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-1">Sprint Partners</h3>
-            <p className="text-gray-600 text-sm">Active cofounders</p>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">Team Members</h3>
+            <p className="text-gray-600 text-sm">Active collaborators</p>
           </div>
         </div>
 
@@ -372,4 +357,3 @@ const SprintDashboard = () => {
 };
 
 export default SprintDashboard;
-

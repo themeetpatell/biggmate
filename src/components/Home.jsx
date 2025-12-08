@@ -112,7 +112,9 @@ import {
   Briefcase,
   Lightbulb,
   Pill,
-  MessageSquare
+  MessageSquare,
+  MessagesSquare,
+  Syringe
 } from 'lucide-react';
 
 const Home = () => {
@@ -1113,7 +1115,7 @@ const Home = () => {
               <p className="text-xs text-gray-500 mt-2">{pitchMessage.length}/500 characters</p>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => setShowPitchModal(false)}
                 className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
@@ -1139,124 +1141,169 @@ const Home = () => {
           setSelectedPitchback(null);
           setPitchbackMessage('');
         }}>
-          <div className="bg-white rounded-3xl p-8 max-w-3xl w-full mx-auto max-h-[90vh] overflow-y-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Pitch to Anonymous</h1>
-              <p className="text-gray-600 mt-1">Respond to their pitch: "{selectedPitchback.title}"</p>
-            </div>
-            <button
-              onClick={() => {
-                setShowPitchbackModal(false);
-                setSelectedPitchback(null);
-                setPitchbackMessage('');
-              }}
-              className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
-            >
-              <X className="w-6 h-6 text-gray-500" />
-            </button>
-          </div>
+          <div className="bg-white rounded-3xl p-8 max-w-4xl w-full mx-auto max-h-[90vh] overflow-y-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            {(() => {
+              const author = selectedPitchback.author || {};
+              const founderSkills = author.skills || [];
+              const cofounderSkills = selectedPitchback.requiredSkills
+                ? selectedPitchback.requiredSkills.split(',').map(s => s.trim()).filter(Boolean)
+                : selectedPitchback.cofounderSkills || [];
 
-          <div className="space-y-6">
-            <div className="bg-gray-50 p-6 rounded-2xl border-l-4 border-black">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Responding to:</h2>
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
-                  <User className="w-6 h-6 text-white" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 mb-2 text-xl">{selectedPitchback.title}</h3>
-                  <p className="text-gray-600 text-sm mb-3">{selectedPitchback.description || selectedPitchback.shortDescription}</p>
-                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                    <span>{selectedPitchback.author.role} • {selectedPitchback.author.location}</span>
-                    <span className="px-2 py-1 bg-gray-200 text-gray-700 rounded-full text-xs">
-                      {selectedPitchback.stage}
-                    </span>
+              return (
+                <>
+                  <div className="flex items-center justify-between mb-4">
+                    <h1 className="text-2xl font-bold text-gray-900">Responding to:</h1>
+                    <button
+                      onClick={() => {
+                        setShowPitchbackModal(false);
+                        setSelectedPitchback(null);
+                        setPitchbackMessage('');
+                      }}
+                      className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                    >
+                      <X className="w-6 h-6 text-gray-500" />
+                    </button>
                   </div>
-                  {selectedPitchback.lookingFor && selectedPitchback.lookingFor.length > 0 && (
-                    <div className="mb-4">
-                      <p className="text-xs font-medium text-gray-700 mb-2">Looking for:</p>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedPitchback.lookingFor.map((role, index) => (
-                          <span key={index} className="px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full">
-                            {role}
-                          </span>
-                        ))}
+
+                  <div className="space-y-6">
+                    <div className="bg-gray-50 p-6 rounded-2xl border border-gray-200">
+                      <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">About Pitch</h2>
+                      <p className="text-2xl font-bold text-gray-900 mb-2">{selectedPitchback.title}</p>
+                      <p className="text-gray-700 leading-relaxed mb-4">{selectedPitchback.description || selectedPitchback.shortDescription}</p>
+                      <div className="flex items-center gap-3 text-sm text-gray-600 flex-wrap">
+                        {selectedPitchback.stage && (
+                          <span className="px-3 py-1 bg-black text-white rounded-full text-xs font-semibold">{selectedPitchback.stage}</span>
+                        )}
+                        {selectedPitchback.industry && (
+                          <span className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-xs font-semibold">{selectedPitchback.industry}</span>
+                        )}
                       </div>
                     </div>
-                  )}
-                </div>
-              </div>
-            </div>
 
-            {selectedPitchback.problem && (
-              <div className="bg-white p-6 rounded-2xl border-2 border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  <Target className="w-5 h-5 text-black" />
-                  Problem Statement
-                </h3>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">{selectedPitchback.problem}</p>
-              </div>
-            )}
+                    <div className="bg-white p-6 rounded-2xl border border-gray-200">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Founder</h3>
+                          <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center">
+                              <User className="w-5 h-5 text-white" />
+                            </div>
+                            <div className="space-y-2 text-sm text-gray-800">
+                              <p className="font-semibold">{author.role}</p>
+                              <p className="text-gray-600">{author.location}</p>
+                              {founderSkills.length > 0 && (
+                                <div className="flex flex-wrap gap-2 pt-1">
+                                  {founderSkills.map((skill, idx) => (
+                                    <span key={idx} className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-semibold">
+                                      {skill}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
 
-            {selectedPitchback.solution && (
-              <div className="bg-white p-6 rounded-2xl border-2 border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                  <Lightbulb className="w-5 h-5 text-black" />
-                  Solution Statement
-                </h3>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">{selectedPitchback.solution}</p>
-              </div>
-            )}
+                        <div>
+                          <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Looking for</h3>
+                          <div className="space-y-2 text-sm text-gray-800">
+                            {selectedPitchback.lookingFor && selectedPitchback.lookingFor.length > 0 && (
+                              <div>
+                                <p className="font-semibold mb-2">Cofounder Role</p>
+                                <div className="flex flex-wrap gap-2">
+                                  {selectedPitchback.lookingFor.map((role, idx) => (
+                                    <span key={idx} className="px-3 py-1 rounded-full bg-gray-900 text-white text-xs font-semibold">
+                                      {role}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {cofounderSkills.length ? (
+                              <div>
+                                <p className="font-semibold mb-2">Cofounder Skills</p>
+                                <div className="flex flex-wrap gap-2">
+                                  {cofounderSkills.map((skill, idx) => (
+                                    <span key={idx} className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-semibold">
+                                      {skill}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : null}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-            <div className="bg-white p-6 rounded-2xl border-2 border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Your Pitchback Message</h2>
-              <p className="text-sm text-gray-600 mb-4">
-                Write a message explaining why you're interested in this pitch and what you can bring to the partnership.
-              </p>
-              <textarea
-                value={pitchbackMessage}
-                onChange={(e) => {
-                  if (e.target.value.length <= 500) {
-                    setPitchbackMessage(e.target.value);
-                  }
-                }}
-                placeholder="Hi! I'm interested in your pitch. I have experience in [your expertise] and I think we could work well together because [your reasons]. I'm looking forward to discussing this opportunity further..."
-                className="w-full h-40 p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
-              />
-              <div className="flex justify-between items-center mt-2">
-                <p className="text-xs text-gray-500">
-                  {pitchbackMessage.length}/500 characters
-                </p>
-                {pitchbackMessage.length > 450 && (
-                  <p className="text-xs text-orange-600">Approaching character limit</p>
-                )}
-              </div>
-            </div>
+                    {selectedPitchback.problem && (
+                      <div className="bg-white p-6 rounded-2xl border border-gray-200">
+                        <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                          <Target className="w-5 h-5 text-black" />
+                          Problem Statement
+                        </h3>
+                        <p className="text-gray-700 leading-relaxed whitespace-pre-line">{selectedPitchback.problem}</p>
+                      </div>
+                    )}
 
-            <div className="flex gap-4 pt-2">
-              <button
-                onClick={() => {
-                  setShowPitchbackModal(false);
-                  setSelectedPitchback(null);
-                  setPitchbackMessage('');
-                }}
-                className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSendPitchback}
-                disabled={!pitchbackMessage.trim()}
-                className="flex-1 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2"
-              >
-                <Send className="w-4 h-4" />
-                Send Pitchback
-              </button>
-            </div>
+                    {selectedPitchback.solution && (
+                      <div className="bg-white p-6 rounded-2xl border border-gray-200">
+                        <h3 className="text-base font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                          <Lightbulb className="w-5 h-5 text-black" />
+                          Solution Statement
+                        </h3>
+                        <p className="text-gray-700 leading-relaxed whitespace-pre-line">{selectedPitchback.solution}</p>
+                      </div>
+                    )}
+
+                    <div className="bg-white p-6 rounded-2xl border border-gray-200">
+                      <h2 className="text-lg font-semibold text-gray-900 mb-3">My Pitchback Message</h2>
+                      <textarea
+                        value={pitchbackMessage}
+                        onChange={(e) => {
+                          if (e.target.value.length <= 500) {
+                            setPitchbackMessage(e.target.value);
+                          }
+                        }}
+                        placeholder="Share why you're the right cofounder for this pitch..."
+                        className="w-full h-32 p-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
+                      />
+                      <div className="flex justify-between items-center mt-2">
+                        <p className="text-xs text-gray-500">
+                          {pitchbackMessage.length}/500 characters
+                        </p>
+                        {pitchbackMessage.length > 450 && (
+                          <p className="text-xs text-orange-600">Approaching character limit</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                      <button
+                        onClick={() => {
+                          setShowPitchbackModal(false);
+                          setSelectedPitchback(null);
+                          setPitchbackMessage('');
+                        }}
+                        className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleSendPitchback}
+                        disabled={!pitchbackMessage.trim()}
+                        className="flex-1 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2"
+                      >
+                        <Send className="w-4 h-4" />
+                        Send Pitchback
+                      </button>
+                    </div>
+                  </div>
+                </>
+              );
+            })()}
           </div>
         </div>
-      </div>
       )}
 
       {/* Success Notification */}
@@ -1284,272 +1331,140 @@ const Home = () => {
 
             {selectedPitchDetails && (
               <div className="space-y-6">
-                {/* Pitch Header */}
-                <div className="border-b border-gray-200 pb-6">
-                  <div className="flex items-start gap-6 mb-4">
-                    <div className="w-24 h-24 bg-gray-900 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      {selectedPitchDetails.imageUrl ? (
-                        <img
-                          src={selectedPitchDetails.imageUrl}
-                          alt={selectedPitchDetails.title}
-                          className="w-full h-full object-cover rounded-2xl"
-                        />
-                      ) : (
-                        <Rocket className="w-12 h-12 text-white" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-3xl font-bold text-gray-900 mb-2">{selectedPitchDetails.title}</h3>
-                      <p className="text-gray-600 text-lg mb-4 leading-relaxed">{selectedPitchDetails.shortDescription}</p>
-                      <div className="flex items-center gap-3 flex-wrap">
-                        <span className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">{selectedPitchDetails.industry}</span>
-                        <span className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
-                          selectedPitchDetails.stageColor === 'green' ? 'bg-gray-100 text-gray-700' :
-                          selectedPitchDetails.stageColor === 'yellow' ? 'bg-gray-100 text-gray-700' :
-                          selectedPitchDetails.stageColor === 'blue' ? 'bg-gray-100 text-gray-700' :
-                          'bg-gray-100 text-gray-700'
-                        }`}>
-                          {selectedPitchDetails.stage}
-                        </span>
-                        <span className="px-3 py-1.5 bg-black text-white rounded-full text-sm font-semibold">{selectedPitchDetails.compatibility}% match</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {(() => {
+                  const founder = selectedPitchDetails.author || {};
+                  const founderProfile = founder.anonymousProfile || {};
+                  const aboutMyself = founder.about || founderProfile.experience || 'Not provided';
+                  const purpose = founderProfile.purpose || selectedPitchDetails.purpose || 'Not provided';
+                  const founderSkills = founderProfile.skills || [];
+                  const founderAvailability = founderProfile.availability || selectedPitchDetails.timeline || 'Not specified';
+                  const lookingForRoles = (selectedPitchDetails.lookingFor && selectedPitchDetails.lookingFor.length)
+                    ? selectedPitchDetails.lookingFor
+                    : selectedPitchDetails.lookingForRole ? [selectedPitchDetails.lookingForRole] : [];
+                  const lookingSkills = selectedPitchDetails.requiredSkills
+                    ? selectedPitchDetails.requiredSkills.split(',').map(s => s.trim()).filter(Boolean)
+                    : (selectedPitchDetails.cofounderSkills || []);
+                  const lookingAvailability = selectedPitchDetails.availabilityPreference || selectedPitchDetails.commitment || 'Not specified';
+                  const lookingIndustry = selectedPitchDetails.industryPreferences || selectedPitchDetails.industry || 'Not specified';
+                  const lookingLocation = selectedPitchDetails.locationPreference || selectedPitchDetails.location || 'Not specified';
 
-                {/* Anonymous Founder Info - Simplified */}
-                <div className="bg-gray-50 rounded-2xl p-6">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center">
-                      <User className="w-8 h-8 text-white" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="text-xl font-bold text-gray-900 truncate mr-2 blur-sm select-none">
-                          {selectedPitchDetails.author.name}
-                        </h4>
-                        <span className="text-sm text-gray-600 font-semibold bg-gray-50 px-3 py-1 rounded-full whitespace-nowrap flex-shrink-0">
-                          {selectedPitchDetails.compatibility}% match
-                        </span>
-                      </div>
-                      <p className="text-gray-600 mb-1">{selectedPitchDetails.author.role}</p>
-                      <p className="text-sm text-gray-500 flex items-center gap-1">
-                        <MapPin className="w-4 h-4 text-black" />
-                        {selectedPitchDetails.author.location}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-4">
-                <div>
-                        <h5 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                          <Briefcase className="w-4 h-4 text-black" />
-                          Experience
-                        </h5>
-                        <p className="text-gray-700 text-sm">{selectedPitchDetails.author.anonymousProfile?.experience}</p>
-          </div>
-                      
-                      <div>
-                        <h5 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                          <GraduationCap className="w-4 h-4 text-black" />
-                          Education
-                        </h5>
-                        <p className="text-gray-700 text-sm">{selectedPitchDetails.author.anonymousProfile?.education}</p>
-              </div>
-                </div>
-                    
-                    <div className="space-y-4">
-                      <div>
-                        <h5 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                          <Zap className="w-4 h-4 text-black" />
-                          Work Style
-                        </h5>
-                        <p className="text-gray-700 text-sm">{selectedPitchDetails.author.anonymousProfile?.workStyle}</p>
-                      </div>
-                      
-                      <div>
-                        <h5 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-black" />
-                          Availability
-                        </h5>
-                        <p className="text-gray-700 text-sm">{selectedPitchDetails.author.anonymousProfile?.availability}</p>
-                      </div>
-            </div>
-          </div>
-
-                  {/* Skills */}
-                  <div className="mt-6">
-                    <h5 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                      <Star className="w-4 h-4 text-black" />
-                      Skills & Expertise
-                    </h5>
-                    <div className="flex flex-wrap gap-2">
-                      {(selectedPitchDetails.author.anonymousProfile?.skills || []).map((skill, index) => (
-                        <span key={index} className="px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full">
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Previous Ventures & Achievements */}
-                  <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                      <h5 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                        <Rocket className="w-4 h-4 text-black" />
-                        Previous Ventures
-                      </h5>
-                      <div className="space-y-2">
-                        {(selectedPitchDetails.author.anonymousProfile?.previousStartups || []).map((startup, index) => (
-                          <div key={index} className="flex items-center gap-2 text-sm text-gray-700">
-                            <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                            <span>{startup}</span>
-              </div>
-                        ))}
-              </div>
-            </div>
-                    
-                    <div>
-                      <h5 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                        <Award className="w-4 h-4 text-black" />
-                        Key Achievements
-                      </h5>
-                      <div className="space-y-2">
-                        {(selectedPitchDetails.author.anonymousProfile?.achievements || []).map((achievement, index) => (
-                          <div key={index} className="flex items-center gap-2 text-sm text-gray-700">
-                            <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                            <span>{achievement}</span>
+                  return (
+                    <>
+                      {/* About Startup */}
+                      <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 space-y-4">
+                        <div className="flex items-center gap-2">
+                          <Rocket className="w-5 h-5 text-gray-800" />
+                          <h3 className="text-lg font-semibold text-gray-900">About Startup</h3>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-2xl font-bold text-gray-900">{selectedPitchDetails.title}</span>
+                            {selectedPitchDetails.stage && (
+                              <span className="px-2.5 py-1 bg-gray-900 text-white rounded-full text-xs font-semibold">
+                                {selectedPitchDetails.stage}
+                              </span>
+                            )}
+                            {selectedPitchDetails.industry && (
+                              <span className="px-2.5 py-1 bg-gray-200 text-gray-800 rounded-full text-xs font-semibold">
+                                {selectedPitchDetails.industry}
+                              </span>
+                            )}
                           </div>
-                        ))}
+                          <p className="text-gray-700 text-sm leading-relaxed">
+                            {selectedPitchDetails.shortDescription || selectedPitchDetails.description || 'No summary provided.'}
+                          </p>
+                        </div>
                       </div>
-            </div>
-        </div>
 
-                  {/* Compatibility Score */}
-                  <div className="mt-6 bg-white rounded-xl p-4 text-center">
-                    <div className="text-3xl font-bold text-gray-600 mb-1">{selectedPitchDetails.compatibility}%</div>
-                    <div className="text-sm text-gray-600">Compatibility Match</div>
-                  </div>
-                </div>
-
-                {/* Problem & Solution */}
-                {(selectedPitchDetails.problem || selectedPitchDetails.solution) && (
-                  <div className="space-y-4">
-                    {selectedPitchDetails.problem && (
-                      <div className="bg-red-50 border-l-4 border-red-500 rounded-r-xl p-5">
-                        <h4 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
-                          <Target className="w-5 h-5 text-red-600" />
-                          Problem
-                        </h4>
-                        <p className="text-gray-700 leading-relaxed">{selectedPitchDetails.problem}</p>
+                      {/* About Founder */}
+                      <div className="bg-white rounded-2xl p-6 border border-gray-200 space-y-4">
+                        <div className="flex items-center gap-2">
+                          <User className="w-5 h-5 text-gray-800" />
+                          <h3 className="text-lg font-semibold text-gray-900">About Founder</h3>
+                        </div>
+                        <div className="flex items-start gap-4">
+                          <div className="w-16 h-16 bg-gray-900 rounded-2xl overflow-hidden">
+                            {founder.avatar ? (
+                              <img
+                                src={founder.avatar}
+                                alt={founder.name || 'Founder avatar'}
+                                className="w-full h-full object-cover blur-sm"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <User className="w-8 h-8 text-white blur-sm" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-700">
+                            <div className="space-y-1">
+                              <p className="font-semibold text-gray-900 blur-sm">{founder.name || 'Anonymous'}</p>
+                              <p>Role: {founder.role || 'Not specified'}</p>
+                              <p>Location: {founder.location || 'Not specified'}</p>
+                              <p>Availability: {founderAvailability}</p>
+                            </div>
+                            <div className="space-y-1">
+                              <p>About Myself: {aboutMyself}</p>
+                              <p>Purpose: {purpose}</p>
+                            </div>
+                            <div className="md:col-span-2">
+                              <p className="font-semibold text-gray-900 mb-2">Skills</p>
+                              <div className="flex flex-wrap gap-2">
+                                {founderSkills.length ? founderSkills.map((skill, idx) => (
+                                  <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full">
+                                    {skill}
+                                  </span>
+                                )) : <span className="text-gray-500">Not provided</span>}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    )}
-                    {selectedPitchDetails.solution && (
-                      <div className="bg-green-50 border-l-4 border-green-500 rounded-r-xl p-5">
-                        <h4 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
-                          <Lightbulb className="w-5 h-5 text-green-600" />
-                          Solution
-                        </h4>
-                        <p className="text-gray-700 leading-relaxed">{selectedPitchDetails.solution}</p>
+
+                      {/* Looking For */}
+                      <div className="bg-white rounded-2xl p-6 border border-gray-200 space-y-4">
+                        <div className="flex items-center gap-2">
+                          <Users className="w-5 h-5 text-gray-800" />
+                          <h3 className="text-lg font-semibold text-gray-900">Looking For</h3>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                          <div>
+                            <p className="font-semibold text-gray-900 mb-1">Their Role</p>
+                            <div className="flex flex-wrap gap-2">
+                              {lookingForRoles.length ? lookingForRoles.map((role, idx) => (
+                                <span key={idx} className="px-3 py-1 bg-purple-50 text-purple-700 rounded-full">
+                                  {role}
+                                </span>
+                              )) : <span className="text-gray-500">Not specified</span>}
+                            </div>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-900 mb-1">Their Skills</p>
+                            <div className="flex flex-wrap gap-2">
+                              {lookingSkills.length ? lookingSkills.map((skill, idx) => (
+                                <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full">
+                                  {skill}
+                                </span>
+                              )) : <span className="text-gray-500">Not specified</span>}
+                            </div>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-900 mb-1">Their Availability</p>
+                            <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full inline-block">{lookingAvailability}</span>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-900 mb-1">Their Industry</p>
+                            <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full inline-block">{Array.isArray(lookingIndustry) ? lookingIndustry.join(', ') : lookingIndustry}</span>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-900 mb-1">Their Location</p>
+                            <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full inline-block">{lookingLocation}</span>
+                          </div>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Market & Funding Info */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border border-blue-200">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Clock className="w-5 h-5 text-blue-600" />
-                      <h5 className="font-semibold text-gray-900">Timeline</h5>
-                    </div>
-                    <p className="text-sm text-gray-700 font-medium">{selectedPitchDetails.timeline}</p>
-                  </div>
-                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-5 border border-purple-200">
-                    <div className="flex items-center gap-2 mb-2">
-                      <TrendingUp className="w-5 h-5 text-purple-600" />
-                      <h5 className="font-semibold text-gray-900">Market Size</h5>
-                    </div>
-                    <p className="text-sm text-gray-700 font-medium">{selectedPitchDetails.market}</p>
-                  </div>
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-5 border border-green-200">
-                    <div className="flex items-center gap-2 mb-2">
-                      <DollarSign className="w-5 h-5 text-green-600" />
-                      <h5 className="font-semibold text-gray-900">Funding Stage</h5>
-                    </div>
-                    <p className="text-sm text-gray-700 font-medium">{selectedPitchDetails.funding}</p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                  <div className="bg-white border border-gray-200 rounded-xl p-5">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Globe className="w-5 h-5 text-gray-800" />
-                      <h5 className="font-semibold text-gray-900">Target Market</h5>
-                    </div>
-                    <p className="text-sm text-gray-700">{selectedPitchDetails.targetMarket || 'Not specified'}</p>
-                  </div>
-                  <div className="bg-white border border-gray-200 rounded-xl p-5">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Briefcase className="w-5 h-5 text-gray-800" />
-                      <h5 className="font-semibold text-gray-900">Business Model</h5>
-                    </div>
-                    <p className="text-sm text-gray-700">{selectedPitchDetails.businessModel || 'Not specified'}</p>
-                  </div>
-                </div>
-                    
-                {/* Collaboration Details */}
-                <div className="mt-6 p-5 bg-gray-50 border border-gray-200 rounded-xl space-y-4">
-                  <h4 className="text-lg font-bold text-gray-900 flex items-center gap-2">
-                    <Users className="w-5 h-5" />
-                    Looking For
-                  </h4>
-
-                  <div className="flex flex-wrap gap-2">
-                    {selectedPitchDetails.lookingFor.map((role, index) => (
-                      <span key={index} className="px-4 py-2 bg-purple-50 text-purple-700 rounded-full font-medium text-sm">
-                        {role}
-                      </span>
-                    ))}
-                  </div>
-
-                  {(selectedPitchDetails.requiredSkills || selectedPitchDetails.author?.anonymousProfile?.skills?.length) && (
-                    <div className="space-y-2">
-                      <p className="font-semibold text-gray-900 text-sm">Required skills & experience</p>
-                      <div className="flex flex-wrap gap-2">
-                        {(selectedPitchDetails.requiredSkills
-                          ? selectedPitchDetails.requiredSkills.split(',').map(s => s.trim()).filter(Boolean)
-                          : selectedPitchDetails.author?.anonymousProfile?.skills || []
-                        ).map((skill, idx) => (
-                          <span key={idx} className="px-3 py-1.5 bg-white border border-gray-200 text-gray-700 rounded-full text-sm">
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {(selectedPitchDetails.author?.summary || selectedPitchDetails.author?.anonymousProfile?.experience || selectedPitchDetails.author?.role) && (
-                    <div className="p-3 rounded-xl bg-white border border-gray-200 text-sm text-gray-700">
-                      <span className="font-semibold text-gray-900">What they bring:</span>{' '}
-                      {selectedPitchDetails.author?.summary || selectedPitchDetails.author?.anonymousProfile?.experience || selectedPitchDetails.author?.role}
-                    </div>
-                  )}
-
-                  {selectedPitchDetails.equityOffer && (
-                    <div className="p-3 rounded-xl bg-white border border-gray-200 text-sm text-gray-700">
-                      <span className="font-semibold text-gray-900">Equity Offer:</span> {selectedPitchDetails.equityOffer}
-                    </div>
-                  )}
-                </div>
-
-                {selectedPitchDetails.additionalInfo && (
-                  <div className="bg-gray-50 rounded-2xl p-5 border border-gray-100">
-                    <h4 className="text-lg font-bold text-gray-900 mb-2">Additional Information</h4>
-                    <p className="text-sm text-gray-700 leading-relaxed">{selectedPitchDetails.additionalInfo}</p>
-                  </div>
-                )}
+                    </>
+                  );
+                })()}
 
                 {/* Metrics - compact */}
                 <div className="bg-gray-50 rounded-xl p-3 border border-gray-100">
@@ -1576,7 +1491,7 @@ const Home = () => {
 
                 {/* Action Buttons */}
                 <div className="space-y-3 pt-4">
-                  <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
                     <button
                       onClick={() => {
                         setLovedPitches(prev => {
@@ -1589,42 +1504,42 @@ const Home = () => {
                           return newLoved;
                         });
                       }}
-                      className={`inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border text-sm font-medium transition hover:shadow-sm whitespace-nowrap ${
-                        lovedPitches.has(selectedPitchDetails.id)
-                          ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
-                          : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
-                      }`}
-                      title="Painkiller"
-                    >
-                      <Pill className={`w-4 h-4 ${lovedPitches.has(selectedPitchDetails.id) ? 'fill-current' : ''}`} />
-                      <span className="text-gray-700">Painkiller</span>
-                      <span className="font-semibold text-gray-900">{selectedPitchDetails.metrics?.medicine || 0}</span>
-                    </button>
-                    <button
-                      onClick={() => handleLike(selectedPitchDetails.id)}
-                      className={`inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border text-sm font-medium transition hover:shadow-sm whitespace-nowrap ${
-                        likedPitches.has(selectedPitchDetails.id)
-                          ? 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100'
-                          : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
-                      }`}
-                      title="Vitamin"
-                    >
-                      <Heart className={`w-4 h-4 ${likedPitches.has(selectedPitchDetails.id) ? 'fill-current' : ''}`} />
-                      <span className="text-gray-700">Vitamin</span>
-                      <span className="font-semibold text-gray-900">{selectedPitchDetails.metrics?.likes || 0}</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setCommentPitch(selectedPitchDetails);
-                        setShowCommentModal(true);
-                      }}
-                      className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-gray-200 bg-white text-gray-700 transition hover:shadow-sm hover:bg-gray-50 text-sm font-medium whitespace-nowrap"
-                      title="Comments"
-                    >
-                      <MessageSquare className="w-4 h-4" />
-                      <span className="text-gray-700">Comments</span>
-                      <span className="font-semibold text-gray-900">{selectedPitchDetails.metrics?.comments || 0}</span>
-                    </button>
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-medium transition hover:shadow-sm whitespace-nowrap ${
+                      lovedPitches.has(selectedPitchDetails.id)
+                        ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
+                        : 'border-red-100 bg-white text-red-700 hover:bg-red-50'
+                    }`}
+                    title="Painkillers"
+                  >
+                    <Syringe className={`w-3.5 h-3.5 ${lovedPitches.has(selectedPitchDetails.id) ? 'fill-current' : ''}`} />
+                    <span>Painkillers</span>
+                    <span className="font-semibold text-gray-900">{selectedPitchDetails.metrics?.medicine || 0}</span>
+                  </button>
+                  <button
+                    onClick={() => handleLike(selectedPitchDetails.id)}
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-medium transition hover:shadow-sm whitespace-nowrap ${
+                      likedPitches.has(selectedPitchDetails.id)
+                        ? 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100'
+                        : 'border-blue-100 bg-white text-blue-700 hover:bg-blue-50'
+                    }`}
+                    title="Vitamins"
+                  >
+                    <Pill className={`w-3.5 h-3.5 ${likedPitches.has(selectedPitchDetails.id) ? 'fill-current' : ''}`} />
+                    <span>Vitamins</span>
+                    <span className="font-semibold text-gray-900">{selectedPitchDetails.metrics?.likes || 0}</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCommentPitch(selectedPitchDetails);
+                      setShowCommentModal(true);
+                    }}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-gray-300 bg-white text-gray-900 transition hover:shadow-sm hover:bg-gray-50 font-medium whitespace-nowrap"
+                    title="Opinions"
+                  >
+                    <MessagesSquare className="w-3.5 h-3.5" />
+                    <span>Opinions</span>
+                    <span className="font-semibold text-gray-900">{selectedPitchDetails.metrics?.comments || 0}</span>
+                  </button>
                   </div>
                   <div className="flex flex-col md:flex-row gap-3">
                     <button
@@ -1716,24 +1631,24 @@ const Home = () => {
       <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
               <h1 className="text-2xl font-bold text-gray-900">Discover Pitches</h1>
               <p className="text-gray-600">Find your next cofounder or share your idea</p>
-                      </div>
+            </div>
             <button
               onClick={handleCreatePitch}
-              className="px-6 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300 flex items-center gap-2"
+              className="w-full sm:w-auto px-5 sm:px-6 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 transition-all duration-300 flex items-center justify-center gap-2"
             >
               <Plus className="w-5 h-5" />
               Create Pitch
             </button>
-              </div>
+          </div>
 
           {/* Search and Filters */}
-          <div className="flex items-center gap-4 mt-6">
-            <div className="flex-1 relative">
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div className="relative col-span-1 sm:col-span-2 lg:col-span-2">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
@@ -1746,7 +1661,7 @@ const Home = () => {
             <select
               value={filters.industry}
               onChange={(e) => setFilters({...filters, industry: e.target.value})}
-              className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent bg-white"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent bg-white"
             >
               <option value="">All Industries</option>
               <option value="Sustainability">Sustainability</option>
@@ -1758,7 +1673,7 @@ const Home = () => {
             <select
               value={filters.stage}
               onChange={(e) => setFilters({...filters, stage: e.target.value})}
-              className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent bg-white"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent bg-white"
             >
               <option value="">All Stages</option>
               <option value="Idea">Idea Stage</option>
@@ -1769,7 +1684,7 @@ const Home = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent bg-white"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent bg-white"
             >
               <option value="recent">Most Recent</option>
               <option value="popular">Most Popular</option>
@@ -1779,9 +1694,9 @@ const Home = () => {
 
                         </div>
                     </div>
-                    
+      
       {/* Pitches Grid */}
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredPitches.map((pitch) => (
             <div key={pitch.id} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden">
@@ -1937,7 +1852,7 @@ const Home = () => {
 
               {/* Action Bar */}
               <div className="px-6 py-3 border-b border-gray-100 bg-white">
-                <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-gray-700 mb-3">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-gray-700 mb-3">
                   <button
                     onClick={() => {
                       setLovedPitches(prev => {
@@ -1950,28 +1865,28 @@ const Home = () => {
                         return newLoved;
                       });
                     }}
-                    className={`inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border text-sm font-medium transition hover:shadow-sm whitespace-nowrap ${
-                      lovedPitches.has(pitch.id)
-                        ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
-                        : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
-                    }`}
-                    title="Painkiller"
-                  >
-                    <Pill className={`w-4 h-4 ${lovedPitches.has(pitch.id) ? 'fill-current' : ''}`} />
-                    <span className="text-gray-700">Painkiller</span>
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-medium transition hover:shadow-sm whitespace-nowrap ${
+                    lovedPitches.has(pitch.id)
+                      ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
+                      : 'border-red-100 bg-white text-red-700 hover:bg-red-50'
+                  }`}
+                  title="Painkillers"
+                >
+                    <Syringe className={`w-3.5 h-3.5 ${lovedPitches.has(pitch.id) ? 'fill-current' : ''}`} />
+                    <span>Painkillers</span>
                     <span className="font-semibold text-gray-900">{pitch.metrics?.medicine || (lovedPitches.has(pitch.id) ? 1 : 0)}</span>
                   </button>
                   <button
                     onClick={() => handleLike(pitch.id)}
-                    className={`inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border text-sm font-medium transition hover:shadow-sm whitespace-nowrap ${
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-medium transition hover:shadow-sm whitespace-nowrap ${
                       likedPitches.has(pitch.id)
                         ? 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100'
-                        : 'border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                        : 'border-blue-100 bg-white text-blue-700 hover:bg-blue-50'
                     }`}
-                    title="Vitamin"
+                    title="Vitamins"
                   >
-                    <Heart className={`w-4 h-4 ${likedPitches.has(pitch.id) ? 'fill-current' : ''}`} />
-                    <span className="text-gray-700">Vitamin</span>
+                    <Pill className={`w-3.5 h-3.5 ${likedPitches.has(pitch.id) ? 'fill-current' : ''}`} />
+                    <span>Vitamins</span>
                     <span className="font-semibold text-gray-900">{pitch.metrics?.likes || (likedPitches.has(pitch.id) ? 1 : 0)}</span>
                   </button>
                   <button
@@ -1979,15 +1894,15 @@ const Home = () => {
                       setCommentPitch(pitch);
                       setShowCommentModal(true);
                     }}
-                    className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-full border border-gray-200 bg-white text-gray-700 transition hover:shadow-sm hover:bg-gray-50 text-sm font-medium whitespace-nowrap"
-                    title="Comments"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-gray-300 bg-white text-gray-900 transition hover:shadow-sm hover:bg-gray-50 font-medium whitespace-nowrap"
+                    title="Opinions"
                   >
-                    <MessageSquare className="w-4 h-4" />
-                    <span className="text-gray-700">Comments</span>
+                    <MessagesSquare className="w-3.5 h-3.5" />
+                    <span>Opinions</span>
                     <span className="font-semibold text-gray-900">{pitch.metrics?.comments || 0}</span>
                   </button>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-3">
                   <button
                     onClick={() => handleViewDetails(pitch)}
                     className="flex-1 py-3 px-4 bg-gray-100 text-gray-800 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-200 flex items-center justify-center gap-2"

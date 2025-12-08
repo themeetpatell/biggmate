@@ -32,9 +32,6 @@ router.get('/founders/:founderId', authMiddleware, async (req, res) => {
       .where('founder_id', founderId)
       .select('value');
     
-    // Calculate VisionMatch score (AI-powered)
-    const visionMatchScore = await calculateVisionMatchScore(founder);
-    
     // Determine builder archetype
     const builderArchetype = determineBuilderArchetype(founder, skills);
     
@@ -51,7 +48,6 @@ router.get('/founders/:founderId', authMiddleware, async (req, res) => {
         interests: interests.map(i => i.interest),
         values: values.map(v => v.value)
       },
-      visionMatchScore,
       builderArchetype,
       riskProfile,
       compatibilityInsights
@@ -165,7 +161,7 @@ router.put('/founders/profile', authMiddleware, [
   }
 });
 
-// VisionMatch AI & Compatibility
+// Compatibility
 router.post('/compatibility', authMiddleware, [
   body('founderId1').notEmpty().withMessage('Founder ID 1 is required'),
   body('founderId2').notEmpty().withMessage('Founder ID 2 is required')
@@ -399,33 +395,6 @@ router.post('/inner-circle/referrals', authMiddleware, [
 });
 
 // Helper functions (AI algorithms)
-async function calculateVisionMatchScore(founder) {
-  // This would integrate with actual AI service
-  // For now, return a calculated score based on profile completeness
-  const factors = {
-    profileCompleteness: 0.3,
-    skillDiversity: 0.2,
-    goalClarity: 0.25,
-    networkStrength: 0.25
-  };
-  
-  let score = 0;
-  
-  // Profile completeness
-  if (founder.company && founder.title && founder.location) score += factors.profileCompleteness * 100;
-  
-  // Skill diversity (mock calculation)
-  score += factors.skillDiversity * 85;
-  
-  // Goal clarity (mock calculation)
-  score += factors.goalClarity * 90;
-  
-  // Network strength (mock calculation)
-  score += factors.networkStrength * 80;
-  
-  return Math.round(score);
-}
-
 function determineBuilderArchetype(founder, skills) {
   // Simple archetype determination based on skills and company stage
   const skillNames = skills.map(s => s.skill.toLowerCase());

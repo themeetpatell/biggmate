@@ -50,14 +50,14 @@ const CofounderMatching = ({ currentUser, matches, onConnect, onPass, onPitch, o
     timeline: ''
   });
 
-  const calculateDetailedVisionMatch = (cofounder) => {
+  const calculateCompatibilityDetails = (cofounder) => {
     const breakdown = {
       industryAlignment: 0,
       roleMatch: 0,
       skillComplement: 0,
       locationMatch: 0,
       experienceMatch: 0,
-      visionAlignment: 0
+      mutualInterest: 0
     };
 
     if (currentUser?.industries && cofounder?.industries) {
@@ -80,7 +80,7 @@ const CofounderMatching = ({ currentUser, matches, onConnect, onPass, onPitch, o
       const mutualMatch = cofounder.lookingFor.some(role => 
         role.toLowerCase().includes(currentUser.role.toLowerCase())
       );
-      breakdown.visionAlignment = mutualMatch ? 100 : 0;
+      breakdown.mutualInterest = mutualMatch ? 100 : 0;
     }
 
     if (currentUser?.skills && cofounder?.skills) {
@@ -112,7 +112,7 @@ const CofounderMatching = ({ currentUser, matches, onConnect, onPass, onPitch, o
       skillComplement: 0.20,
       locationMatch: 0.10,
       experienceMatch: 0.10,
-      visionAlignment: 0.15
+      mutualInterest: 0.15
     };
 
     const overallScore = Math.round(
@@ -121,7 +121,7 @@ const CofounderMatching = ({ currentUser, matches, onConnect, onPass, onPitch, o
       breakdown.skillComplement * weights.skillComplement +
       breakdown.locationMatch * weights.locationMatch +
       breakdown.experienceMatch * weights.experienceMatch +
-      breakdown.visionAlignment * weights.visionAlignment
+      breakdown.mutualInterest * weights.mutualInterest
     );
 
     return {
@@ -133,10 +133,9 @@ const CofounderMatching = ({ currentUser, matches, onConnect, onPass, onPitch, o
   const filteredAndSortedMatches = useMemo(() => {
     return matches
       .map(match => {
-        const matchDetails = calculateDetailedVisionMatch(match);
+        const matchDetails = calculateCompatibilityDetails(match);
         return {
           ...match,
-          visionMatch: matchDetails.overall,
           compatibility: match.compatibility || matchDetails.overall,
           matchBreakdown: matchDetails.breakdown
         };
@@ -833,7 +832,7 @@ I bring [business experience] and have [achievements]. Together, we could [visio
                     <div className="absolute bottom-3 left-3 right-3">
                       <div className="bg-white/90 backdrop-blur-sm rounded-xl px-3 py-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium text-gray-600">Vision Match</span>
+                          <span className="text-xs font-medium text-gray-600">Match Score</span>
                           <span className="text-lg font-bold text-gray-900">{match.compatibility}%</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
