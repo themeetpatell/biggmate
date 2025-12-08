@@ -35,7 +35,11 @@ const Landing = () => {
   }, []);
 
   const handleFindCofounder = () => {
-    navigate('/auth');
+    navigate('/auth?mode=register');
+  };
+  
+  const handleLogin = () => {
+    navigate('/auth?mode=login');
   };
 
   const handleLearnMore = () => {

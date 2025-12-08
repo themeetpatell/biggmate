@@ -67,10 +67,16 @@ const MarketingNavbar = () => {
               );
             })}
             <Link
-              to="/auth"
-              className="ml-4 px-6 py-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all duration-300 font-bold text-sm shadow-lg hover:shadow-xl hover:scale-105"
+              to="/auth?mode=login"
+              className="ml-4 px-6 py-3 text-gray-900 rounded-xl hover:bg-gray-100 transition-all duration-300 font-bold text-sm"
             >
-              Get Started
+              Login
+            </Link>
+            <Link
+              to="/auth?mode=register"
+              className="ml-2 px-6 py-3 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-all duration-300 font-bold text-sm shadow-lg hover:shadow-xl hover:scale-105"
+            >
+              Register
             </Link>
           </div>
 
@@ -101,11 +107,18 @@ const MarketingNavbar = () => {
               </Link>
             ))}
             <Link
-              to="/auth"
+              to="/auth?mode=login"
               onClick={() => setIsMenuOpen(false)}
-              className="block px-4 py-3 bg-gray-900 text-white rounded-xl font-bold text-center mt-4"
+              className="block px-4 py-3 text-gray-900 border-2 border-gray-200 rounded-xl font-bold text-center mt-4 hover:bg-gray-50 transition-colors"
             >
-              Get Started
+              Login
+            </Link>
+            <Link
+              to="/auth?mode=register"
+              onClick={() => setIsMenuOpen(false)}
+              className="block px-4 py-3 bg-gray-900 text-white rounded-xl font-bold text-center mt-2"
+            >
+              Register
             </Link>
           </div>
         </div>

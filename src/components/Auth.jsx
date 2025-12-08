@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { 
   Eye, 
   EyeOff, 
@@ -23,9 +23,13 @@ import { loginUser, registerUser, clearError } from '../store/slices/authSlice.j
 const Auth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
   
-  const [authMode, setAuthMode] = useState('signin'); // 'signin', 'signup', 'reset'
+  // Get mode from URL parameter (login, register) and map to internal authMode
+  const urlMode = searchParams.get('mode');
+  const initialMode = urlMode === 'register' ? 'signup' : 'signin';
+  const [authMode, setAuthMode] = useState(initialMode); // 'signin', 'signup', 'reset'
   const [showPassword, setShowPassword] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
@@ -61,6 +65,16 @@ const Auth = () => {
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  // Update authMode when URL parameter changes
+  useEffect(() => {
+    const urlMode = searchParams.get('mode');
+    if (urlMode === 'register') {
+      setAuthMode('signup');
+    } else if (urlMode === 'login') {
+      setAuthMode('signin');
+    }
+  }, [searchParams]);
 
   // Navigate after successful authentication
   useEffect(() => {
@@ -255,6 +269,12 @@ const Auth = () => {
     setResetStep(1);
     setForgotType('');
     setResetData({ countryCode: '+1', whatsappNumber: '', otp: '', newPassword: '', confirmPassword: '' });
+    
+    // Update URL to reflect the current mode
+    const newMode = mode === 'signup' ? 'register' : 'login';
+    if (mode !== 'reset') {
+      navigate(`/auth?mode=${newMode}`, { replace: true });
+    }
   };
 
   if (isAuthenticated) {
@@ -783,13 +803,13 @@ const Auth = () => {
             {authMode !== 'reset' && (
               <>
                 <p className="text-gray-300">
-                  {authMode === 'signup' ? 'I already have an account?' : "I don't have an Account?"}
-                  <button
-                    onClick={() => setMode(authMode === 'signup' ? 'signin' : 'signup')}
-                    className="ml-2 text-gray-300 hover:text-white font-semibold transition-colors"
+                  {authMode === 'signup' ? 'Already have an account?' : "Don't have an account?"}
+                  <Link
+                    to={authMode === 'signup' ? '/auth?mode=login' : '/auth?mode=register'}
+                    className="ml-2 text-white hover:text-gray-200 font-semibold transition-colors underline"
                   >
                     {authMode === 'signup' ? 'Sign in' : 'Sign up'}
-                  </button>
+                  </Link>
                 </p>
                 {authMode === 'signin' && (
                   <button
