@@ -79,12 +79,8 @@ const Auth = () => {
   // Navigate after successful authentication
   useEffect(() => {
     if (isAuthenticated) {
-      const onboardingComplete = localStorage.getItem('onboardingComplete');
-      if (onboardingComplete === 'true') {
-        navigate('/home');
-      } else {
-        navigate('/onboarding/mission');
-      }
+      // After login, always redirect to the home page
+      navigate('/home', { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
