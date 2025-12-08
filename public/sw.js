@@ -3,6 +3,19 @@ const CACHE_NAME = 'mindmate-v1.0.0';
 const STATIC_CACHE = 'mindmate-static-v1.0.0';
 const DYNAMIC_CACHE = 'mindmate-dynamic-v1.0.0';
 
+// Detect localhost/dev environment and avoid caching during local development.
+const IS_LOCALHOST = (typeof self !== 'undefined' && self.location && (
+  self.location.hostname === 'localhost' ||
+  self.location.hostname === '127.0.0.1' ||
+  self.location.hostname === ''
+));
+
+if (IS_LOCALHOST) {
+  // In development, we want the dev server (Vite) HMR and websocket to work
+  // without being interfered with by a service worker that serves stale files.
+  console.log('Service Worker (no-op): running on localhost — skipping caching to avoid dev interference.');
+}
+
 // Assets to cache immediately
 const STATIC_ASSETS = [
   '/',
@@ -14,102 +27,108 @@ const STATIC_ASSETS = [
 ];
 
 // Install event - cache static assets
-self.addEventListener('install', (event) => {
-  console.log('Service Worker installing...');
-  event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then((cache) => {
-        console.log('Caching static assets');
-        return cache.addAll(STATIC_ASSETS);
-      })
-      .then(() => {
-        console.log('Static assets cached successfully');
-        return self.skipWaiting();
-      })
-      .catch((error) => {
-        console.error('Failed to cache static assets:', error);
-      })
-  );
-});
+if (!IS_LOCALHOST) {
+  self.addEventListener('install', (event) => {
+    console.log('Service Worker installing...');
+    event.waitUntil(
+      caches.open(STATIC_CACHE)
+        .then((cache) => {
+          console.log('Caching static assets');
+          return cache.addAll(STATIC_ASSETS);
+        })
+        .then(() => {
+          console.log('Static assets cached successfully');
+          return self.skipWaiting();
+        })
+        .catch((error) => {
+          console.error('Failed to cache static assets:', error);
+        })
+    );
+  });
+}
 
 // Activate event - clean up old caches
-self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating...');
-  event.waitUntil(
-    caches.keys()
-      .then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => {
-            if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
-              console.log('Deleting old cache:', cacheName);
-              return caches.delete(cacheName);
-            }
-          })
-        );
-      })
-      .then(() => {
-        console.log('Service Worker activated');
-        return self.clients.claim();
-      })
-  );
-});
+if (!IS_LOCALHOST) {
+  self.addEventListener('activate', (event) => {
+    console.log('Service Worker activating...');
+    event.waitUntil(
+      caches.keys()
+        .then((cacheNames) => {
+          return Promise.all(
+            cacheNames.map((cacheName) => {
+              if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
+                console.log('Deleting old cache:', cacheName);
+                return caches.delete(cacheName);
+              }
+            })
+          );
+        })
+        .then(() => {
+          console.log('Service Worker activated');
+          return self.clients.claim();
+        })
+    );
+  });
+}
 
 // Fetch event - serve from cache or network
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
+if (!IS_LOCALHOST) {
+  self.addEventListener('fetch', (event) => {
+    const { request } = event;
+    const url = new URL(request.url);
 
-  // Skip non-GET requests
-  if (request.method !== 'GET') {
-    return;
-  }
+    // Skip non-GET requests
+    if (request.method !== 'GET') {
+      return;
+    }
 
-  // Skip chrome-extension and other non-http requests
-  if (!url.protocol.startsWith('http')) {
-    return;
-  }
+    // Skip chrome-extension and other non-http requests
+    if (!url.protocol.startsWith('http')) {
+      return;
+    }
 
-  event.respondWith(
-    caches.match(request)
-      .then((cachedResponse) => {
-        // Return cached version if available
-        if (cachedResponse) {
-          console.log('Serving from cache:', request.url);
-          return cachedResponse;
-        }
+    event.respondWith(
+      caches.match(request)
+        .then((cachedResponse) => {
+          // Return cached version if available
+          if (cachedResponse) {
+            console.log('Serving from cache:', request.url);
+            return cachedResponse;
+          }
 
-        // Otherwise fetch from network
-        return fetch(request)
-          .then((response) => {
-            // Don't cache non-successful responses
-            if (!response || response.status !== 200 || response.type !== 'basic') {
+          // Otherwise fetch from network
+          return fetch(request)
+            .then((response) => {
+              // Don't cache non-successful responses
+              if (!response || response.status !== 200 || response.type !== 'basic') {
+                return response;
+              }
+
+              // Clone the response
+              const responseToCache = response.clone();
+
+              // Cache dynamic content
+              caches.open(DYNAMIC_CACHE)
+                .then((cache) => {
+                  cache.put(request, responseToCache);
+                });
+
               return response;
-            }
-
-            // Clone the response
-            const responseToCache = response.clone();
-
-            // Cache dynamic content
-            caches.open(DYNAMIC_CACHE)
-              .then((cache) => {
-                cache.put(request, responseToCache);
-              });
-
-            return response;
-          })
-          .catch((error) => {
-            console.error('Fetch failed:', error);
-            
-            // Return offline page for navigation requests
-            if (request.mode === 'navigate') {
-              return caches.match('/offline.html');
-            }
-            
-            throw error;
-          });
-      })
-  );
-});
+            })
+            .catch((error) => {
+              console.error('Fetch failed:', error);
+              
+              // Return offline page for navigation requests
+              if (request.mode === 'navigate') {
+                return caches.match('/offline.html');
+              }
+              
+              throw error;
+            });
+        })
+    );
+  });
+}
 
 // Background sync for offline actions
 self.addEventListener('sync', (event) => {
