@@ -49,6 +49,34 @@
   50% { background-position: 100% 50%; }
 }
 
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+/* Custom Scrollbar Styles */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
 .animate-gradient {
   background-size: 200% 200%;
   animation: gradient 3s ease infinite;
