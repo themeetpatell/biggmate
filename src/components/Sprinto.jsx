@@ -316,7 +316,10 @@ const Sprinto = () => {
     }
     
     // MVP Testing
-    setTestPlan(data.test_plan || defaultMVPTesting.testPlan);
+    const testPlanData = data.test_plan || {};
+    setTestPlan({
+      scenarios: testPlanData.scenarios || []
+    });
     setBetaUsers(data.beta_users || []);
     setBugs(data.bugs || []);
     setUsabilityResults(data.usability_results || []);
@@ -1889,7 +1892,7 @@ const Sprinto = () => {
             <p className="text-gray-600">Define test scenarios and test cases.</p>
           </div>
           <button
-            onClick={() => setTestPlan({ ...testPlan, scenarios: [...testPlan.scenarios, { id: Date.now(), scenario: '', steps: '', expected: '', status: 'pending' }] })}
+            onClick={() => setTestPlan({ ...testPlan, scenarios: [...(testPlan.scenarios || []), { id: Date.now(), scenario: '', steps: '', expected: '', status: 'pending' }] })}
             className="px-4 py-2 bg-black text-white rounded-xl hover:bg-gray-800 transition-colors text-sm font-semibold flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
@@ -1897,12 +1900,12 @@ const Sprinto = () => {
           </button>
         </div>
         <div className="space-y-4">
-          {testPlan.scenarios.length === 0 ? (
+          {(testPlan.scenarios || []).length === 0 ? (
             <div className="text-center py-12 text-gray-500">
               <p>No test scenarios defined yet. Add your first test scenario to get started.</p>
             </div>
           ) : (
-            testPlan.scenarios.map((scenario) => (
+            (testPlan.scenarios || []).map((scenario) => (
               <div key={scenario.id} className="p-6 bg-gray-50 rounded-xl border border-gray-200">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
@@ -1910,7 +1913,7 @@ const Sprinto = () => {
                     <input
                       type="text"
                       value={scenario.scenario}
-                      onChange={(e) => setTestPlan({ ...testPlan, scenarios: testPlan.scenarios.map(s => s.id === scenario.id ? { ...s, scenario: e.target.value } : s) })}
+                      onChange={(e) => setTestPlan({ ...testPlan, scenarios: (testPlan.scenarios || []).map(s => s.id === scenario.id ? { ...s, scenario: e.target.value } : s) })}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
                       placeholder="Test scenario name..."
                     />
@@ -1919,7 +1922,7 @@ const Sprinto = () => {
                     <label className="block text-sm font-semibold text-gray-900 mb-2">Status</label>
                     <select
                       value={scenario.status}
-                      onChange={(e) => setTestPlan({ ...testPlan, scenarios: testPlan.scenarios.map(s => s.id === scenario.id ? { ...s, status: e.target.value } : s) })}
+                      onChange={(e) => setTestPlan({ ...testPlan, scenarios: (testPlan.scenarios || []).map(s => s.id === scenario.id ? { ...s, status: e.target.value } : s) })}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
                     >
                       <option value="pending">Pending</option>
@@ -1934,7 +1937,7 @@ const Sprinto = () => {
                     <label className="block text-sm font-semibold text-gray-900 mb-2">Test Steps</label>
                     <textarea
                       value={scenario.steps}
-                      onChange={(e) => setTestPlan({ ...testPlan, scenarios: testPlan.scenarios.map(s => s.id === scenario.id ? { ...s, steps: e.target.value } : s) })}
+                      onChange={(e) => setTestPlan({ ...testPlan, scenarios: (testPlan.scenarios || []).map(s => s.id === scenario.id ? { ...s, steps: e.target.value } : s) })}
                       className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-black focus:border-transparent"
                       rows="3"
                       placeholder="Step 1: ...&#10;Step 2: ..."
@@ -1944,7 +1947,7 @@ const Sprinto = () => {
                     <label className="block text-sm font-semibold text-gray-900 mb-2">Expected Result</label>
                     <textarea
                       value={scenario.expected}
-                      onChange={(e) => setTestPlan({ ...testPlan, scenarios: testPlan.scenarios.map(s => s.id === scenario.id ? { ...s, expected: e.target.value } : s) })}
+                      onChange={(e) => setTestPlan({ ...testPlan, scenarios: (testPlan.scenarios || []).map(s => s.id === scenario.id ? { ...s, expected: e.target.value } : s) })}
                       className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-black focus:border-transparent"
                       rows="3"
                       placeholder="What should happen?"
@@ -1952,7 +1955,7 @@ const Sprinto = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => setTestPlan({ ...testPlan, scenarios: testPlan.scenarios.filter(s => s.id !== scenario.id) })}
+                  onClick={() => setTestPlan({ ...testPlan, scenarios: (testPlan.scenarios || []).filter(s => s.id !== scenario.id) })}
                   className="text-red-600 hover:text-red-700 text-sm font-semibold flex items-center gap-2"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -2152,40 +2155,59 @@ const Sprinto = () => {
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Usability Testing</h2>
         <p className="text-gray-600 mb-6">Document usability test results and findings.</p>
         <div className="space-y-4">
-          {usabilityResults.map((result, index) => (
-            <div key={index} className="p-6 bg-gray-50 rounded-xl border border-gray-200">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">Test Task</label>
-                  <input
-                    type="text"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
-                    placeholder="What task did users perform?"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">Success Rate</label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
-                    placeholder="%"
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-semibold text-gray-900 mb-2">Findings</label>
-                  <textarea
-                    className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-black focus:border-transparent"
-                    rows="3"
-                    placeholder="What did you learn from this test?"
-                  />
-                </div>
-              </div>
+          {usabilityResults.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">
+              <p>No usability tests documented yet. Add your first test result to get started.</p>
             </div>
-          ))}
+          ) : (
+            usabilityResults.map((result, index) => (
+              <div key={result.id || index} className="p-6 bg-gray-50 rounded-xl border border-gray-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">Test Task</label>
+                    <input
+                      type="text"
+                      value={result.task || ''}
+                      onChange={(e) => setUsabilityResults(usabilityResults.map((r, i) => i === index ? { ...r, task: e.target.value } : r))}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                      placeholder="What task did users perform?"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">Success Rate (%)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={result.rate || ''}
+                      onChange={(e) => setUsabilityResults(usabilityResults.map((r, i) => i === index ? { ...r, rate: parseInt(e.target.value) || 0 } : r))}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+                      placeholder="0-100%"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-semibold text-gray-900 mb-2">Findings</label>
+                    <textarea
+                      value={result.findings || ''}
+                      onChange={(e) => setUsabilityResults(usabilityResults.map((r, i) => i === index ? { ...r, findings: e.target.value } : r))}
+                      className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-black focus:border-transparent"
+                      rows="3"
+                      placeholder="What did you learn from this test?"
+                    />
+                  </div>
+                </div>
+                <button
+                  onClick={() => setUsabilityResults(usabilityResults.filter((_, i) => i !== index))}
+                  className="mt-3 text-red-600 hover:text-red-700 text-sm font-semibold flex items-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Remove
+                </button>
+              </div>
+            ))
+          )}
           <button
-            onClick={() => setUsabilityResults([...usabilityResults, { task: '', rate: 0, findings: '' }])}
+            onClick={() => setUsabilityResults([...usabilityResults, { id: Date.now(), task: '', rate: 0, findings: '' }])}
             className="w-full p-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-600 hover:text-gray-900 hover:border-gray-400 flex items-center justify-center gap-2"
           >
             <Plus className="w-5 h-5" />
