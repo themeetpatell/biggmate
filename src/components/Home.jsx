@@ -135,6 +135,8 @@ const Home = () => {
   const [selectedPitch, setSelectedPitch] = useState(null);
   const [pitchMessage, setPitchMessage] = useState('');
   const [showCreatePitch, setShowCreatePitch] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [pitchReminder, setPitchReminder] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedPitchDetails, setSelectedPitchDetails] = useState(null);
   const [showPitchbackModal, setShowPitchbackModal] = useState(false);
@@ -168,6 +170,27 @@ const Home = () => {
     stage: '',
     location: ''
   });
+
+  useEffect(() => {
+    const shouldOpen = localStorage.getItem('openCreatePitch') === 'true';
+    if (shouldOpen) {
+      setShowCreatePitch(true);
+      localStorage.removeItem('openCreatePitch');
+    }
+  }, []);
+
+  useEffect(() => {
+    const title = localStorage.getItem('startupTitle');
+    const stage = localStorage.getItem('startupStage');
+    const oneLiner = localStorage.getItem('startupOneliner');
+    if (title || stage || oneLiner) {
+      setPitchReminder({
+        title: title || 'Your startup',
+        stage: stage || '',
+        oneLiner: oneLiner || ''
+      });
+    }
+  }, []);
 
   // Mock pitch data with more comprehensive information
   const generateMockPitches = (pageNum) => {
@@ -1646,9 +1669,35 @@ const Home = () => {
             </button>
           </div>
 
+          {pitchReminder && (
+            <div className="mt-4 bg-gray-50 border border-gray-200 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-wide text-gray-500 font-semibold">Complete your pitch</p>
+                <h3 className="text-lg font-semibold text-gray-900">{pitchReminder.title}</h3>
+                <p className="text-gray-600 text-sm">
+                  {pitchReminder.stage ? `${pitchReminder.stage} • ` : ''}{pitchReminder.oneLiner || 'Add more details to publish your pitch.'}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setPitchReminder(null)}
+                  className="px-3 py-2 text-sm text-gray-600 hover:text-gray-900"
+                >
+                  Dismiss
+                </button>
+                <button
+                  onClick={() => setShowCreatePitch(true)}
+                  className="px-4 py-2 bg-black text-white rounded-xl text-sm hover:bg-gray-800 transition-all"
+                >
+                  Finish pitch
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Search and Filters */}
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="relative col-span-1 sm:col-span-2 lg:col-span-2">
+          <div className="mt-6 grid grid-cols-5 md:grid-cols-5 lg:grid-cols-4 gap-3">
+            <div className="relative col-span-4 lg:col-span-3">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
@@ -1658,38 +1707,88 @@ const Home = () => {
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-900 focus:border-transparent"
               />
             </div>
-            <select
-              value={filters.industry}
-              onChange={(e) => setFilters({...filters, industry: e.target.value})}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent bg-white"
-            >
-              <option value="">All Industries</option>
-              <option value="Sustainability">Sustainability</option>
-              <option value="Fintech">Fintech</option>
-              <option value="HealthTech">HealthTech</option>
-              <option value="EdTech">EdTech</option>
-              <option value="AI/ML">AI/ML</option>
-            </select>
-            <select
-              value={filters.stage}
-              onChange={(e) => setFilters({...filters, stage: e.target.value})}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent bg-white"
-            >
-              <option value="">All Stages</option>
-              <option value="Idea">Idea Stage</option>
-              <option value="MVP">MVP Stage</option>
-              <option value="Beta">Beta Stage</option>
-              <option value="Launched">Launched</option>
-            </select>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent bg-white"
-            >
-              <option value="recent">Most Recent</option>
-              <option value="popular">Most Popular</option>
-              <option value="match">Best Match</option>
-            </select>
+
+            <div className="relative col-span-1 flex justify-end">
+              <button
+                onClick={() => setFiltersOpen((prev) => !prev)}
+                className="w-full px-3 py-3 border border-gray-300 rounded-xl bg-white flex items-center justify-center md:justify-between focus:ring-2 focus:ring-black focus:border-transparent"
+              >
+                <Filter className="w-5 h-5 text-gray-700" />
+                <span className="hidden md:inline text-gray-700 ml-2">Filters</span>
+                <ChevronRight className={`hidden md:block w-5 h-5 text-gray-500 transition-transform ${filtersOpen ? 'rotate-90' : ''}`} />
+              </button>
+              {filtersOpen && (
+                <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-2xl shadow-xl z-30 p-4 space-y-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-semibold text-gray-900">Filters</span>
+                    <button
+                      onClick={() => setFiltersOpen(false)}
+                      className="text-gray-500 hover:text-gray-800"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Industry</label>
+                    <select
+                      value={filters.industry}
+                      onChange={(e) => setFilters({...filters, industry: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent bg-white"
+                    >
+                      <option value="">All Industries</option>
+                      <option value="Sustainability">Sustainability</option>
+                      <option value="Fintech">Fintech</option>
+                      <option value="HealthTech">HealthTech</option>
+                      <option value="EdTech">EdTech</option>
+                      <option value="AI/ML">AI/ML</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Stage</label>
+                    <select
+                      value={filters.stage}
+                      onChange={(e) => setFilters({...filters, stage: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent bg-white"
+                    >
+                      <option value="">All Stages</option>
+                      <option value="Idea">Idea Stage</option>
+                      <option value="MVP">MVP Stage</option>
+                      <option value="Beta">Beta Stage</option>
+                      <option value="Launched">Launched</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Sort</label>
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent bg-white"
+                    >
+                      <option value="recent">Most Recent</option>
+                      <option value="popular">Most Popular</option>
+                      <option value="match">Best Match</option>
+                    </select>
+                  </div>
+                  <div className="flex items-center justify-end gap-2">
+                    <button
+                      onClick={() => {
+                        setFilters({ industry: '', stage: '', location: '' });
+                        setSortBy('recent');
+                      }}
+                      className="text-sm text-gray-600 hover:text-gray-900"
+                    >
+                      Clear
+                    </button>
+                    <button
+                      onClick={() => setFiltersOpen(false)}
+                      className="px-4 py-2 bg-black text-white rounded-xl text-sm"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
                         </div>

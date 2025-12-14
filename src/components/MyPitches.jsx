@@ -625,6 +625,11 @@ const MyPitches = () => {
     navigate('/home', { state: { pitchbackPitch: pitch } });
   };
 
+  const goToStartupPageBuilder = () => {
+    localStorage.setItem('openCreatePitch', 'true');
+    navigate('/home');
+  };
+
   const handleCreateMatchRoom = (matchId) => {
     setMatchRooms((prev) => ({
       ...prev,
@@ -1067,6 +1072,34 @@ const MyPitches = () => {
 
   const renderAcceptedMatches = () => (
     <div className="space-y-6">
+      {acceptedMatches.length > 0 && (
+        <div className="bg-gradient-to-r from-gray-900 to-gray-700 text-white rounded-3xl p-6 shadow-lg flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div className="space-y-1">
+            <p className="text-xs uppercase tracking-[0.15em] text-white/70 font-semibold">Journey checkpoint</p>
+            <h3 className="text-xl font-semibold">You’ve got a match. Now make the startup live.</h3>
+            <p className="text-white/80 text-sm">
+              Lock the co-founder, publish the startup page, and spin up your workspace. Next stops: Sprinting → Launchpad → AI Co-Founder → Founder CRM.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={() => handleCreateMatchRoom(acceptedMatches[0].id)}
+              className="px-4 py-3 bg-white text-gray-900 rounded-xl font-semibold hover:bg-gray-100 transition-all flex items-center justify-center gap-2"
+            >
+              <Rocket className="w-4 h-4" />
+              Open Match Room
+            </button>
+            <button
+              onClick={goToStartupPageBuilder}
+              className="px-4 py-3 bg-black/30 border border-white/30 text-white rounded-xl font-semibold hover:bg-black/40 transition-all flex items-center justify-center gap-2"
+            >
+              <Edit3 className="w-4 h-4" />
+              Publish startup page
+            </button>
+          </div>
+        </div>
+      )}
+
       {acceptedMatches.map((match) => {
         const roomState = matchRooms[match.id] || {};
         const canvasSections = [
