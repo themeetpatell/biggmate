@@ -298,6 +298,15 @@ const Navbar = () => {
 
           {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-2">
+            {/* Messages */}
+            <Link
+              to="/messages"
+              className="relative p-2.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100/90 rounded-xl transition-all duration-300 hover:scale-105 group"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-900/5 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <MessageCircle className="relative w-5 h-5 transition-all duration-300 group-hover:scale-110" />
+            </Link>
+            
             {/* Notifications */}
             <div className="relative" ref={notificationRef}>
               <button 
@@ -418,6 +427,21 @@ const Navbar = () => {
                     </Link>
                     
                     <Link 
+                      to="/my-pitches" 
+                      className="flex items-center gap-4 px-4 py-3.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 rounded-xl transition-all duration-200 group mt-1"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      <div className="p-2.5 bg-gray-100 rounded-xl group-hover:bg-gray-200 transition-all duration-200 group-hover:scale-105 shadow-sm">
+                        <Rocket className="w-4 h-4 text-gray-700" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-semibold text-gray-900">My Startup</div>
+                        <div className="text-xs text-gray-500 mt-0.5">View your matched startup</div>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Link>
+                    
+                    <Link 
                       to="/settings" 
                       className="flex items-center gap-4 px-4 py-3.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 rounded-xl transition-all duration-200 group mt-1"
                       onClick={() => setIsUserMenuOpen(false)}
@@ -515,6 +539,26 @@ const Navbar = () => {
                     <User className="w-4 h-4 text-gray-700" />
                   </div>
                   <span>Profile</span>
+                </Link>
+                <Link 
+                  to="/messages" 
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gradient-to-r hover:from-gray-50/90 hover:via-gray-50/50 hover:to-transparent rounded-xl transition-all duration-200"
+                >
+                  <div className="p-2 bg-gray-100/80 rounded-lg">
+                    <MessageCircle className="w-4 h-4 text-gray-700" />
+                  </div>
+                  <span>Messages</span>
+                </Link>
+                <Link 
+                  to="/my-pitches" 
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gradient-to-r hover:from-gray-50/90 hover:via-gray-50/50 hover:to-transparent rounded-xl transition-all duration-200"
+                >
+                  <div className="p-2 bg-gray-100/80 rounded-lg">
+                    <Rocket className="w-4 h-4 text-gray-700" />
+                  </div>
+                  <span>My Startup</span>
                 </Link>
                 <Link 
                   to="/settings" 

@@ -34,6 +34,8 @@ const LaunchPreparation = lazy(() => import('./components/LaunchPreparation.jsx'
 const EntrepreneurProfile = lazy(() => import('./components/EntrepreneurProfile.jsx'));
 const Sprinto = lazy(() => import('./components/SprintingModule.jsx'));
 const MyPitches = lazy(() => import('./components/MyPitches.jsx'));
+const Messages = lazy(() => import('./components/Messages.jsx'));
+const Settings = lazy(() => import('./components/Settings.jsx'));
 
 // Sprint Tools
 const IdeaFurnishing = lazy(() => import('./components/sprint-tools/IdeaFurnishing.jsx'));
@@ -209,12 +211,7 @@ const AppContent = () => {
               <Route path="/settings" element={
                 <ProtectedRoute>
                   <MainLayout>
-                    <div className="p-8">
-                      <h1 className="text-2xl font-bold text-gray-900 mb-6">Settings</h1>
-                      <div className="bg-white rounded-2xl p-6 shadow-lg">
-                        <p className="text-gray-600">Settings page coming soon...</p>
-                      </div>
-                    </div>
+                    <Settings />
                   </MainLayout>
                 </ProtectedRoute>
               } />
@@ -231,6 +228,14 @@ const AppContent = () => {
                 <ProtectedRoute>
                   <MainLayout>
                     <MyPitches />
+                  </MainLayout>
+                </ProtectedRoute>
+              } />
+              
+              <Route path="/messages" element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <Messages />
                   </MainLayout>
                 </ProtectedRoute>
               } />
