@@ -18,7 +18,6 @@ const MarketingNavbar = () => {
 
   const navItems = [
     { path: '/', label: 'Home' },
-    { path: '/product', label: 'Products' },
     { path: '/about', label: 'About' }
   ];
 
@@ -31,16 +30,11 @@ const MarketingNavbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-gray-900 to-gray-700 rounded-xl opacity-0 group-hover:opacity-20 blur transition-opacity duration-300"></div>
-              <div className="relative w-10 h-10 bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                <Rocket className="w-6 h-6 text-white" />
-              </div>
-            </div>
-            <div>
-              <div className="text-xl font-black text-gray-900 tracking-tight">Biggmate</div>
-              <div className="text-xs text-gray-500 font-medium">Find Your Cofounder</div>
-            </div>
+            <img
+              src="/BiggMate-long.png"
+              alt="BiggMate"
+              className="h-16 w-auto object-contain md:h-20"
+            />
           </Link>
 
           <div className="hidden lg:flex items-center gap-1">

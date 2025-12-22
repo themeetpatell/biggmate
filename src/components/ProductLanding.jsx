@@ -48,88 +48,69 @@ const ProductLanding = () => {
 
   const coreFeatures = [
     {
-      icon: Brain,
-      title: 'AI-Powered Cofounder Matching',
-      description: 'Advanced machine learning algorithms analyze your skills, experience, vision, and startup goals to match you with the perfect cofounder.',
+      icon: Lightbulb,
+      title: 'Pitch Home',
+      description: 'Discover, filter, and engage with community pitches from founders looking for aligned partners.',
       features: [
-        'Skill-based compatibility scoring',
-        'Vision alignment analysis',
-        'Complementary expertise detection',
-        'Real-time matching updates',
-        'Personality compatibility assessment',
-        'Work style matching'
+        'Smart discovery & filters',
+        'Role-based browsing',
+        'Save & follow pitches',
+        'Signal interest quickly',
+        'Shareable pitch profiles'
       ],
-      gradient: 'from-amber-500 via-orange-500 to-yellow-500'
+      gradient: 'from-indigo-600 via-violet-600 to-purple-600'
     },
     {
-      icon: Target,
-      title: 'Pitch & Pitch-Back System',
-      description: 'Share your startup vision through detailed pitches. Get specific role proposals from interested cofounders who explain exactly how they can contribute.',
+      icon: MessageSquare,
+      title: 'My Pitches',
+      description: 'Create, edit, and manage your pitches with responses, status tracking, and analytics.',
       features: [
-        'Structured pitch creation templates',
-        'Role-specific pitch-back responses',
-        'Skill contribution mapping',
-        'Vision alignment verification',
-        'Interactive Q&A system',
-        'Pitch analytics and insights'
+        'Structured pitch templates',
+        'Pitch-back responses',
+        'Status & response tracking',
+        'Metrics & insights',
+        'Version history'
       ],
-      gradient: 'from-orange-500 via-amber-600 to-yellow-600'
+      gradient: 'from-purple-600 via-violet-600 to-indigo-600'
     },
     {
-      icon: Rocket,
-      title: 'Complete Startup Journey Tools',
-      description: 'Comprehensive suite covering every stage from idea validation to launch preparation and post-launch growth.',
+      icon: Users,
+      title: 'Cofounder Finder',
+      description: 'Find aligned cofounders through targeted matching, role proposals, and deep alignment signals.',
       features: [
-        'Idea validation framework',
-        'MVP planning and tracking',
-        'Market research tools',
-        'Competitor analysis',
-        'Launch preparation checklist',
-        'Growth metrics dashboard'
+        'Compatibility scoring',
+        'Vision alignment checks',
+        'Complementary skill matching',
+        'Role proposals & fit',
+        'Shortlist & outreach'
       ],
-      gradient: 'from-yellow-500 via-amber-500 to-orange-500'
+      gradient: 'from-violet-600 via-indigo-600 to-purple-600'
     },
     {
       icon: BarChart3,
-      title: 'Sprint Dashboard & Project Management',
-      description: 'Powerful project management tools to track milestones, manage tasks, and coordinate effectively with your cofounder.',
+      title: 'Founder CRM',
+      description: 'Track conversations, commitments, and relationship progress with a lightweight CRM built for founders.',
       features: [
-        'Agile sprint planning',
-        'Milestone tracking and reporting',
-        'Task assignment and delegation',
-        'Progress analytics and insights',
-        'Team collaboration tools',
-        'Deadline management'
+        'Conversation timelines',
+        'Commitment tracking',
+        'Relationship status',
+        'Notes & follow-ups',
+        'Pipeline views'
       ],
-      gradient: 'from-amber-600 via-orange-600 to-amber-700'
+      gradient: 'from-indigo-600 via-purple-600 to-violet-600'
     },
     {
-      icon: Shield,
-      title: 'Equity Framework & Agreements',
-      description: 'Professional templates, calculators, and guidance for role discussions, equity splits, vesting schedules, and cofounder agreements.',
+      icon: Brain,
+      title: 'AI Co‑Founders',
+      description: 'Get AI assistance for pitch refinement, role fit, outreach messaging, and cofounder evaluation.',
       features: [
-        'Dynamic equity split calculator',
-        'Vesting schedule templates',
-        'Role definition framework',
-        'Legal agreement templates',
-        'IP assignment documents',
-        'Exit scenario planning'
+        'Pitch refinement',
+        'Role fit analysis',
+        'Outreach drafts',
+        'Conversation summaries',
+        'Next‑best action tips'
       ],
-      gradient: 'from-orange-600 via-red-500 to-orange-700'
-    },
-    {
-      icon: TrendingUp,
-      title: 'Launch Preparation & Go-to-Market',
-      description: 'Everything you need for investor readiness, go-to-market planning, and ensuring a successful startup launch.',
-      features: [
-        'Investor pitch deck builder',
-        'Go-to-market strategy planner',
-        'Launch timeline creator',
-        'Post-launch growth tracking',
-        'Investor outreach tools',
-        'PR and marketing templates'
-      ],
-      gradient: 'from-yellow-600 via-amber-600 to-orange-600'
+      gradient: 'from-purple-700 via-violet-700 to-indigo-700'
     }
   ];
 
@@ -211,38 +192,31 @@ const ProductLanding = () => {
   const processSteps = [
     {
       step: '01',
-      title: 'Create Your Profile',
-      description: 'Build a comprehensive profile showcasing your skills, experience, and startup vision. Highlight what makes you unique and what you bring to the table.',
+      title: 'Create Profile',
+      description: 'Share your skills, experience, and startup vision.',
       icon: Users,
-      gradient: 'from-amber-500 to-orange-500'
+      gradient: 'from-indigo-600 to-violet-600'
     },
     {
       step: '02',
-      title: 'Share Your Pitch',
-      description: 'Create a detailed pitch about your startup idea. Explain your vision, market opportunity, what you need, and what value you offer.',
+      title: 'Post Your Pitch',
+      description: 'Describe your idea and the roles you need.',
       icon: Target,
-      gradient: 'from-orange-500 to-amber-600'
+      gradient: 'from-violet-600 to-indigo-600'
     },
     {
       step: '03',
-      title: 'Get AI-Matched',
-      description: 'Our intelligent algorithm analyzes thousands of data points to match you with potential cofounders based on complementary skills and vision alignment.',
+      title: 'Get Matched',
+      description: 'AI finds aligned cofounders based on fit.',
       icon: Brain,
-      gradient: 'from-yellow-500 to-amber-500'
+      gradient: 'from-purple-600 to-violet-700'
     },
     {
       step: '04',
-      title: 'Receive Pitch-Backs',
-      description: 'Interested cofounders respond with specific role proposals, explaining how their skills and experience can contribute to your startup\'s success.',
+      title: 'Connect & Decide',
+      description: 'Review pitch‑backs, align, and move forward.',
       icon: MessageSquare,
-      gradient: 'from-amber-600 to-orange-600'
-    },
-    {
-      step: '05',
-      title: 'Connect & Collaborate',
-      description: 'Use our comprehensive tools to discuss equity, define roles, plan your journey, and start building your startup together.',
-      icon: Rocket,
-      gradient: 'from-orange-600 to-red-500'
+      gradient: 'from-indigo-700 to-purple-700'
     }
   ];
 
@@ -251,7 +225,7 @@ const ProductLanding = () => {
       <MarketingNavbar />
       
       <section className="relative pt-40 pb-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-500 via-orange-500 to-yellow-500"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-700 via-violet-700 to-purple-700"></div>
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-20"></div>
         <div className="absolute top-20 left-10 w-96 h-96 bg-white/10 rounded-full filter blur-3xl"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-white/10 rounded-full filter blur-3xl"></div>
@@ -260,16 +234,16 @@ const ProductLanding = () => {
           <div className={`text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-5 py-2.5 rounded-full mb-8 border border-white/30">
               <Gem className="w-5 h-5 text-white" />
-              <span className="text-sm font-bold text-white">Complete Platform</span>
+              <span className="text-sm font-bold text-white">Core Platform</span>
             </div>
             
             <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black mb-8 leading-none text-white">
               Everything You Need to<br />
-              <span className="bg-gradient-to-r from-yellow-100 via-amber-100 to-orange-100 bg-clip-text text-transparent">Build Your Startup</span>
+              <span className="bg-gradient-to-r from-indigo-200 via-violet-200 to-purple-200 bg-clip-text text-transparent">Find Your Cofounder</span>
             </h1>
             
             <p className="text-2xl sm:text-3xl text-white mb-12 max-w-4xl mx-auto font-semibold leading-relaxed">
-              A comprehensive platform with powerful tools designed for entrepreneurs to find cofounders, validate ideas, build MVPs, and launch successful startups.
+              A focused platform to find aligned cofounders, manage pitches, and track relationships — streamlined for what you need now.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
@@ -277,7 +251,7 @@ const ProductLanding = () => {
                 onClick={handleGetStarted}
                 className="group px-12 py-6 bg-white text-gray-900 rounded-2xl hover:scale-105 hover:shadow-2xl transition-all font-black text-xl flex items-center justify-center gap-3"
               >
-                <span>Start Building</span>
+                <span>Get Started</span>
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
               </button>
               <button
@@ -295,8 +269,8 @@ const ProductLanding = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <div className="inline-flex items-center gap-2 px-5 py-2 bg-amber-50 rounded-full mb-8">
-              <Flame className="w-5 h-5 text-amber-600" />
-              <span className="text-sm font-bold text-amber-600">Core Features</span>
+              <Flame className="w-5 h-5 text-violet-600" />
+              <span className="text-sm font-bold text-violet-600">Core Features</span>
       </div>
             <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6">Powerful Platform Capabilities</h2>
             <p className="text-xl text-gray-800 max-w-3xl mx-auto font-semibold">
@@ -350,9 +324,9 @@ const ProductLanding = () => {
       <section className="py-32 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-2 px-5 py-2 bg-white rounded-full mb-8 shadow-sm border border-amber-200">
-              <Box className="w-5 h-5 text-amber-600" />
-              <span className="text-sm font-bold text-amber-600">Additional Tools</span>
+            <div className="inline-flex items-center gap-2 px-5 py-2 bg-white rounded-full mb-8 shadow-sm border border-violet-200">
+              <Box className="w-5 h-5 text-violet-600" />
+              <span className="text-sm font-bold text-violet-600">Additional Tools</span>
             </div>
             <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6">Even More Features</h2>
             <p className="text-xl text-gray-800 max-w-3xl mx-auto font-semibold">
@@ -387,8 +361,8 @@ const ProductLanding = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <div className="inline-flex items-center gap-2 px-5 py-2 bg-amber-50 rounded-full mb-8">
-              <Zap className="w-5 h-5 text-amber-600" />
-              <span className="text-sm font-bold text-amber-600">Simple Process</span>
+              <Zap className="w-5 h-5 text-violet-600" />
+              <span className="text-sm font-bold text-violet-600">Simple Process</span>
       </div>
             <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6">How It Works</h2>
             <p className="text-xl text-gray-800 max-w-3xl mx-auto font-semibold">
@@ -397,7 +371,7 @@ const ProductLanding = () => {
         </div>
 
           <div className="grid md:grid-cols-5 gap-8 relative">
-            <div className="hidden md:block absolute top-20 left-0 right-0 h-1 bg-gradient-to-r from-indigo-200 via-purple-200 via-pink-200 via-orange-200 to-green-200"></div>
+            <div className="hidden md:block absolute top-20 left-0 right-0 h-1 bg-gradient-to-r from-indigo-200 via-violet-200 to-purple-200"></div>
             {processSteps.map((step, index) => {
             const Icon = step.icon;
             return (
@@ -427,14 +401,14 @@ const ProductLanding = () => {
           <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl rounded-[4rem] p-16 border border-white/20 shadow-2xl">
             <div className="text-center">
               <div className="inline-flex items-center gap-2 px-5 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-8 border border-white/30">
-                <Rocket className="w-5 h-5 text-white" />
-                <span className="text-sm font-bold text-white">Start Now</span>
+                <Brain className="w-5 h-5 text-white" />
+                <span className="text-sm font-bold text-white">Start Matching</span>
               </div>
               <h2 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-8 leading-tight">
-                Ready to Build Your Startup?
+                Ready to Find Your Cofounder?
               </h2>
               <p className="text-2xl text-white mb-12 max-w-3xl mx-auto font-semibold">
-                Join 500+ founders on the waitlist ready to find cofounders and build successful startups
+                Join 500+ founders on the waitlist finding aligned partners faster
               </p>
               <button
                 onClick={handleGetStarted}
@@ -445,12 +419,12 @@ const ProductLanding = () => {
               </button>
               
               <div className="mt-16 grid md:grid-cols-4 gap-8">
-                  {[
-                    { icon: Users, label: '500+ On Waitlist', gradient: 'from-amber-500 to-orange-500' },
-                    { icon: Rocket, label: 'Launching 2026', gradient: 'from-orange-500 to-amber-600' },
-                    { icon: Award, label: '6 Core Features', gradient: 'from-yellow-500 to-amber-500' },
-                    { icon: Star, label: '24/7 Access', gradient: 'from-amber-600 to-orange-600' }
-                  ].map((stat, index) => {
+                    {[
+                      { icon: Users, label: '500+ On Waitlist', gradient: 'from-indigo-600 to-violet-600' },
+                      { icon: Rocket, label: 'Launching 2026', gradient: 'from-violet-600 to-indigo-600' },
+                      { icon: Award, label: '5 Core Features', gradient: 'from-purple-600 to-violet-700' },
+                      { icon: Star, label: '24/7 Access', gradient: 'from-indigo-700 to-purple-700' }
+                    ].map((stat, index) => {
                   const Icon = stat.icon;
                   return (
                     <div key={index} className="text-center">

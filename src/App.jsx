@@ -20,7 +20,6 @@ const Home = lazy(() => import('./components/Home.jsx'));
 const SprintDashboard = lazy(() => import('./components/SprintDashboard.jsx'));
 const Auth = lazy(() => import('./components/Auth.jsx'));
 const Landing = lazy(() => import('./components/Landing.jsx'));
-const ProductLanding = lazy(() => import('./components/ProductLanding.jsx'));
 const AboutUs = lazy(() => import('./components/AboutUs.jsx'));
 const Onboarding = lazy(() => import('./components/onboarding/Onboarding.jsx'));
 const StartupPitchCreator = lazy(() => import('./components/StartupPitchCreator.jsx'));
@@ -114,7 +113,6 @@ const AppContent = () => {
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Landing />} />
-              <Route path="/product" element={<ProductLanding />} />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/onboarding/*" element={<Onboarding />} />

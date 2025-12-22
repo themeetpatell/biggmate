@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Eye, 
   EyeOff, 
@@ -23,6 +23,7 @@ import { loginUser, registerUser, clearError } from '../store/slices/authSlice.j
 const Auth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
   
   const [authMode, setAuthMode] = useState('signin'); // 'signin', 'signup', 'reset'
@@ -59,6 +60,14 @@ const Auth = () => {
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const mode = params.get('mode');
+    if (mode === 'signup' || mode === 'signin') {
+      setAuthMode(mode);
+    }
+  }, [location.search]);
 
   // Navigate after successful authentication
   useEffect(() => {

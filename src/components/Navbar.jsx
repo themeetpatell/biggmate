@@ -259,14 +259,12 @@ const Navbar = () => {
           <div className="flex items-center justify-between h-20">
           {/* Logo */}
             <Link to="/home" className="flex items-center flex-shrink-0 group">
-              <div className="relative">
-                <div className="absolute -inset-1 bg-gradient-to-r from-gray-900/10 via-gray-800/5 to-gray-900/10 rounded-2xl opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500"></div>
-                <span className="relative text-2xl font-extrabold tracking-tight bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent group-hover:from-gray-700 group-hover:via-gray-600 group-hover:to-gray-700 transition-all duration-500">
-                  BiggMate
-                </span>
-                <div className="absolute -bottom-1.5 left-0 w-0 h-[2px] bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 group-hover:w-full transition-all duration-500 rounded-full"></div>
-              </div>
-          </Link>
+              <img
+                src="/BiggMate-logo.png"
+                alt="BiggMate"
+                className="h-12 w-auto object-contain md:h-14"
+              />
+            </Link>
 
           {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-0.5">
