@@ -32,6 +32,7 @@ import {
   ThumbsUp,
   ThumbsDown,
   Share2,
+  Repeat2,
   Bookmark,
   Filter,
   Search,
@@ -128,6 +129,7 @@ const Home = () => {
   const [likedPitches, setLikedPitches] = useState(new Set());
   const [lovedPitches, setLovedPitches] = useState(new Set());
   const [bookmarkedPitches, setBookmarkedPitches] = useState(new Set());
+  const [repostedPitches, setRepostedPitches] = useState(new Set());
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [commentPitch, setCommentPitch] = useState(null);
   const [commentText, setCommentText] = useState('');
@@ -155,13 +157,16 @@ const Home = () => {
     marketSize: '',
     currentStage: '',
     lookingForRole: '',
-    requiredSkills: '',
+    requiredSkills: [],
     whatYouBring: '',
     location: '',
     timeline: '',
     fundingStage: '',
     equityOffer: '',
-    additionalInfo: ''
+    additionalInfo: '',
+    availabilityPreference: '',
+    industryPreferences: '',
+    locationPreference: ''
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('recent');
@@ -206,6 +211,8 @@ const Home = () => {
         stage: "MVP Stage",
         stageColor: "green",
         lookingFor: ["Technical Co-founder", "UI/UX Designer"],
+        locationPreference: "Same city",
+        equityOffer: "20-30% equity",
         author: {
           name: "Anonymous",
           role: "Business Co-founder",
@@ -231,8 +238,26 @@ const Home = () => {
           views: 245,
           likes: 18,
           pitches: 12,
-          comments: 8
+          comments: 8,
+          reposts: 5
         },
+        comments: [
+          {
+            author: "Sarah Johnson",
+            text: "This is exactly what the market needs! The carbon tracking space is ripe for disruption. Love the AI-powered analytics approach.",
+            timestamp: "2 hours ago"
+          },
+          {
+            author: "Michael Chen",
+            text: "Great idea! Have you considered partnering with carbon offset providers? That could be a good revenue stream.",
+            timestamp: "1 hour ago"
+          },
+          {
+            author: "Emma Davis",
+            text: "Impressive! The predictive analytics feature sounds game-changing. Would love to learn more about your tech stack.",
+            timestamp: "45 minutes ago"
+          }
+        ],
         timeline: "6-12 months to market",
         market: "Carbon management software market ($12B)",
         funding: "Pre-seed, seeking $500K",
@@ -250,6 +275,8 @@ const Home = () => {
         stage: "Early Stage",
         stageColor: "yellow",
         lookingFor: ["Technical Co-founder", "Product Manager", "Marketing Expert"],
+        locationPreference: "Same country",
+        equityOffer: "15-25% equity",
         author: {
           name: "Dr. Michael Chen",
           role: "Medical Co-founder",
@@ -275,8 +302,10 @@ const Home = () => {
           views: 189,
           likes: 25,
           pitches: 8,
-          comments: 5
+          comments: 5,
+          reposts: 3
         },
+        comments: [],
         timeline: "9-15 months to market",
         market: "Telemedicine market ($185B)",
         funding: "Seed stage, seeking $1M",
@@ -294,6 +323,8 @@ const Home = () => {
         stage: "Idea Stage",
         stageColor: "blue",
         lookingFor: ["Technical Co-founder", "UI/UX Designer", "Content Creator"],
+        locationPreference: "Anywhere",
+        equityOffer: "Open to discussion",
         author: {
           name: "Emily Rodriguez",
           role: "Education Co-founder",
@@ -557,6 +588,34 @@ const Home = () => {
     setSelectedPitchback(pitch);
     setShowDetailsModal(false);
     setShowPitchbackModal(true);
+  };
+
+  const handleRepost = (pitchId) => {
+    setRepostedPitches(prev => {
+      const newReposted = new Set(prev);
+      if (newReposted.has(pitchId)) {
+        newReposted.delete(pitchId);
+        // Decrease repost count
+        setPitches(prevPitches => 
+          prevPitches.map(pitch => 
+            pitch.id === pitchId 
+              ? { ...pitch, metrics: { ...pitch.metrics, reposts: (pitch.metrics.reposts || 0) - 1 } }
+              : pitch
+          )
+        );
+      } else {
+        newReposted.add(pitchId);
+        // Increase repost count
+        setPitches(prevPitches => 
+          prevPitches.map(pitch => 
+            pitch.id === pitchId 
+              ? { ...pitch, metrics: { ...pitch.metrics, reposts: (pitch.metrics.reposts || 0) + 1 } }
+              : pitch
+          )
+        );
+      }
+      return newReposted;
+    });
   };
 
   const handleSendPitchback = () => {
@@ -898,40 +957,123 @@ const Home = () => {
                     <option value="Design Co-founder">Design Co-founder</option>
                     <option value="Product Co-founder">Product Co-founder</option>
                     <option value="Multiple Roles">Multiple Roles</option>
+                    <option value="UI/UX Designer">UI/UX Designer</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Required skills & experience *
                   </label>
-                  <input
-                    type="text"
-                    value={pitchForm.requiredSkills}
-                    onChange={(e) => setPitchForm({...pitchForm, requiredSkills: e.target.value})}
-                    placeholder="e.g., React, Node.js, 5+ years startup experience, B2B sales"
-                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
-                  />
+                  <select
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value && !pitchForm.requiredSkills.includes(value)) {
+                        setPitchForm({...pitchForm, requiredSkills: [...pitchForm.requiredSkills, value]});
+                      }
+                      e.target.value = '';
+                    }}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent mb-3"
+                  >
+                    <option value="">+ Add Skill</option>
+                    {['Technical Development', 'Product Management', 'Marketing', 'Sales', 'Operations', 'Finance', 
+                      'Design', 'Business Strategy', 'Fundraising', 'Legal', 'HR', 'Data Analysis', 'AI/ML', 
+                      'Blockchain', 'Mobile Development', 'Backend Development', 'Frontend Development', 'DevOps', 
+                      'UX/UI Design', 'Growth Hacking', 'Content Marketing', 'SEO/SEM', 'Social Media', 'PR',
+                      'Cloud Architecture', 'Cybersecurity', 'Quality Assurance', 'Project Management', 'Agile/Scrum']
+                      .filter(sk => !pitchForm.requiredSkills.includes(sk))
+                      .map((skill) => (
+                        <option key={skill} value={skill}>{skill}</option>
+                      ))}
+                  </select>
+                  {pitchForm.requiredSkills.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {pitchForm.requiredSkills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="inline-flex items-center gap-2 px-3 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium"
+                        >
+                          {skill}
+                          <button
+                            onClick={() => setPitchForm({
+                              ...pitchForm, 
+                              requiredSkills: pitchForm.requiredSkills.filter(s => s !== skill)
+                            })}
+                            className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Their Availability *
+                    </label>
+                    <select 
+                      value={pitchForm.availabilityPreference}
+                      onChange={(e) => setPitchForm({...pitchForm, availabilityPreference: e.target.value})}
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                    >
+                      <option value="">Select Availability</option>
+                      <option value="Full-time">Full-time</option>
+                      <option value="Part-time">Part-time</option>
+                      <option value="Flexible">Flexible</option>
+                      <option value="Weekends">Weekends</option>
+                      <option value="Not specified">Not specified</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Their Industry *
+                    </label>
+                    <select 
+                      value={pitchForm.industryPreferences}
+                      onChange={(e) => setPitchForm({...pitchForm, industryPreferences: e.target.value})}
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                    >
+                      <option value="">Select Industry</option>
+                      <option value="Technology">Technology</option>
+                      <option value="Healthcare">Healthcare</option>
+                      <option value="FinTech">FinTech</option>
+                      <option value="Education">Education</option>
+                      <option value="Sustainability">Sustainability</option>
+                      <option value="Food & Beverage">Food & Beverage</option>
+                      <option value="Real Estate">Real Estate</option>
+                      <option value="E-commerce">E-commerce</option>
+                      <option value="SaaS">SaaS</option>
+                      <option value="AI/ML">AI/ML</option>
+                      <option value="Any">Any</option>
+                    </select>
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    What you bring to the table *
+                    Their Location *
                   </label>
-                  <textarea
-                    value={pitchForm.whatYouBring}
-                    onChange={(e) => setPitchForm({...pitchForm, whatYouBring: e.target.value})}
-                    placeholder="Describe your background, skills, and what you'll contribute to the partnership..."
-                    className="w-full h-24 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
-                  />
+                  <select
+                    value={pitchForm.locationPreference}
+                    onChange={(e) => setPitchForm({...pitchForm, locationPreference: e.target.value})}
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
+                  >
+                    <option value="">Select Location Preference</option>
+                    <option value="Same city">Same city</option>
+                    <option value="Same state">Same state</option>
+                    <option value="Same country">Same country</option>
+                    <option value="Anywhere">Anywhere</option>
+                  </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Equity Offer (Optional)
+                    Equity Offer *
                   </label>
                   <input
                     type="text"
                     value={pitchForm.equityOffer}
                     onChange={(e) => setPitchForm({...pitchForm, equityOffer: e.target.value})}
-                    placeholder="e.g., 20-30% equity"
+                    placeholder="e.g., 20-30% equity, 15% equity + salary, To be discussed"
                     className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent"
                   />
                 </div>
@@ -1002,13 +1144,16 @@ const Home = () => {
                     marketSize: '',
                     currentStage: '',
                     lookingForRole: '',
-                    requiredSkills: '',
+                    requiredSkills: [],
                     whatYouBring: '',
                     location: '',
                     timeline: '',
                     fundingStage: '',
                     equityOffer: '',
-                    additionalInfo: ''
+                    additionalInfo: '',
+                    availabilityPreference: '',
+                    industryPreferences: '',
+                    locationPreference: ''
                   });
                 }}
                 className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
@@ -1020,8 +1165,9 @@ const Home = () => {
                   if (pitchForm.startupName && pitchForm.industry && pitchForm.oneLineDescription && 
                       pitchForm.problem && pitchForm.solution && pitchForm.targetMarket && 
                       pitchForm.businessModel && pitchForm.currentStage && pitchForm.lookingForRole &&
-                      pitchForm.requiredSkills && pitchForm.whatYouBring && pitchForm.location && 
-                      pitchForm.timeline) {
+                      pitchForm.requiredSkills.length > 0 && pitchForm.location && 
+                      pitchForm.timeline && pitchForm.availabilityPreference && pitchForm.industryPreferences &&
+                      pitchForm.locationPreference && pitchForm.equityOffer) {
                     const newPitch = {
                       id: Date.now(),
                       title: pitchForm.startupName,
@@ -1036,21 +1182,27 @@ const Home = () => {
                       stageColor: 'green',
                       lookingFor: [pitchForm.lookingForRole],
                       requiredSkills: pitchForm.requiredSkills,
+                      availabilityPreference: pitchForm.availabilityPreference,
+                      industryPreferences: pitchForm.industryPreferences,
+                      locationPreference: pitchForm.locationPreference,
+                      equityOffer: pitchForm.equityOffer,
+                      fundingStage: pitchForm.fundingStage,
                       author: {
                         name: user?.name || 'You',
-                        role: pitchForm.whatYouBring.split(' ').slice(0, 3).join(' ') || 'Founder',
-                        summary: pitchForm.whatYouBring,
+                        role: 'Founder',
+                        summary: `Looking for ${pitchForm.lookingForRole}`,
                         location: pitchForm.location,
                         anonymousProfile: {
-                          experience: pitchForm.requiredSkills,
-                          skills: pitchForm.requiredSkills.split(',').map(s => s.trim()),
+                          experience: pitchForm.lookingForRole,
+                          skills: pitchForm.requiredSkills,
                           education: 'Not specified',
                           workStyle: 'Collaborative',
                           availability: pitchForm.timeline
                         }
                       },
                       compatibility: 100,
-                      metrics: { views: 0, likes: 0, pitches: 0, comments: 0 },
+                      metrics: { views: 0, likes: 0, pitches: 0, comments: 0, reposts: 0 },
+      comments: [],
                       timeline: pitchForm.timeline,
                       market: pitchForm.marketSize || 'Not specified',
                       funding: pitchForm.fundingStage || 'Not specified',
@@ -1168,9 +1320,11 @@ const Home = () => {
             {(() => {
               const author = selectedPitchback.author || {};
               const founderSkills = author.skills || [];
-              const cofounderSkills = selectedPitchback.requiredSkills
-                ? selectedPitchback.requiredSkills.split(',').map(s => s.trim()).filter(Boolean)
-                : selectedPitchback.cofounderSkills || [];
+              const cofounderSkills = Array.isArray(selectedPitchback.requiredSkills)
+                ? selectedPitchback.requiredSkills
+                : (typeof selectedPitchback.requiredSkills === 'string'
+                  ? selectedPitchback.requiredSkills.split(',').map(s => s.trim()).filter(Boolean)
+                  : (selectedPitchback.cofounderSkills || []));
 
               return (
                 <>
@@ -1211,13 +1365,13 @@ const Home = () => {
                             <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center">
                               <User className="w-5 h-5 text-white" />
                             </div>
-                            <div className="space-y-2 text-sm text-gray-800">
-                              <p className="font-semibold">{author.role}</p>
-                              <p className="text-gray-600">{author.location}</p>
+                            <div className="space-y-2 text-sm">
+                              <p className="font-semibold text-gray-900">{author.role}</p>
+                              <p className="text-gray-900">{author.location}</p>
                               {founderSkills.length > 0 && (
                                 <div className="flex flex-wrap gap-2 pt-1">
                                   {founderSkills.map((skill, idx) => (
-                                    <span key={idx} className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-semibold">
+                                    <span key={idx} className="px-3 py-1 rounded-full bg-gray-100 text-gray-800 text-xs font-medium">
                                       {skill}
                                     </span>
                                   ))}
@@ -1229,10 +1383,10 @@ const Home = () => {
 
                         <div>
                           <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">Looking for</h3>
-                          <div className="space-y-2 text-sm text-gray-800">
+                          <div className="space-y-3 text-sm">
                             {selectedPitchback.lookingFor && selectedPitchback.lookingFor.length > 0 && (
                               <div>
-                                <p className="font-semibold mb-2">Cofounder Role</p>
+                                <p className="font-semibold text-gray-900 mb-2">Cofounder Role</p>
                                 <div className="flex flex-wrap gap-2">
                                   {selectedPitchback.lookingFor.map((role, idx) => (
                                     <span key={idx} className="px-3 py-1 rounded-full bg-gray-900 text-white text-xs font-semibold">
@@ -1242,18 +1396,42 @@ const Home = () => {
                                 </div>
                               </div>
                             )}
-                            {cofounderSkills.length ? (
+                            {cofounderSkills.length > 0 && (
                               <div>
-                                <p className="font-semibold mb-2">Cofounder Skills</p>
+                                <p className="font-semibold text-gray-900 mb-2">Required Skills</p>
                                 <div className="flex flex-wrap gap-2">
                                   {cofounderSkills.map((skill, idx) => (
-                                    <span key={idx} className="px-3 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-semibold">
+                                    <span key={idx} className="px-3 py-1 rounded-full bg-gray-100 text-gray-800 text-xs font-medium">
                                       {skill}
                                     </span>
                                   ))}
                                 </div>
                               </div>
-                            ) : null}
+                            )}
+                            {selectedPitchback.availabilityPreference && (
+                              <div>
+                                <p className="font-semibold text-gray-900 mb-1">Availability</p>
+                                <p className="text-gray-900">{selectedPitchback.availabilityPreference}</p>
+                              </div>
+                            )}
+                            {selectedPitchback.industryPreferences && (
+                              <div>
+                                <p className="font-semibold text-gray-900 mb-1">Industry</p>
+                                <p className="text-gray-900">{selectedPitchback.industryPreferences}</p>
+                              </div>
+                            )}
+                            {selectedPitchback.locationPreference && (
+                              <div>
+                                <p className="font-semibold text-gray-900 mb-1">Location</p>
+                                <p className="text-gray-900">{selectedPitchback.locationPreference}</p>
+                              </div>
+                            )}
+                            {selectedPitchback.equityOffer && (
+                              <div>
+                                <p className="font-semibold text-gray-900 mb-1">Equity Offer</p>
+                                <p className="text-green-700 font-semibold">{selectedPitchback.equityOffer}</p>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -1358,15 +1536,16 @@ const Home = () => {
                   const founder = selectedPitchDetails.author || {};
                   const founderProfile = founder.anonymousProfile || {};
                   const aboutMyself = founder.about || founderProfile.experience || 'Not provided';
-                  const purpose = founderProfile.purpose || selectedPitchDetails.purpose || 'Not provided';
                   const founderSkills = founderProfile.skills || [];
                   const founderAvailability = founderProfile.availability || selectedPitchDetails.timeline || 'Not specified';
                   const lookingForRoles = (selectedPitchDetails.lookingFor && selectedPitchDetails.lookingFor.length)
                     ? selectedPitchDetails.lookingFor
                     : selectedPitchDetails.lookingForRole ? [selectedPitchDetails.lookingForRole] : [];
-                  const lookingSkills = selectedPitchDetails.requiredSkills
-                    ? selectedPitchDetails.requiredSkills.split(',').map(s => s.trim()).filter(Boolean)
-                    : (selectedPitchDetails.cofounderSkills || []);
+                  const lookingSkills = Array.isArray(selectedPitchDetails.requiredSkills)
+                    ? selectedPitchDetails.requiredSkills
+                    : (typeof selectedPitchDetails.requiredSkills === 'string' 
+                      ? selectedPitchDetails.requiredSkills.split(',').map(s => s.trim()).filter(Boolean)
+                      : (selectedPitchDetails.cofounderSkills || []));
                   const lookingAvailability = selectedPitchDetails.availabilityPreference || selectedPitchDetails.commitment || 'Not specified';
                   const lookingIndustry = selectedPitchDetails.industryPreferences || selectedPitchDetails.industry || 'Not specified';
                   const lookingLocation = selectedPitchDetails.locationPreference || selectedPitchDetails.location || 'Not specified';
@@ -1399,6 +1578,73 @@ const Home = () => {
                         </div>
                       </div>
 
+                      {/* Problem & Solution */}
+                      {(selectedPitchDetails.problem || selectedPitchDetails.solution) && (
+                        <div className="bg-white rounded-2xl p-6 border border-gray-200 space-y-4">
+                          {selectedPitchDetails.problem && (
+                            <div>
+                              <h4 className="text-base font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                                <Target className="w-4 h-4" />
+                                Problem
+                              </h4>
+                              <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
+                                {selectedPitchDetails.problem}
+                              </p>
+                            </div>
+                          )}
+                          {selectedPitchDetails.solution && (
+                            <div>
+                              <h4 className="text-base font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                                <Rocket className="w-4 h-4" />
+                                Solution
+                              </h4>
+                              <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
+                                {selectedPitchDetails.solution}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Market & Business Details */}
+                      {(selectedPitchDetails.targetMarket || selectedPitchDetails.businessModel || selectedPitchDetails.marketSize || selectedPitchDetails.timeline) && (
+                        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+                          <h3 className="text-lg font-semibold text-gray-900 mb-4">Market & Business Details</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            {selectedPitchDetails.targetMarket && (
+                              <div>
+                                <p className="font-semibold text-gray-900 mb-1">Target Market</p>
+                                <p className="text-gray-700">{selectedPitchDetails.targetMarket}</p>
+                              </div>
+                            )}
+                            {selectedPitchDetails.businessModel && (
+                              <div>
+                                <p className="font-semibold text-gray-900 mb-1">Business Model</p>
+                                <p className="text-gray-700">{selectedPitchDetails.businessModel}</p>
+                              </div>
+                            )}
+                            {selectedPitchDetails.marketSize && (
+                              <div>
+                                <p className="font-semibold text-gray-900 mb-1">Market Size</p>
+                                <p className="text-gray-700">{selectedPitchDetails.marketSize}</p>
+                              </div>
+                            )}
+                            {selectedPitchDetails.timeline && (
+                              <div>
+                                <p className="font-semibold text-gray-900 mb-1">Timeline</p>
+                                <p className="text-gray-700">{selectedPitchDetails.timeline}</p>
+                              </div>
+                            )}
+                            {(selectedPitchDetails.fundingStage || selectedPitchDetails.funding) && (
+                              <div>
+                                <p className="font-semibold text-gray-900 mb-1">Funding Stage</p>
+                                <p className="text-gray-700">{selectedPitchDetails.fundingStage || selectedPitchDetails.funding}</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
                       {/* About Founder */}
                       <div className="bg-white rounded-2xl p-6 border border-gray-200 space-y-4">
                         <div className="flex items-center gap-2">
@@ -1419,22 +1665,30 @@ const Home = () => {
                               </div>
                             )}
                           </div>
-                          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-gray-700">
-                            <div className="space-y-1">
-                              <p className="font-semibold text-gray-900 blur-sm">{founder.name || 'Anonymous'}</p>
-                              <p>Role: {founder.role || 'Not specified'}</p>
-                              <p>Location: {founder.location || 'Not specified'}</p>
-                              <p>Availability: {founderAvailability}</p>
+                          <div className="flex-1 space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                              <div>
+                                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Role</p>
+                                <p className="text-gray-900 font-medium">{founder.role || 'Not specified'}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Location</p>
+                                <p className="text-gray-900 font-medium">{founder.location || 'Not specified'}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Availability</p>
+                                <p className="text-gray-900 font-medium">{founderAvailability}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Experience</p>
+                                <p className="text-gray-900 font-medium">{aboutMyself}</p>
+                              </div>
                             </div>
-                            <div className="space-y-1">
-                              <p>About Myself: {aboutMyself}</p>
-                              <p>Purpose: {purpose}</p>
-                            </div>
-                            <div className="md:col-span-2">
-                              <p className="font-semibold text-gray-900 mb-2">Skills</p>
+                            <div>
+                              <p className="text-xs font-semibold text-gray-500 uppercase mb-2">Skills</p>
                               <div className="flex flex-wrap gap-2">
                                 {founderSkills.length ? founderSkills.map((skill, idx) => (
-                                  <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full">
+                                  <span key={idx} className="px-3 py-1.5 bg-gray-100 text-gray-800 rounded-lg text-sm font-medium">
                                     {skill}
                                   </span>
                                 )) : <span className="text-gray-500">Not provided</span>}
@@ -1483,8 +1737,22 @@ const Home = () => {
                             <p className="font-semibold text-gray-900 mb-1">Their Location</p>
                             <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full inline-block">{lookingLocation}</span>
                           </div>
+                          <div>
+                            <p className="font-semibold text-gray-900 mb-1">Equity Offer</p>
+                            <span className="px-3 py-1 bg-green-50 text-green-700 rounded-full inline-block font-medium">{selectedPitchDetails.equityOffer || 'Not specified'}</span>
+                          </div>
                         </div>
                       </div>
+
+                      {/* Additional Information */}
+                      {selectedPitchDetails.additionalInfo && (
+                        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100">
+                          <h3 className="text-lg font-semibold text-gray-900 mb-3">Additional Information</h3>
+                          <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
+                            {selectedPitchDetails.additionalInfo}
+                          </p>
+                        </div>
+                      )}
                     </>
                   );
                 })()}
@@ -1516,52 +1784,29 @@ const Home = () => {
                 <div className="space-y-3 pt-4">
                   <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs">
                     <button
+                      onClick={() => handleLike(selectedPitchDetails.id)}
+                      className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full border font-medium transition hover:shadow-sm whitespace-nowrap ${
+                        likedPitches.has(selectedPitchDetails.id)
+                          ? 'border-orange-200 bg-orange-50 text-orange-700 hover:bg-orange-100'
+                          : 'border-orange-100 bg-white text-orange-700 hover:bg-orange-50'
+                      }`}
+                      title="Spark"
+                    >
+                      <Sparkles className={`w-4 h-4 ${likedPitches.has(selectedPitchDetails.id) ? 'fill-current' : ''}`} />
+                      <span className="font-semibold">Spark</span>
+                      <span className="font-bold text-gray-900">{selectedPitchDetails.metrics?.likes || 0}</span>
+                    </button>
+                    <button
                       onClick={() => {
-                        setLovedPitches(prev => {
-                          const newLoved = new Set(prev);
-                          if (newLoved.has(selectedPitchDetails.id)) {
-                            newLoved.delete(selectedPitchDetails.id);
-                          } else {
-                            newLoved.add(selectedPitchDetails.id);
-                          }
-                          return newLoved;
-                        });
+                        setCommentPitch(selectedPitchDetails);
+                        setShowCommentModal(true);
                       }}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-medium transition hover:shadow-sm whitespace-nowrap ${
-                      lovedPitches.has(selectedPitchDetails.id)
-                        ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
-                        : 'border-red-100 bg-white text-red-700 hover:bg-red-50'
-                    }`}
-                    title="Painkillers"
-                  >
-                    <Syringe className={`w-3.5 h-3.5 ${lovedPitches.has(selectedPitchDetails.id) ? 'fill-current' : ''}`} />
-                    <span>Painkillers</span>
-                    <span className="font-semibold text-gray-900">{selectedPitchDetails.metrics?.medicine || 0}</span>
-                  </button>
-                  <button
-                    onClick={() => handleLike(selectedPitchDetails.id)}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-medium transition hover:shadow-sm whitespace-nowrap ${
-                      likedPitches.has(selectedPitchDetails.id)
-                        ? 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100'
-                        : 'border-blue-100 bg-white text-blue-700 hover:bg-blue-50'
-                    }`}
-                    title="Vitamins"
-                  >
-                    <Pill className={`w-3.5 h-3.5 ${likedPitches.has(selectedPitchDetails.id) ? 'fill-current' : ''}`} />
-                    <span>Vitamins</span>
-                    <span className="font-semibold text-gray-900">{selectedPitchDetails.metrics?.likes || 0}</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setCommentPitch(selectedPitchDetails);
-                      setShowCommentModal(true);
-                    }}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-gray-300 bg-white text-gray-900 transition hover:shadow-sm hover:bg-gray-50 font-medium whitespace-nowrap"
-                    title="Opinions"
-                  >
-                    <MessagesSquare className="w-3.5 h-3.5" />
-                    <span>Opinions</span>
-                    <span className="font-semibold text-gray-900">{selectedPitchDetails.metrics?.comments || 0}</span>
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-300 bg-white text-gray-900 transition hover:shadow-sm hover:bg-gray-50 font-medium whitespace-nowrap"
+                      title="Opinions"
+                    >
+                      <MessagesSquare className="w-4 h-4" />
+                      <span className="font-semibold">Opinions</span>
+                      <span className="font-bold text-gray-900">{selectedPitchDetails.metrics?.comments || 0}</span>
                   </button>
                   </div>
                   <div className="flex flex-col md:flex-row gap-3">
@@ -1589,9 +1834,10 @@ const Home = () => {
 
       {showCommentModal && commentPitch && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl p-8 max-w-md w-full mx-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Add Comment</h2>
+          <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b">
+              <h2 className="text-2xl font-bold text-gray-900">Opinions</h2>
               <button
                 onClick={() => {
                   setShowCommentModal(false);
@@ -1604,48 +1850,88 @@ const Home = () => {
               </button>
             </div>
             
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Your Comment
-              </label>
-              <textarea
-                value={commentText}
-                onChange={(e) => {
-                  if (e.target.value.length <= 500) {
-                    setCommentText(e.target.value);
-                  }
-                }}
-                placeholder="Share your thoughts or feedback about this pitch..."
-                className="w-full h-32 p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
-              />
-              <p className="text-xs text-gray-500 mt-2">{commentText.length}/500 characters</p>
+            {/* Comments List - Scrollable */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              {commentPitch.comments && commentPitch.comments.length > 0 ? (
+                commentPitch.comments.map((comment, index) => (
+                  <div key={index} className="flex gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-600 to-purple-600 flex items-center justify-center flex-shrink-0">
+                      <User className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-sm">{comment.author}</span>
+                        <span className="text-xs text-gray-500">{comment.timestamp}</span>
+                      </div>
+                      <p className="text-sm text-gray-800 mt-1">{comment.text}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-12 text-gray-500">
+                  <MessagesSquare className="w-16 h-16 mx-auto mb-3 text-gray-400" />
+                  <p className="text-lg font-medium">No opinions yet</p>
+                  <p className="text-sm">Be the first to share your thoughts!</p>
+                </div>
+              )}
             </div>
 
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  setShowCommentModal(false);
-                  setCommentPitch(null);
-                  setCommentText('');
-                }}
-                className="flex-1 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (commentText.trim()) {
-                    console.log('Comment submitted:', commentText);
-                    setShowCommentModal(false);
-                    setCommentPitch(null);
-                    setCommentText('');
-                  }
-                }}
-                disabled={!commentText.trim()}
-                className="flex-1 py-3 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
-              >
-                Submit Comment
-              </button>
+            {/* Comment Input - Fixed at Bottom */}
+            <div className="border-t p-6">
+              <div className="flex gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-600 to-purple-600 flex items-center justify-center flex-shrink-0">
+                  <User className="w-5 h-5 text-white" />
+                </div>
+                <div className="flex-1">
+                  <textarea
+                    value={commentText}
+                    onChange={(e) => {
+                      if (e.target.value.length <= 500) {
+                        setCommentText(e.target.value);
+                      }
+                    }}
+                    placeholder="Add an opinion..."
+                    className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-black focus:border-transparent resize-none"
+                    rows="2"
+                  />
+                  <div className="flex items-center justify-between mt-2">
+                    <p className="text-xs text-gray-500">{commentText.length}/500</p>
+                    <button
+                      onClick={() => {
+                        if (commentText.trim()) {
+                          // Add comment to the pitch
+                          setPitches(prevPitches => 
+                            prevPitches.map(pitch => {
+                              if (pitch.id === commentPitch.id) {
+                                const newComment = {
+                                  author: user?.name || 'You',
+                                  text: commentText.trim(),
+                                  timestamp: 'Just now'
+                                };
+                                const updatedComments = [...(pitch.comments || []), newComment];
+                                return {
+                                  ...pitch,
+                                  comments: updatedComments,
+                                  metrics: {
+                                    ...pitch.metrics,
+                                    comments: updatedComments.length
+                                  }
+                                };
+                              }
+                              return pitch;
+                            })
+                          );
+                          setCommentText('');
+                        }
+                      }}
+                      disabled={!commentText.trim()}
+                      className="px-6 py-2 bg-black text-white rounded-xl font-semibold hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                    >
+                      Post
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1891,22 +2177,6 @@ const Home = () => {
                     <span className="truncate">{pitch.author.anonymousProfile?.availability}</span>
                   </div>
                 </div>
-                
-                {/* Skills */}
-                <div className="mt-3">
-                  <div className="flex flex-wrap gap-1">
-                    {(pitch.author.anonymousProfile?.skills || []).slice(0, 4).map((skill, index) => (
-                      <span key={index} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full font-medium">
-                        {skill}
-                      </span>
-                    ))}
-                    {(pitch.author.anonymousProfile?.skills || []).length > 4 && (
-                      <span className="px-2 py-1 bg-gray-200 text-gray-600 text-xs rounded-full font-medium">
-                        +{(pitch.author.anonymousProfile?.skills || []).length - 4}
-                      </span>
-                    )}
-                  </div>
-                </div>
               </div>
 
               {/* Looking For */}
@@ -1924,98 +2194,93 @@ const Home = () => {
                     ))}
                   </div>
                 </div>
+                <div className="flex flex-wrap items-center gap-3 text-xs text-gray-700">
+                  {pitch.equityOffer && (
+                    <div className="inline-flex items-center gap-1.5">
+                      <DollarSign className="w-3.5 h-3.5 text-green-600" />
+                      <span className="font-semibold text-green-700">{pitch.equityOffer}</span>
+                    </div>
+                  )}
+                  {pitch.locationPreference && (
+                    <div className="inline-flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-gray-500" />
+                      <span className="font-medium text-gray-900">{pitch.locationPreference}</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Metrics */}
               <div className="px-6 py-2 border-y border-gray-100 bg-gray-50">
-                <div className="flex flex-wrap items-center gap-3 sm:gap-5 text-xs sm:text-sm text-gray-600">
-                  <div className="inline-flex items-center gap-2 whitespace-nowrap">
-                    <Eye className="w-3.5 h-3.5 text-gray-500" />
-                    <span className="font-semibold text-gray-900 text-sm">{pitch.metrics.views}</span>
-                    <span className="text-gray-600 text-[11px] sm:text-sm">Views</span>
-                  </div>
-                  <span className="text-gray-300 hidden sm:inline">•</span>
-                  <div className="inline-flex items-center gap-2 whitespace-nowrap">
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <div className="inline-flex items-center gap-1.5 whitespace-nowrap">
                     <MessageCircle className="w-3.5 h-3.5 text-gray-500" />
-                    <span className="font-semibold text-gray-900 text-sm">{pitch.metrics.pitches || 0}</span>
-                    <span className="text-gray-600 text-[11px] sm:text-sm">Pitchbacks</span>
+                    <span className="font-semibold text-gray-900">{pitch.metrics.pitches || 0}</span>
+                    <span className="text-gray-600">Pitchbacks</span>
                   </div>
-                  <span className="text-gray-300 hidden sm:inline">•</span>
-                  <div className="inline-flex items-center gap-2 whitespace-nowrap">
+                  <span className="text-gray-300">•</span>
+                  <div className="inline-flex items-center gap-1.5 whitespace-nowrap">
                     <Clock className="w-3.5 h-3.5 text-gray-500" />
-                    <span className="text-gray-600 text-[11px] sm:text-sm">Posted</span>
-                    <span className="font-semibold text-gray-900 text-sm whitespace-nowrap">{pitch.createdAt}</span>
+                    <span className="text-gray-600">Posted</span>
+                    <span className="font-semibold text-gray-900 whitespace-nowrap">{pitch.createdAt}</span>
                   </div>
                 </div>
               </div>
 
               {/* Action Bar */}
-              <div className="px-6 py-3 border-b border-gray-100 bg-white">
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-gray-700 mb-3">
-                  <button
-                    onClick={() => {
-                      setLovedPitches(prev => {
-                        const newLoved = new Set(prev);
-                        if (newLoved.has(pitch.id)) {
-                          newLoved.delete(pitch.id);
-                        } else {
-                          newLoved.add(pitch.id);
-                        }
-                        return newLoved;
-                      });
-                    }}
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-medium transition hover:shadow-sm whitespace-nowrap ${
-                    lovedPitches.has(pitch.id)
-                      ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
-                      : 'border-red-100 bg-white text-red-700 hover:bg-red-50'
-                  }`}
-                  title="Painkillers"
-                >
-                    <Syringe className={`w-3.5 h-3.5 ${lovedPitches.has(pitch.id) ? 'fill-current' : ''}`} />
-                    <span>Painkillers</span>
-                    <span className="font-semibold text-gray-900">{pitch.metrics?.medicine || (lovedPitches.has(pitch.id) ? 1 : 0)}</span>
-                  </button>
-                  <button
-                    onClick={() => handleLike(pitch.id)}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border font-medium transition hover:shadow-sm whitespace-nowrap ${
-                      likedPitches.has(pitch.id)
-                        ? 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100'
-                        : 'border-blue-100 bg-white text-blue-700 hover:bg-blue-50'
-                    }`}
-                    title="Vitamins"
-                  >
-                    <Pill className={`w-3.5 h-3.5 ${likedPitches.has(pitch.id) ? 'fill-current' : ''}`} />
-                    <span>Vitamins</span>
-                    <span className="font-semibold text-gray-900">{pitch.metrics?.likes || (likedPitches.has(pitch.id) ? 1 : 0)}</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setCommentPitch(pitch);
-                      setShowCommentModal(true);
-                    }}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-gray-300 bg-white text-gray-900 transition hover:shadow-sm hover:bg-gray-50 font-medium whitespace-nowrap"
-                    title="Opinions"
-                  >
-                    <MessagesSquare className="w-3.5 h-3.5" />
-                    <span>Opinions</span>
-                    <span className="font-semibold text-gray-900">{pitch.metrics?.comments || 0}</span>
-                  </button>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <button
-                    onClick={() => handleViewDetails(pitch)}
-                    className="flex-1 py-3 px-4 bg-gray-100 text-gray-800 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-200 flex items-center justify-center gap-2"
-                  >
-                    <Eye className="w-4 h-4" />
-                    View Details
-                  </button>
-                  <button
-                    onClick={() => handlePitchback(pitch)}
-                    className="flex-1 py-3 px-4 bg-black text-white rounded-xl font-semibold hover:bg-gray-900 transition-all duration-200 flex items-center justify-center gap-2"
-                  >
-                    <Send className="w-4 h-4" />
-                    Pitchback
-                  </button>
+              <div className="px-6 py-3 bg-white">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-5">
+                    <button
+                      onClick={() => handleLike(pitch.id)}
+                      className="flex items-center gap-1 hover:opacity-70 transition"
+                      title="Spark"
+                    >
+                      <Sparkles className={`w-6 h-6 ${likedPitches.has(pitch.id) ? 'fill-orange-600 text-orange-600' : 'text-gray-700'}`} />
+                      <span className={`text-sm font-semibold ${likedPitches.has(pitch.id) ? 'text-orange-600' : 'text-gray-700'}`}>
+                        {pitch.metrics?.likes || (likedPitches.has(pitch.id) ? 1 : 0)}
+                      </span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setCommentPitch(pitch);
+                        setShowCommentModal(true);
+                      }}
+                      className="flex items-center gap-1 hover:opacity-70 transition"
+                      title="Opinions"
+                    >
+                      <MessagesSquare className="w-6 h-6 text-gray-700" />
+                      <span className="text-sm font-semibold text-gray-700">
+                        {pitch.metrics?.comments || 0}
+                      </span>
+                    </button>
+                    <button
+                      onClick={() => handleRepost(pitch.id)}
+                      className="flex items-center gap-1 hover:opacity-70 transition"
+                      title="Repost"
+                    >
+                      <Repeat2 className={`w-6 h-6 ${repostedPitches.has(pitch.id) ? 'text-green-600' : 'text-gray-700'}`} />
+                      <span className={`text-sm font-semibold ${repostedPitches.has(pitch.id) ? 'text-green-600' : 'text-gray-700'}`}>
+                        {pitch.metrics?.reposts || (repostedPitches.has(pitch.id) ? 1 : 0)}
+                      </span>
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => handleViewDetails(pitch)}
+                      className="p-2.5 bg-gray-200 hover:bg-gray-300 rounded-full transition-colors"
+                      title="View Details"
+                    >
+                      <Eye className="w-5 h-5 text-gray-800" />
+                    </button>
+                    <button
+                      onClick={() => handlePitchback(pitch)}
+                      className="p-2.5 bg-gray-900 hover:bg-gray-800 rounded-full transition-colors"
+                      title="Pitchback"
+                    >
+                      <Send className="w-5 h-5 text-white" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

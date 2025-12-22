@@ -523,72 +523,69 @@ const Navbar = () => {
                 );
               })}
               
-              <div className="pt-4 mt-4 border-t border-gray-200/80">
-                <div className="px-4 py-3 mb-2 bg-gradient-to-r from-gray-50/60 via-gray-50/40 to-transparent rounded-xl">
-                  <div className="font-bold text-gray-900 text-sm tracking-tight">
+              <div className="pt-4 mt-4 border-t border-gray-100">
+                <div className="px-4 py-2.5 mb-3">
+                  <div className="font-semibold text-gray-900 text-base">
                     {user?.firstName || 'John'} {user?.lastName || 'Doe'}
                   </div>
-                  <div className="text-xs text-gray-500 mt-0.5">@{user?.username || 'johndoe123'}</div>
+                  <div className="text-sm text-gray-500 mt-0.5">@{user?.username || 'johndoe123'}</div>
                 </div>
+                
                 <Link 
                   to="/profile" 
                   onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gradient-to-r hover:from-gray-50/90 hover:via-gray-50/50 hover:to-transparent rounded-xl transition-all duration-200"
+                  className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-all duration-200 group"
                 >
-                  <div className="p-2 bg-gray-100/80 rounded-lg">
-                    <User className="w-4 h-4 text-gray-700" />
-                  </div>
-                  <span>Profile</span>
+                  <User className="w-5 h-5 text-gray-600 group-hover:text-gray-900" />
+                  <span className="font-medium">Profile</span>
                 </Link>
+                
                 <Link 
                   to="/messages" 
                   onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gradient-to-r hover:from-gray-50/90 hover:via-gray-50/50 hover:to-transparent rounded-xl transition-all duration-200"
+                  className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-all duration-200 group"
                 >
-                  <div className="p-2 bg-gray-100/80 rounded-lg">
-                    <MessageCircle className="w-4 h-4 text-gray-700" />
-                  </div>
-                  <span>Messages</span>
+                  <MessageCircle className="w-5 h-5 text-gray-600 group-hover:text-gray-900" />
+                  <span className="font-medium">Messages</span>
                 </Link>
+                
                 <Link 
                   to="/my-pitches" 
                   onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gradient-to-r hover:from-gray-50/90 hover:via-gray-50/50 hover:to-transparent rounded-xl transition-all duration-200"
+                  className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-all duration-200 group"
                 >
-                  <div className="p-2 bg-gray-100/80 rounded-lg">
-                    <Rocket className="w-4 h-4 text-gray-700" />
-                  </div>
-                  <span>My Startup</span>
+                  <Rocket className="w-5 h-5 text-gray-600 group-hover:text-gray-900" />
+                  <span className="font-medium">My Startup</span>
                 </Link>
+                
                 <Link 
                   to="/settings" 
                   onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gradient-to-r hover:from-gray-50/90 hover:via-gray-50/50 hover:to-transparent rounded-xl transition-all duration-200"
+                  className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-all duration-200 group"
                 >
-                  <div className="p-2 bg-gray-100/80 rounded-lg">
-                    <Settings className="w-4 h-4 text-gray-700" />
-                  </div>
-                  <span>Settings</span>
+                  <Settings className="w-5 h-5 text-gray-600 group-hover:text-gray-900" />
+                  <span className="font-medium">Settings</span>
                 </Link>
+                
+                <div className="my-3 mx-4 h-px bg-gray-200"></div>
+                
                 <Link 
                   to="/crm" 
                   onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gradient-to-r hover:from-blue-50/90 hover:via-cyan-50/50 hover:to-transparent rounded-xl transition-all duration-200"
+                  className="flex items-center gap-3 px-4 py-3 text-blue-700 hover:bg-blue-50 rounded-lg transition-all duration-200 group"
                 >
-                  <div className="p-2 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-lg">
-                    <Users className="w-4 h-4 text-blue-700" />
-                  </div>
-                  <span>Founders' CRM</span>
+                  <Users className="w-5 h-5 text-blue-600 group-hover:text-blue-700" />
+                  <span className="font-medium">Founders' CRM</span>
                 </Link>
-                <div className="my-2 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+                
+                <div className="my-3 mx-4 h-px bg-gray-200"></div>
+                
                 <button 
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-red-600 hover:bg-gradient-to-r hover:from-red-50/90 hover:via-red-50/50 hover:to-transparent rounded-xl transition-all duration-200 text-left"
+                  className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 text-left group"
                 >
-                  <div className="p-2 bg-red-50/80 rounded-lg">
-                    <LogOut className="w-4 h-4 text-red-600" />
-                  </div>
-                  <span>Logout</span>
+                  <LogOut className="w-5 h-5 text-red-500 group-hover:text-red-600" />
+                  <span className="font-medium">Logout</span>
                 </button>
               </div>
             </div>
